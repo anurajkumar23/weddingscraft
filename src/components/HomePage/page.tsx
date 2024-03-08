@@ -8,12 +8,14 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { MapPin } from "lucide-react";
-import CategoryPage from "./category/page";
+import CategoryPage from "./category/CategoryPage";
 
-const HomePage = () => {
+
+
+const HomePage: React.FC = () => {
   return (
-    <div>
-      <div className="py-4 px-10">
+    <div className="w-full">
+      <div className="py-4 px-10 ">
         <h1 className="text-3xl font-bold italic ">Discover everything you need</h1>
         <div className="flex mt-4 gap-x-4">
           <div className="border-2 border-gray-800 rounded-sm w-1/5 items-center px-2 justify-star flex gap-x-1 ">

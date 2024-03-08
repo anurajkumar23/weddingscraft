@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const Navbar = () => {
+const Navbar:React.FC = () => {
   return (
     <nav className="fixed w-full h-20 shadow-xl bg-slate-100">
       <div className="flex justify-between items-center h-full font-semibold w-full px-4 2xl:px-14 xl:px-10">
