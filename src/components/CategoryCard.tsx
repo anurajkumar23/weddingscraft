@@ -10,7 +10,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ img, alt, title }) => {
 
 
     return (
-        <div className='mt-4 flex flex-wrap justify-around w-full h-full'>
+        <div >
             <div>
                 <div className='border overflow-hidden flex justify-center items-center rounded-full'>
                     <Image

@@ -15,7 +15,7 @@ const CategoryPage: React.FC = () => {
     ];
 
     return (
-        <div >
+        <div className='mt-4 flex flex-wrap justify-around w-full h-full'>
             {categories.map((category) => (
                 <CategoryCard
                     key={category.id}
