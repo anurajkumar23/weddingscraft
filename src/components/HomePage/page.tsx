@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      <h1 className="font-semibold mt-3 px-10">Venue</h1>
+      <h1 className="font-semibold mt-3 px-10 text-2xl">Venue</h1>
       <CategoryPage />
 
     </div>
