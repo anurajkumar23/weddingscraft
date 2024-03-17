@@ -11,7 +11,9 @@ const Navbar:React.FC = () => {
           <ul className="flex gap-6 items-center cursor-pointer ">
             <li className='hidden md:flex'>
               <Link href="/">Home</Link></li>
-            <li className='hidden md:flex'>Banquet Halls</li>
+            <li className='hidden md:flex'>
+              <Link href="/BanquetHall">Banquet Halls</Link>
+             </li>
             <li className='hidden md:flex'>Caterer</li>
             <li className='hidden md:flex'>Decorators</li>
             <li className='hidden md:flex'>Photographers</li>
