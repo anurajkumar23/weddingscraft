@@ -1,3 +1,4 @@
+import InnerCardPage from '@/components/InnerCard/InnerCardPage';
 import { SlidersHorizontal } from 'lucide-react';
 import React from 'react';
 
@@ -11,6 +12,7 @@ const Page = () => {
           <span className='text-base font-medium'>Filters</span>
         </div>
       </div>
+      <InnerCardPage/>
     </div>
   );
 };
