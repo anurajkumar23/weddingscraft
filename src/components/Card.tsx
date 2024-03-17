@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react';
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
 
@@ -24,7 +25,7 @@ const Card: React.FC<CardProps> = ({ img, alt, title }) => {
       <h1>{title}</h1>
        <span>Rating</span>
       </div>
-      <h1>Location</h1>
+      <MapPin />
       <h1>Description</h1>
       <h1>Special Feature:</h1>
       <h1>Price</h1>
