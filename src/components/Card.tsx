@@ -20,15 +20,15 @@ const Card: React.FC<CardProps> = ({ img, alt, title }) => {
         height={600} // Set the height of the image
         className=' object-cover md:w-80 md:h-80 sm:w-80 sm:h-64  cursor-pointer rounded-2xl'
       />
-      <div className="px-5 mt-3">
+      <div className=" mt-3">
       <div className='flex justify-between'>
-      <h1>{title}</h1>
+      <strong className='font-medium md:text-lg text-base'>{title}</strong>
        <span>Rating</span>
       </div>
-      <MapPin />
-      <h1>Description</h1>
-      <h1>Special Feature:</h1>
-      <h1>Price</h1>
+      <MapPin  className='text-gray-600 max-sm:text-sm'/>
+      <h1 className='text-gray-600 max-sm:text-sm'>Description</h1>
+      <h1 className='text-gray-600 max-sm:text-sm'>Special Feature:</h1>
+      <h1 className='max-sm:text-sm'>Price</h1>
       </div>
     </div>
   );

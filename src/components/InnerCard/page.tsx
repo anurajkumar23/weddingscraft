@@ -2,16 +2,21 @@ import { Heart, MapPin } from 'lucide-react';
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
 import { Button } from '../ui/button';
+import Link from 'next/link';
 
 interface InnerPageProps {
     img: string | StaticImageData;
     alt: string;
     title: string;
+    link?: string;
+    id: string;
 }
 
-const InnerPage: React.FC<InnerPageProps> = ({ img, alt, title }) => {
+const InnerPage: React.FC<InnerPageProps> = ({ img, alt, title, link, id }) => {
     return (
-        <div className='mb-6 md:w-3/4 border p-4 bg-slate-50 rounded-md'>
+        <div>
+            <Link href={`/${link}/${id}`} key={id} >
+        <div className='mb-6 md:w-3/4 border p-4 bg-slate-100 rounded-md'>
             <div className='flex'>
                 <Image
                     src={img}
@@ -41,6 +46,8 @@ const InnerPage: React.FC<InnerPageProps> = ({ img, alt, title }) => {
                 <Button className='mr-2 mb-2 bg-green-600 hover:bg-green-700 hover:text-white text-white text-base' variant="outline">Request Pricing</Button>
                 <Button className='bg-blue-600 hover:bg-blue-700 hover:text-white text-white text-base' variant="outline">For more details</Button>
             </div>
+        </div>
+        </Link>
         </div>
     );
 };
