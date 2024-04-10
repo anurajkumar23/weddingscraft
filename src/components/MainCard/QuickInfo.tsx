@@ -100,7 +100,7 @@ const QuickInfo: React.FC = () => {
             <AlertDialogHeader>
               <AlertDialogTitle>Services</AlertDialogTitle>
             </AlertDialogHeader>
-            <AlertDialogDescription className={showAllServices}>
+            <AlertDialogDescription>
               <div className='grid grid-cols-2 mt-4'>
                 {servicesData.map((service, index) => (
                   <div key={index} className='flex space-x-2 pb-3'>
