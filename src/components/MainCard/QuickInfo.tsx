@@ -1,0 +1,123 @@
+"use client"
+import React, { useState } from 'react';
+import { GoCheckCircleFill } from 'react-icons/go';
+import { Button } from '../ui/button';
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from '@/components/ui/alert-dialog';
+
+const QuickInfo: React.FC = () => {
+  const servicesData = [
+    'Lock on bedroom door',
+    'Free Wifi',
+    'Room service',
+    'Swimming pool',
+    'Gym',
+    'Spa',
+    'Restaurant',
+    'Parking',
+    'Airport shuttle',
+    'Lock on bedroom door',
+    'Free Wifi',
+    'Room service',
+    'Swimming pool',
+    'Gym',
+    'Spa',
+
+  ];
+
+  const [showAllServices, setShowAllServices] = useState(false);
+
+  const toggleShowAllServices = () => {
+    setShowAllServices(!showAllServices);
+  };
+
+  return (
+    <div>
+      <div className='container border w-full h-full rounded-sm bg-white py-6'>
+        <div className='grid grid-cols-2'>
+          <h1 className='text-2xl font-medium mb-6'>Quick Information</h1>
+          <h1 className='text-2xl font-medium mr-6 mb-6'>Timings</h1>
+          <div>
+            <h1 className='text-lg text-gray-600 '>Year of Establishment</h1>
+            <h1 className='text-lg font-semibold'>2018</h1>
+          </div>
+          <div className='flex space-x-4'>
+            <h1 className='font-medium text-lg'>Mon - Sun</h1>
+            <h1 className='text-gray-700'>Open 24 Hrs</h1>
+          </div>
+        </div>
+      </div>
+      <div className='container border rounded-sm w-full h-full'>
+        <div className='grid grid-cols-3 py-6'>
+          <div>
+            <h1 className='text-2xl font-medium mb-6'>Type</h1>
+            <div className='flex space-x-2'>
+              <GoCheckCircleFill size={25} className='text-green-600' />
+              <h1 className='font-semibold'>AC</h1>
+            </div>
+          </div>
+          <div>
+            <h1 className='text-2xl font-medium mb-6'>Seating Capacity</h1>
+            <div className='flex space-x-2'>
+              <GoCheckCircleFill size={25} className='text-green-600' />
+              <h1 className='font-semibold'>Upto 100 Persons</h1>
+            </div>
+          </div>
+          <div>
+            <h1 className='text-2xl font-medium mb-6'>Availability</h1>
+            <div className='flex space-x-2'>
+              <GoCheckCircleFill size={25} className='text-green-600' />
+              <h1 className='font-semibold'>Haldi Function</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='container border w-full h-full rounded-sm bg-white py-6'>
+        <h1 className='text-2xl font-medium mb-6'>Services</h1>
+        <div className='grid grid-cols-2'>
+          {servicesData.slice(0, 5).map((service, index) => (
+            <div key={index} className='flex space-x-2 pb-3'>
+              <GoCheckCircleFill size={25} className='text-green-600' />
+              <h1 className='font-semibold'>{service}</h1>
+            </div>
+          ))}
+        </div>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <Button variant='outline' onClick={toggleShowAllServices} className='text-blue-500 mt-4 border-blue-500'>
+              View All
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Services</AlertDialogTitle>
+            </AlertDialogHeader>
+            <AlertDialogDescription className={showAllServices}>
+              <div className='grid grid-cols-2 mt-4'>
+                {servicesData.map((service, index) => (
+                  <div key={index} className='flex space-x-2 pb-3'>
+                    <GoCheckCircleFill size={25} className='text-green-600' />
+                    <h1 className='font-semibold'>{service}</h1>
+                  </div>
+                ))}
+              </div>
+            </AlertDialogDescription>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Close</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </div>
+  );
+};
+
+export default QuickInfo;
