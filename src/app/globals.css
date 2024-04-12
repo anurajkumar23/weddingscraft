@@ -74,3 +74,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.ant-rate-star {
+  border: 1px solid #cbd5e0;
+  padding: 1.4px;
+  border-radius: 0.25rem;
+}

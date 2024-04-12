@@ -42,7 +42,7 @@ const MainCardPage: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                <QuickInfo/>
+                    <QuickInfo />
                 </div>
             </div>
             <div className='border-2 rounded-sm ml-5 w-2/5 p-4'>
@@ -93,9 +93,6 @@ const MainCardPage: React.FC = () => {
                             <p className='text-gray-400'> ₹ 15,000</p>
                         </div>
                     </div>
-
-
-
                 </div>
                 <div className='flex justify-center'>
                     <Button className='p-6 gap-x-2 shadow-lg' variant="outline">
