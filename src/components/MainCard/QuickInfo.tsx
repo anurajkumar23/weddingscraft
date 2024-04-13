@@ -91,7 +91,7 @@ const QuickInfo: React.FC = () => {
 
   return (
     <div>
-      <div className='justify-between relative bottom-16 overflow-x-auto'>
+      <div className='justify-between relative bottom-16 overflow-x-auto md:hidden'>
         <hr />
         <ul className='flex justify-between '>
           {menuItems.map((menu) => (
@@ -110,7 +110,9 @@ const QuickInfo: React.FC = () => {
         </ul>
         <hr />
       </div>
+      <div className='md:hidden'>
       <Pricing id="Pricing" />
+      </div>
       <div className='container border w-full h-full rounded-sm bg-white py-6'>
         <div className='grid grid-cols-2'>
           <h1 className='text-2xl font-medium mb-6'>Quick Information</h1>
