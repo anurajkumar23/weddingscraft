@@ -16,26 +16,30 @@ import ImageContainer from './ImageContainer';
 import Banquet1 from "../../../public/Banquet-1.jpg";
 import UserReview from './UserReview';
 import { Rate } from "antd";
+import Pricing from './Pricing';
+import { Link, Element, Events, animateScroll as scroll, scrollSpy } from 'react-scroll';
 
 const QuickInfo: React.FC = () => {
 
 
-  const userReviews = [ 
+  const userReviews = [
     {
-      id:"1", name:"Anuraj kumar", date:"27 july 2024", heading:"Nice", ratings:4.5, description:"Average Hall with more ambiance and less quality food. The hall is completely well decorated but related to food the quality is too average and up to mark as per expected. Visited there for friends functions. I liked all the surroundings and atmosphere but food taste upsets me more."
+      id: "1", name: "Anuraj kumar", date: "27 july 2024", heading: "Nice", ratings: 4.5, description: "Average Hall with more ambiance and less quality food. The hall is completely well decorated but related to food the quality is too average and up to mark as per expected. Visited there for friends functions. I liked all the surroundings and atmosphere but food taste upsets me more."
     },
     {
-      id:"2", name:"Gunjan kumar", date:"27 july 2024", heading:"Amazing Experience", ratings:3, description:"One the best hotels in Thane location where you can find good quality of food with good view of Thane They have huge capicity of banquet also where they give good rates to clients they also have live music in every evening where one can enjoy their dinner with family i strongly recommend to this hotel"
+      id: "2", name: "Gunjan kumar", date: "27 july 2024", heading: "Amazing Experience", ratings: 3, description: "One the best hotels in Thane location where you can find good quality of food with good view of Thane They have huge capicity of banquet also where they give good rates to clients they also have live music in every evening where one can enjoy their dinner with family i strongly recommend to this hotel"
     }
   ];
-  
+
   const Banquet = [
-    { id: "1", src: Banquet1, alt: "Banquet", title: "Photos", links:"BanquetHall",numbers:"45"},
-    { id: "2", src: Banquet1, alt: "Banquet", title: "Videos", links:"BanquetHall",numbers:"4"},
+    { id: "1", src: Banquet1, alt: "Banquet", title: "Photos", links: "BanquetHall", numbers: "45" },
+    { id: "2", src: Banquet1, alt: "Banquet", title: "Videos", links: "BanquetHall", numbers: "4" },
     // { id: "2", src: Banquet2, alt: "Banquet", title: "Decorators" },
     // { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
     // { id: "4", src: Photographer, alt: "Photographer", title: "Photographers" }
-];
+  ];
+
+
   const servicesData = [
     'Lock on bedroom door',
     'Free Wifi',
@@ -61,8 +65,52 @@ const QuickInfo: React.FC = () => {
     setShowAllServices(!showAllServices);
   };
 
+  const [activeLink, setActiveLink] = useState('');
+
+  const handleSetActiveLink = (to: string) => {
+    setActiveLink(to);
+  };
+  const menuItems = [
+    {
+      id: 1,
+      title: 'Pricing'
+    },
+    {
+      id: 2,
+      title: 'Services'
+    },
+    {
+      id: 3,
+      title: 'Photos'
+    },
+    {
+      id: 4,
+      title: 'Reviews'
+    }
+  ]
+
   return (
     <div>
+      <div className='justify-between relative bottom-16 overflow-x-auto'>
+        <hr />
+        <ul className='flex justify-between '>
+          {menuItems.map((menu) => (
+            <li key={menu.id} >
+              <Link
+                to={menu.title}
+                spy={true}
+                smooth={true}
+                offset={50}
+                duration={500}
+                onSetActive={() => handleSetActiveLink(menu.title)}
+                className={activeLink === menu.title ? 'text-red-600 border-b border-red-600' : ''}
+              >{menu.title}</Link>
+            </li>
+          ))}
+        </ul>
+        <hr />
+      </div>
+      <Pricing id="Pricing" />
       <div className='container border w-full h-full rounded-sm bg-white py-6'>
         <div className='grid grid-cols-2'>
           <h1 className='text-2xl font-medium mb-6'>Quick Information</h1>
@@ -77,7 +125,7 @@ const QuickInfo: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className='container border rounded-sm w-full h-full'>
+      <div id='Services' className='container border rounded-sm w-full h-full'>
         <div className='grid grid-cols-3 py-6'>
           <div>
             <h1 className='text-2xl font-medium mb-6'>Type</h1>
@@ -102,7 +150,7 @@ const QuickInfo: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className='container border w-full h-full rounded-sm bg-white py-6'>
+      <div id='Photos' className='container border w-full h-full rounded-sm bg-white py-6'>
         <h1 className='text-2xl font-medium mb-6'>Services</h1>
         <div className='grid grid-cols-2'>
           {servicesData.slice(0, 5).map((service, index) => (
@@ -112,7 +160,7 @@ const QuickInfo: React.FC = () => {
             </div>
           ))}
         </div>
-        <AlertDialog>
+        <AlertDialog >
           <AlertDialogTrigger>
             <Button variant='outline' onClick={toggleShowAllServices} className='text-blue-500 mt-4 border-blue-500'>
               View All
@@ -137,52 +185,52 @@ const QuickInfo: React.FC = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </div>
-      <div className='container border w-full h-full rounded-sm bg-white py-6'>
-        <div>
+      </div >
+      <div className='container border w-full h-full rounded-sm bg-white py-6' >
+        <div id='Reviews' >
           <h1 className='text-2xl font-medium mb-6'>Photos</h1>
           <div className='flex gap-x-6'>
-          {Banquet.map((card) =>(
-          <ImageContainer
-           key={card.id}
-           img={card.src} // Change here
-           alt={card.alt}
-           title={card.title}
-           number={card.numbers}
-          //  id={card.id}
-          //  link={card.links}
-          />
-           ))}
-           </div>
+            {Banquet.map((card) => (
+              <ImageContainer
+                key={card.id}
+                img={card.src} // Change here
+                alt={card.alt}
+                title={card.title}
+                number={card.numbers}
+              //  id={card.id}
+              //  link={card.links}
+              />
+            ))}
+          </div>
         </div>
       </div>
       <div className='container border w-full h-full rounded-sm bg-white py-6'>
         <div >
           <h1 className='text-2xl font-medium mb-6'>Reviews & Ratings</h1>
           <div className='flex gap-x-4'>
-          <span className='border p-4 rounded-xl bg-green-600 text-white text-xl'>4.5</span>
-          <h1 className='text-2xl font-semibold items-center flex'>2,705 Rating</h1>
+            <span className='border p-4 rounded-xl bg-green-600 text-white text-xl'>4.5</span>
+            <h1 className='text-2xl font-semibold items-center flex'>2,705 Rating</h1>
           </div>
 
           <div className='py-8'>
-          <h1 className='text-2xl font-medium'>Post your Review</h1>
-          <Rate className='py-4 text-4xl'/>
+            <h1 className='text-2xl font-medium'>Post your Review</h1>
+            <Rate className='py-4 text-4xl' />
           </div>
           <h1 className='text-2xl font-medium py-4 '>Users Review</h1>
           {/* <hr/> */}
-          {userReviews.map((user)=>(
-          <UserReview
-          key={user.id}
-          user={user.name}
-          ratings= {user.ratings}
-          post={user.date}
-          heading={user.heading}
-          description={user.description}
-          />
-        ))}
+          {userReviews.map((user) => (
+            <UserReview
+              key={user.id}
+              user={user.name}
+              ratings={user.ratings}
+              post={user.date}
+              heading={user.heading}
+              description={user.description}
+            />
+          ))}
         </div>
       </div>
-      
+
     </div>
   );
 };
