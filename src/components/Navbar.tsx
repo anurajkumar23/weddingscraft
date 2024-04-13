@@ -16,6 +16,7 @@ const Navbar:React.FC = () => {
           alt='Dream Wedding logo'
           className='w-60 '
           />
+        
         </div>
         <div>
           <ul className="flex gap-6 items-center cursor-pointer ">
