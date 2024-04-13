@@ -29,9 +29,11 @@ const MainCardPage: React.FC = () => {
                         <div className="flex items-center mb-2">
                             <MapPin className='mr-2' />
                             <span className="text-gray-600">Location patna jagdev path</span>
-                            <span className='border flex gap-x-2 ml-4 p-1 rounded-sm font-sans cursor-pointer'>View on Map
-                                <MapPinned className='text-red-400' />
+                            <div className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white  ml-4 p-1 rounded-sm font-sans cursor-pointer'>
+                            <span className='flex gap-x-2'>View on Map
+                                <MapPinned/>
                             </span>
+                            </div>
                         </div>
                         <h1>Details:</h1>
                         <Button className='mr-2 mb-2 mt-2 gap-x-2 bg-green-600 hover:bg-green-700 hover:text-white text-white text-base' variant="outline">
