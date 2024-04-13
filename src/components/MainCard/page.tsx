@@ -8,7 +8,7 @@ import QuickInfo from './QuickInfo';
 const MainCardPage: React.FC = () => {
     return (
         <div className='w-full h-full grid md:grid-cols-12 gap-2'>
-            <div className=' md:col-span-8'>
+            <div className='md:col-span-8'>
                 <div className=''>
                     <Image
                         height={500}
@@ -40,9 +40,7 @@ const MainCardPage: React.FC = () => {
                             <PhoneCall />
                             Contact Us
                         </Button>
-
                     </div>
-                    
                 </div>
             </div>
             <div className='border-2 rounded-sm md:col-span-4 p-2 pb-6'>
@@ -93,7 +91,6 @@ const MainCardPage: React.FC = () => {
                             <p className='text-gray-400'> ₹ 15,000</p>
                         </div>
                     </div>
-
                 </div>
                 <div className='justify-center flex gap-4 '>
                     <Button className='p-6 gap-2 shadow-lg font-medium md:text-base text-sm ' variant="outline">
@@ -107,7 +104,7 @@ const MainCardPage: React.FC = () => {
                 </div>
             </div>
             <div className='md:col-span-8'>
-            <QuickInfo />
+                <QuickInfo />
             </div>
         </div>
     );
