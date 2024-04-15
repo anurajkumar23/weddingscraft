@@ -18,6 +18,7 @@ import UserReview from './UserReview';
 import { Rate } from "antd";
 import Pricing from './Pricing';
 import { Link, Element, Events, animateScroll as scroll, scrollSpy } from 'react-scroll';
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 const QuickInfo: React.FC = () => {
 
@@ -86,16 +87,24 @@ const QuickInfo: React.FC = () => {
     {
       id: 4,
       title: 'Reviews'
+    },
+    {
+      id: 5,
+      title: 'Reviews'
+    },
+    {
+      id: 6,
+      title: 'Reviews'
     }
   ]
 
   return (
-    <div>
-      <div className='justify-between relative bottom-16 overflow-x-auto md:hidden'>
-        <hr />
-        <ul className='flex justify-between '>
+    <div className='w-screen'>
+      <div className='relative bottom-16'>
+      <ScrollArea className="w-full whitespace-nowrap border">
+        <div className="flex w-max space-x-6 p-4 bg-slate-200">
           {menuItems.map((menu) => (
-            <li key={menu.id} >
+            <p key={menu.id}>
               <Link
                 to={menu.title}
                 spy={true}
@@ -105,13 +114,14 @@ const QuickInfo: React.FC = () => {
                 onSetActive={() => handleSetActiveLink(menu.title)}
                 className={activeLink === menu.title ? 'text-red-600 border-b border-red-600' : ''}
               >{menu.title}</Link>
-            </li>
+            </p>
           ))}
-        </ul>
-        <hr />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       </div>
       <div className='md:hidden'>
-      <Pricing id="Pricing" />
+        <Pricing id="Pricing" />
       </div>
       <div className='container border w-full h-full rounded-sm bg-white py-6'>
         <div className='grid grid-cols-2'>
