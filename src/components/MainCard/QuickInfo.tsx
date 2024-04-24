@@ -100,7 +100,7 @@ const QuickInfo: React.FC = () => {
 
   return (
     <div className='w-screen'>
-      <div className='relative bottom-16'>
+      <div className='relative bottom-16 sm:hidden '>
       <ScrollArea className="w-full whitespace-nowrap border">
         <div className="flex w-max space-x-6 p-4 bg-slate-200">
           {menuItems.map((menu) => (
@@ -123,7 +123,7 @@ const QuickInfo: React.FC = () => {
       <div className='md:hidden'>
         <Pricing id="Pricing" />
       </div>
-      <div className='container border w-full h-full rounded-sm bg-white py-6'>
+      <div id='Services' className='container border w-full h-full rounded-sm bg-white py-6'>
         <div className='grid grid-cols-2'>
           <h1 className='text-2xl font-medium mb-6'>Quick Information</h1>
           <h1 className='text-2xl font-medium mr-6 mb-6'>Timings</h1>
@@ -162,7 +162,7 @@ const QuickInfo: React.FC = () => {
           </div>
         </div>
       </div>
-      <div id='Photos' className='container border w-full h-full rounded-sm bg-white py-6'>
+      <div id='Services' className='container border w-full h-full rounded-sm bg-white py-6'>
         <h1 className='text-2xl font-medium mb-6'>Services</h1>
         <div className='grid grid-cols-2'>
           {servicesData.slice(0, 5).map((service, index) => (
@@ -199,7 +199,7 @@ const QuickInfo: React.FC = () => {
         </AlertDialog>
       </div >
       <div className='container border w-full h-full rounded-sm bg-white py-6' >
-        <div id='Reviews' >
+        <div id='Photos' >
           <h1 className='text-2xl font-medium mb-6'>Photos</h1>
           <div className='flex gap-x-6'>
             {Banquet.map((card) => (
@@ -216,7 +216,7 @@ const QuickInfo: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className='container border w-full h-full rounded-sm bg-white py-6'>
+      <div id='Reviews' className='container border w-full h-full rounded-sm bg-white py-6'>
         <div >
           <h1 className='text-2xl font-medium mb-6'>Reviews & Ratings</h1>
           <div className='flex gap-x-4'>

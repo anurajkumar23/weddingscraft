@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider>
           <Navbar />
-          <div className="py-20">
+          <div>
             {children}
           </div>
           <Footer />

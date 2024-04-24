@@ -4,8 +4,7 @@ import React from 'react'
 const page: React.FC = () => {
   return (
     <div>
-      <div className='py-6'>
-        {/* <h1 className='text-3xl font-medium mb-4'>Top Banquet Halls in Patna</h1> */}
+      <div >
         <MainCardPage />
       </div>
       

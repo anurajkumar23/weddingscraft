@@ -2,19 +2,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiHome3Line } from "react-icons/ri";
-import logo from "../../public/Dream Wedding Logo_20240410_161219_0000.png"
+import logo from "../../public/Dream Wedding Logo_20240417_103338_0000.png"
 
 const Navbar:React.FC = () => {
   return (
-    <nav className="fixed w-full h-20 shadow-xl bg-slate-100 z-50">
-      <div className="flex justify-between items-center h-full font-semibold w-full px-4 2xl:px-14 xl:px-10">
+    <nav className=" z-50 w-full h-20 shadow-xl bg-slate-100 ">
+      <div className="flex justify-between gap-4 items-center h-full font-semibold w-full px-2 2xl:px-14 xl:px-10">
         <div className='cursor-pointer flex '>
           <Image
           width={500}
-          height={10}
+          height={500}
           src={logo}
           alt='Dream Wedding logo'
-          className='w-60 '
+          className='w-80 '
           />
         
         </div>
@@ -40,7 +40,7 @@ const Navbar:React.FC = () => {
           </ul>
         </div>
       </div>
-      <div className='font-semibold bottom-0 w-full h-20 shadow-xl bg-slate-100  fixed md:hidden' style={{ boxShadow: '0px -4px 6px rgba(0, 0, 0, 0.1)' }}>
+      {/* <div className='font-semibold bottom-0 w-full h-20 shadow-xl bg-slate-100  fixed md:hidden' style={{ boxShadow: '0px -4px 6px rgba(0, 0, 0, 0.1)' }}>
         <ul className='flex justify-between items-center h-full text-sm px-3'>
           <li>
           <Link href="/">
@@ -51,7 +51,7 @@ const Navbar:React.FC = () => {
           <li>Decorators</li>
           <li>Photographers</li>
         </ul>
-      </div>
+      </div> */}
 
     </nav>
   );
