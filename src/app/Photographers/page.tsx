@@ -15,6 +15,8 @@ const Photographs = [
   { id: "4", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
   { id: "5", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
   { id: "6", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
+  { id: "7", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
+  { id: "8", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
   // { id: "2", src: Banquet2, alt: "Banquet", title: "Decorators" },
   // { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
   // { id: "4", src: Photographer, alt: "Photographer", title: "Photographers" }
@@ -22,13 +24,16 @@ const Photographs = [
 const page = () => {
 
   return (
-    <div className='w-full flex py-20'>
+    <div className='w-full flex py-20 relative'>
+      <div className="absolute inset-0 h-full w-full bg-white -z-10 ">
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_40%_500px,#d5c5ff,transparent)]"></div>
+      </div>
       <Swiper
         slidesPerView={2}
         spaceBetween={10}
         centeredSlides={true}
         autoplay={{
-          delay: 6000,
+          delay: 4000,
           disableOnInteraction: false,
         }}
         loop={true}
@@ -37,7 +42,7 @@ const page = () => {
           prevEl: '.swiper-button-prev',
         }}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper mySlider"
+        className="swipper-container"
         breakpoints={{
 
           320: {
@@ -73,16 +78,12 @@ const page = () => {
             </SwiperSlide>
           ))}
         </div>
-        <div className="swiper-button-next bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        <div className="swiper-button-next  bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
+        
       </div>
-      {/* Custom Tailwind CSS previous button */}
-      <div className="swiper-button-prev bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-1 w-1" fill="none" viewBox="0 0 15 15" stroke="white">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
+     
+      <div className="swiper-button-prev swiper-button-white bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
+        
       </div>
       </Swiper>
     </div>

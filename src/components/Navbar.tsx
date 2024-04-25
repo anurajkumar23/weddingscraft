@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RiHome3Line } from "react-icons/ri";
 import logo from "../../public/Dream Wedding Logo_20240417_103338_0000.png"
 
 const Navbar: React.FC = () => {
