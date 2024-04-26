@@ -8,6 +8,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Search } from 'lucide-react';
+import backgroundImage from "../../../public/photographers background image with lotus Ankur.png"
+import Image from 'next/image';
 
 const Photographs = [
   { id: "1", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
@@ -25,12 +27,14 @@ const Photographs = [
 const page = () => {
 
   return (
-    <div className='w-full flex py-20 relative'>
-      <div className="absolute inset-0 h-full w-full bg-white -z-10 ">
-        <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_40%_500px,#d5c5ff,transparent)]"></div>
-      </div>
-
-      <div className='absolute w-full top-8 z-20 sm:justify-end justify-center flex sm:px-20 '>
+    <div className='w-full '>
+      <Image
+        src={backgroundImage}
+        alt='background image'
+        className='absolute -z-1 object-cover h-full w-full'
+      />
+<div className='flex py-20'>
+      <div className='absolute py-20 w-full top-8 z-20 sm:justify-end justify-center flex sm:px-20 '>
         <div className=' border rounded-3xl p-2  w-72  z-10 bg-purple-200 flex justify-between items-center'>
           <div className="relative flex">
             <input
@@ -61,17 +65,20 @@ const page = () => {
         className="swipper-container"
         breakpoints={{
 
-          320: {
-            slidesPerView: 2,
+          350: {
+            slidesPerView: 1,
           },
 
+          400:{
+            slidesPerView:2,
+          },
           // When window width is <= 640px
           640: {
-            slidesPerView: 4,
+            slidesPerView: 3,
           },
           // When window width is <= 768px
           768: {
-            slidesPerView: 5,
+            slidesPerView: 4,
           },
           // When window width is <= 1024px
           1024: {
@@ -85,6 +92,7 @@ const page = () => {
             <SwiperSlide key={card.id} >
               <Card
                 key={card.id}
+                id={card.id}
                 img={card.src} // Change here
                 alt={card.alt}
                 title={card.title}
@@ -102,6 +110,7 @@ const page = () => {
 
         </div>
       </Swiper>
+      </div>
     </div>
   )
 }

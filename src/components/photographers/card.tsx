@@ -1,9 +1,11 @@
 import { Heart, MapPin } from 'lucide-react';
 import Image, { StaticImageData } from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 
 interface cardProps {
+    id: string;
     img: string | StaticImageData;
     alt: string;
     title: string;
@@ -12,9 +14,10 @@ interface cardProps {
 }
 
 
-const card: React.FC<cardProps> = ({ img, alt, title, description, Price }) => {
+const card: React.FC<cardProps> = ({ img, alt, title, description, Price ,id}) => {
     return (
         <div className='flex cursor-pointer py-5 justify-center items-center '>
+            <Link href={`/Photographers//${id}`}>
             <div className='w-48 bg-white z-10  border border-purple-300 p-2 rounded-2xl hover:scale-105 hover:border-purple-400 hover:border-4 transition duration-300 hover:shadow-lg'>
                 <Image
                     src={img}
@@ -37,6 +40,7 @@ const card: React.FC<cardProps> = ({ img, alt, title, description, Price }) => {
                 <hr className='h-px mt-8 bg-black border-0' />
                 <h1 className='mt-2 justify-center flex font-bold cursor-pointer'>ORDER</h1>
             </div>
+            </Link>
         </div>
     );
 };

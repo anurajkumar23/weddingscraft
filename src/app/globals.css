@@ -86,6 +86,8 @@
   justify-content: center;
   align-items: center;
   flex: 1 1 auto;
+  /* position: relative; */
+
 }
 
 .swiper-button-next,
