@@ -7,6 +7,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { Search } from 'lucide-react';
 
 const Photographs = [
   { id: "1", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
@@ -28,6 +29,21 @@ const page = () => {
       <div className="absolute inset-0 h-full w-full bg-white -z-10 ">
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_40%_500px,#d5c5ff,transparent)]"></div>
       </div>
+
+      <div className='absolute right-0 border rounded-3xl p-2 top-8 w-72 mx-20 z-10 bg-purple-200'>
+  <div className='flex justify-between items-center'>
+    <div className="relative flex">
+      <input
+        type="text"
+        placeholder="Search for Photographers"
+        className="bg-purple-200 text-black placeholder-purple-500 border-purple-300 focus:outline-none  rounded-full p-1 mx-2"
+      />
+      
+    </div>
+    <Search className='cursor-pointer bg-purple-500 rounded-full text-white p-1 size-8'/>
+  </div>
+</div>
+
       <Swiper
         slidesPerView={2}
         spaceBetween={10}

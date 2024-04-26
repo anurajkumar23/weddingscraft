@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
             <h1 className="text-lg">Patna</h1></div>
           <div className="rounded-sm border-2 border-gray-800 w-2/5">
             <Command>
-              <CommandInput placeholder="Type a command or search..." />
+              <CommandInput  placeholder="Type a command or search..." />
               {/* <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="Suggestions">
