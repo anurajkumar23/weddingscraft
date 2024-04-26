@@ -30,19 +30,19 @@ const page = () => {
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_800px_at_40%_500px,#d5c5ff,transparent)]"></div>
       </div>
 
-      <div className='absolute right-0 border rounded-3xl p-2 top-8 w-72 mx-20 z-10 bg-purple-200'>
-  <div className='flex justify-between items-center'>
-    <div className="relative flex">
-      <input
-        type="text"
-        placeholder="Search for Photographers"
-        className="bg-purple-200 text-black placeholder-purple-500 border-purple-300 focus:outline-none  rounded-full p-1 mx-2"
-      />
-      
-    </div>
-    <Search className='cursor-pointer bg-purple-500 rounded-full text-white p-1 size-8'/>
-  </div>
-</div>
+      <div className='absolute w-full top-8 z-20 sm:justify-end justify-center flex sm:px-20 '>
+        <div className=' border rounded-3xl p-2  w-72  z-10 bg-purple-200 flex justify-between items-center'>
+          <div className="relative flex">
+            <input
+              type="text"
+              placeholder="Search for Photographers"
+              className="bg-purple-200 text-black placeholder-purple-500 border-purple-300 focus:outline-none  rounded-full p-1 mx-2"
+            />
+
+          </div>
+          <Search className='cursor-pointer bg-purple-500 rounded-full text-white p-1 size-8' />
+        </div>
+      </div>
 
       <Swiper
         slidesPerView={2}
@@ -95,12 +95,12 @@ const page = () => {
           ))}
         </div>
         <div className="swiper-button-next  bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
-        
-      </div>
-     
-      <div className="swiper-button-prev swiper-button-white bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
-        
-      </div>
+
+        </div>
+
+        <div className="swiper-button-prev swiper-button-white bg-purple-400 p-6 rounded-full shadow-2xl cursor-pointer">
+
+        </div>
       </Swiper>
     </div>
   )
