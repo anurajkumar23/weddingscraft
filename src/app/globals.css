@@ -103,3 +103,9 @@
   --swiper-navigation-size: 27px;
   font-weight: 900;
 }
+
+.heart-shadow{
+  -webkit-box-shadow: -1px 1px 5px 4px rgba(255, 255, 255, 0.422);
+  -moz-box-shadow: -1px 1px 5px 4px rgba(255, 255, 255, 0.422);
+  box-shadow: 1px 1px 5px 4px rgba(255, 255, 255, 0.422);
+}
