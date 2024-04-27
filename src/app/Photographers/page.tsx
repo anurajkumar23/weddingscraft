@@ -33,7 +33,7 @@ const page = () => {
         alt='background image'
         className='absolute -z-1 object-cover h-full w-full'
       />
-<div className='flex py-20'>
+<div className='flex py-28'>
       <div className='absolute py-20 w-full top-8 z-20 sm:justify-end justify-center flex sm:px-20 '>
         <div className=' border rounded-3xl p-2  w-72  z-10 bg-purple-200 flex justify-between items-center'>
           <div className="relative flex">
@@ -49,8 +49,7 @@ const page = () => {
       </div>
 
       <Swiper
-        slidesPerView={2}
-        spaceBetween={10}
+        spaceBetween={70}
         centeredSlides={true}
         autoplay={{
           delay: 4000,
@@ -70,7 +69,7 @@ const page = () => {
           },
 
           400:{
-            slidesPerView:2,
+           slidesPerView: 2,
           },
           // When window width is <= 640px
           640: {

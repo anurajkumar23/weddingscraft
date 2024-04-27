@@ -18,13 +18,13 @@ const card: React.FC<cardProps> = ({ img, alt, title, description, Price ,id}) =
     return (
         <div className='flex cursor-pointer py-5 justify-center items-center '>
             <Link href={`/Photographers//${id}`}>
-            <div className='w-48 bg-white z-10  border border-purple-300 p-2 rounded-2xl hover:scale-105 hover:border-purple-400 hover:border-4 transition duration-300 hover:shadow-lg'>
+            <div className='md:w-48 w-56 bg-white z-10  border border-purple-300 p-2 rounded-2xl hover:scale-105 hover:border-purple-400 hover:border-4 transition duration-300 hover:shadow-lg'>
                 <Image
                     src={img}
                     alt={alt}
                     width={500}
                     height={500}
-                    className='object-cover w-48 h-44 cursor-pointer rounded-2xl'
+                    className='object-cover md:w-48 w-56 h-44 cursor-pointer rounded-2xl'
                 />
                 <div className='absolute border rounded-full p-1 bg-white ml-1 top-[170px] hover:scale-105 heart-shadow'>
                     <Heart className='text-red-400 fill-red-400 z-20' />
