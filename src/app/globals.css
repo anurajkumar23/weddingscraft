@@ -90,6 +90,8 @@
 
 }
 
+
+
 .swiper-button-next,
 .swiper-button-prev {
   background-color: white;
@@ -110,4 +112,13 @@
   -webkit-box-shadow: -1px 1px 5px 4px rgba(255, 255, 255, 0.523);
   -moz-box-shadow: -1px 1px 5px 4px rgba(255, 255, 255, 0.422);
   box-shadow: -1px 1px 5px 4px rgba(255, 255, 255, 0.422);
+}
+
+.card-component {
+  background: radial-gradient(circle 120px at 0% 45%, rgb(157, 219, 230), rgb(8, 125, 167));
+  position: relative;
+}
+
+.photographer_element2{
+  width: 1000px; 
 }

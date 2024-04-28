@@ -17,7 +17,7 @@ interface cardProps {
 const card: React.FC<cardProps> = ({ img, alt, title, description, Price ,id}) => {
     return (
         <div className='flex cursor-pointer py-5 justify-center items-center '>
-            <Link href={`/Photographers//${id}`}>
+            <Link href={`/Photographers/${id}`}>
             <div className='md:w-48 w-56 bg-white z-10  border border-purple-300 p-2 rounded-2xl hover:scale-105 hover:border-purple-400 hover:border-4 transition duration-300 hover:shadow-lg'>
                 <Image
                     src={img}

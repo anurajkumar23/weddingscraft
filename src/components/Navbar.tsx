@@ -8,14 +8,15 @@ const Navbar: React.FC = () => {
     <nav className=" z-50 w-full h-20 shadow-xl bg-slate-100 ">
       <div className="flex justify-between gap-4 items-center h-full font-semibold w-full px-2 2xl:px-14 xl:px-10">
         <div className='cursor-pointer flex '>
-          <Image
-            width={500}
-            height={500}
-            src={logo}
-            alt='Dream Wedding logo'
-            className='w-80 '
-          />
-
+          <Link href='/'>
+            <Image
+              width={500}
+              height={500}
+              src={logo}
+              alt='Dream Wedding logo'
+              className='w-80 cursor-pointer '
+            />
+          </Link>
         </div>
         <div>
           <ul className="flex gap-6 items-center cursor-pointer ">
@@ -28,7 +29,7 @@ const Navbar: React.FC = () => {
             <li className='hidden md:flex'>Decorators</li>
             <li className='hidden md:flex'>
               <Link href="/Photographers">Photographers</Link>
-              </li>
+            </li>
             <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
               Login /SignUp
             </li>
