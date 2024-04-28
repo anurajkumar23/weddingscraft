@@ -20,7 +20,7 @@ const page = () => {
         alt='background image'
         className='absolute -z-1 object-cover md:h-full h-full w-full'
       />
-      <div className='z-10 relative py-36 w-full grid md:grid-cols-3 gap-4 md:px-80 overflow-hidden'>
+      <div className='z-10 relative py-36 w-full grid md:grid-cols-3 gap-4 sm:grid-cols-2 lg:px-80 overflow-hidden'>
         {data.map((items) => (
           <InnerCard
             key={items.id}
