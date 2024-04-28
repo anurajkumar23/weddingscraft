@@ -100,7 +100,7 @@ const QuickInfo: React.FC = () => {
 
   return (
     <div className='w-screen'>
-      <div className='relative bottom-16 sm:hidden '>
+      <div className='sticky top-0 z-10 sm:hidden '>
       <ScrollArea className="w-full whitespace-nowrap border">
         <div className="flex w-max space-x-6 p-4 bg-slate-200">
           {menuItems.map((menu) => (
