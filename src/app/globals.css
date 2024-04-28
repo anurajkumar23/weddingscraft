@@ -115,7 +115,7 @@
 }
 
 .card-component {
-  background: radial-gradient(circle 120px at 0% 45%, rgb(157, 219, 230), rgb(8, 125, 167));
+  background: radial-gradient(circle 120px at 0% 45%, rgb(157, 219, 230), rgb(8, 94, 125));
   position: relative;
 }
 
