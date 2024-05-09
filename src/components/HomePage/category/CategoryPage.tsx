@@ -10,11 +10,12 @@ import Photographer from "../../../../public/Photographer.jpeg";
 const CategoryPage: React.FC = () => {
     const categories = [
         { id: "1", src: Banquet1, alt: "Banquet", title: "Banquet Halls" ,links: "BanquetHall"},
-        { id: "2", src: Banquet2, alt: "Banquet", title: "Decorators" },
+        { id: "2", src: Banquet2, alt: "Decorators", title: "Decorators", links:"Decorators" },
         { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
         { id: "4", src: Photographer, alt: "Photographer", title: "Photographers", links: "Photographers" }
     ];
 
+    
     return (
         <div className='mt-4 flex flex-wrap justify-around w-full h-full'>
             {categories.map((category) => (
