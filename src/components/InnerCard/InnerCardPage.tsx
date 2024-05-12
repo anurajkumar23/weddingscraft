@@ -1,40 +1,64 @@
-import React from 'react'
-import Banquet1 from "../../../public/Banquet-1.jpg";
-import Banquet2 from "../../../public/Banquet-2.jpg";
-import Catering from "../../../public/cattering.jpg";
-import Photographer from "../../../public/Photographer.jpeg";
-import Image from 'next/image';
-import InnerPage from './page';
+"use client";
+import React, { useEffect, useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import InnerPage from "./page";
+import { getBanquet } from "@/utils/banquet/GetBanquet";
 
+export interface Card {
+  _id: string;
+  alt: string;
+  name: string;
+  rating: number;
+  description: string;
+  location: {
+    city: string;
+    pincode: string;
+    area: string;
+  };
+  locationUrl: string;
+  link: string;
+  billboard: string;
+  like:[]
+}
 
 const InnerCardPage: React.FC = () => {
+  const [banquetData, setBanquetData] = useState<Card[]>([]);
 
-    const Banquet = [
-        { id: "1", src: Banquet1, alt: "Banquet", title: "Banquet Halls", links:"BanquetHall"},
-        { id: "2", src: Banquet1, alt: "Banquet", title: "Banquet Halls", links:"BanquetHall"},
-        // { id: "2", src: Banquet2, alt: "Banquet", title: "Decorators" },
-        // { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
-        // { id: "4", src: Photographer, alt: "Photographer", title: "Photographers" }
-    ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getBanquet();
+        if (data && data.data && data.data.banquet) {
+          setBanquetData(data.data.banquet);
+        }
+      } catch (error) {
+        console.error("Error fetching banquet data:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="pt-10 w-full">
-  <div>
-    
-   {Banquet.map((card) =>(
+      <div>
+        {banquetData.map((card) => (
+          <InnerPage
+            key={card._id}
+            billboard={card.billboard}
+            alt={card.alt}
+            like={card.like}
+            name={card.name}
+            _id={card._id}
+            rating={card.rating}
+            description={card.description}
+            location={card.location}
+            locationUrl={card.locationUrl}
+            link="BanquetHall"
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-   <InnerPage
-   key={card.id}
-   img={card.src} // Change here
-   alt={card.alt}
-   title={card.title}
-   id={card.id}
-   link={card.links}
-   />
-   ))}
-  </div>
-  </div>
-  )
-}
-
-export default InnerCardPage
+export default InnerCardPage;
