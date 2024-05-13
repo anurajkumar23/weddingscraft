@@ -122,3 +122,17 @@
 .photographer_element2{
   width: 1000px; 
 }
+
+/* .flip-card-front, .flip-card-back {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+} */
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.flip-card{
+  transform: rotateY(180deg);
+}
