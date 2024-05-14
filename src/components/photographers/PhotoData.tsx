@@ -6,7 +6,7 @@ import element2 from "../../../public/elements/10_20240427_221553_0003.png";
 
 const PhotoData = () => {
     return (
-        <div className="rounded-lg flip-card-back border-2 flip-card-back text-white w-full h-[425px] card-component border-purple-300 p-2 rounded-2x hover:border-purple-400 transition-height duration-300 ease-in-out">
+        <div className="rounded-lg flip-card-back border-2  text-white w-full h-[425px] card-component border-purple-300 p-2 rounded-2x hover:border-purple-400 transition-height duration-300 ease-in-out">
             {/* Your content goes here */}
             <h1 className='pt-4 p-2'>
                 Hello EveryOne how are you
