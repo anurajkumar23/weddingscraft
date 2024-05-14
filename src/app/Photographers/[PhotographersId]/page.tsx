@@ -15,7 +15,7 @@ const page = () => {
 
 
   return (
-    <div className='w-full bg-gradient-to-r from-violet-200 to-pink-50  '>
+    <div className='w-full h-auto bg-gradient-to-r from-violet-200 to-pink-50  '>
       <Image
         src={bgImage}
         alt='background image'

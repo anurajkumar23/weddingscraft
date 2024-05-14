@@ -25,9 +25,9 @@ const InnerCard: React.FC<CardProps> = ({ title, description1,description2, Pric
     };
 
     return (
-        <div className="">
+        <div className="relative h-full w-full flex justify-center items-center">
             <Link href={`/Photographers/${id}`}>
-                <div className={` relative flex justify-center items-center transition-transform duration-500 transform z-1 w-72 h-[420px] rounded-xl shadow-2xl text-white card-component border border-cyan-300 p-2 hover:border-cyan-400 hover:shadow-lg ${isRotated ? ' flip-card'  : ''}`} >
+                <div className={`relative flex justify-center items-center transition-transform duration-500 transform z-1 w-72 h-[420px] rounded-xl shadow-2xl text-white card-component border border-cyan-300 p-2 hover:border-cyan-400 hover:shadow-lg ${isRotated ? ' flip-card'  : ''}`} >
                     <div className="z-10 w-full absolute ">
                         <div className="pt-5">
                             <strong className="font-bold text-5xl text-white font-serif flex justify-center">
