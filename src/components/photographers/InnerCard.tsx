@@ -16,7 +16,7 @@ interface CardProps {
     Price: number;
 }
 
-const InnerCard: React.FC<CardProps> = ({ title, description1,description2, Price, id }) => {
+const InnerCard: React.FC<CardProps> = ({ title, description1, description2, Price, id }) => {
 
     const [showPhotoData, setShowPhotoData] = useState(false);
     const [isRotated, setIsRotated] = useState(false);
@@ -30,7 +30,7 @@ const InnerCard: React.FC<CardProps> = ({ title, description1,description2, Pric
     return (
         <div className="relative h-full w-full flex justify-center items-center ">
             <Link href={`/Photographers/${id}`}>
-            <div className={`relative justify-center items-center transition-transform duration-500 transform z-1 w-72 h-[420px] rounded-xl shadow-2xl text-white card-component border border-cyan-300 p-2 hover:border-cyan-400 hover:shadow-lg hover:flip-card ${isRotated ? ' flip-card'  : ''} `} >
+                <div className={`relative justify-center items-center transition-transform duration-500  transform z-1 w-72 h-[420px] rounded-xl shadow-2xl text-white card-component border border-cyan-300 p-2 hover:border-cyan-400 hover:shadow-lg hover:flip-card ${isRotated ? ' flip-card' : ''} `} >
                     <div className="z-10 w-full absolute ">
                         <div className="pt-5">
                             <strong className="font-bold text-5xl text-white font-serif flex justify-center">
@@ -50,14 +50,7 @@ const InnerCard: React.FC<CardProps> = ({ title, description1,description2, Pric
 
                         </div>
                         <h1 className='justify-center pt-2 text-xl font-bold flex'>₹{Price}</h1>
-                        <div className="mt-4 mb-4 relative z-10 justify-center flex cursor-pointer">
-                        <button 
-                                onClick={handleExploreMoreClick} 
-                                className={`rounded-full hover:bg-blue-500 p-2 px-3 bg-[#ed4ebb]`}
-                            >
-                                {showPhotoData ? "Close" : "Explore more"}
-                            </button>
-                        </div>
+
 
                     </div>
                     <Image
@@ -76,10 +69,18 @@ const InnerCard: React.FC<CardProps> = ({ title, description1,description2, Pric
                         className="photographer_element2 overflow-hidden relative z-0  max-w-[900px] right-[315px] bottom-[410px]"
                     />
                     {showPhotoData && (
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 duration-300">
-                    <PhotoData />
-                </div>
+                        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 duration-300">
+                            <PhotoData />
+                        </div>
                     )}
+                </div>
+                <div className="mt-4 mb-4 relative z-10 bottom-[100px] justify-center text-white flex cursor-pointer">
+                    <button
+                        onClick={handleExploreMoreClick}
+                        className={`rounded-full hover:bg-blue-500 p-2 px-3  bg-[#ed4ebb]`}
+                    >
+                        {showPhotoData ? "Close" : "Explore more"}
+                    </button>
                 </div>
             </Link>
         </div>
