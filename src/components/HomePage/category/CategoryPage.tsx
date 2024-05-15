@@ -11,7 +11,7 @@ const CategoryPage: React.FC = () => {
     const categories = [
         { id: "1", src: Banquet1, alt: "Banquet", title: "Banquet Halls" ,links: "BanquetHall"},
         { id: "2", src: Banquet2, alt: "Decorators", title: "Decorators", links:"Decorators" },
-        { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
+        { id: "3", src: Catering, alt: "Catering", title: "Caterers", links:"Caterers" },
         { id: "4", src: Photographer, alt: "Photographer", title: "Photographers", links: "Photographers" }
     ];
 

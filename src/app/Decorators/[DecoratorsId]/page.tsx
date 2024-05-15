@@ -10,18 +10,11 @@ import { PhoneCall } from 'lucide-react'
 
 const page = () => {
 
-    //     const GalleryImage = [
-    //      {id:"1", src:photo1},
-    //      {id:"2", src:photo2},
-    //      {id:"3", src:photo1},
-    //      {id:"4", src:photo3},
-    //      {id:"5", src:photo1}
-    //     ]
 
     return (
         <div className='py-6 mx-4'>
             <div className=' rounded-sm border'>
-                <div className='border rounded-sm m-1 w-full flex overflow-y-scroll h-96'>
+                <div className='border rounded-sm m-1 w-full flex overflow-y-scroll h-96 2xl:h-screen'>
 
                     <GalleryImage />
                 </div>

@@ -1,40 +1,43 @@
 "use client"
-import React, { useState, useCallback } from "react";
-import Gallery from "react-photo-gallery";
-import Carousel, { Modal, ModalGateway } from "react-images";
-import { photos } from "./photo"; // Assuming you've placed your photos file in the root of the project
 
-export default function GalleryImage() {
-  const [currentImage, setCurrentImage] = useState(0);
-  const [viewerIsOpen, setViewerIsOpen] = useState(false);
+import React, { useState } from "react";
+import Image from "next/image";
+import { photos } from "./photo";
+import Gallery, { PhotoClickHandler } from "react-photo-gallery";
+import { X } from "lucide-react";
 
-  const openLightbox = useCallback((event: any, { photo, index }: any) => {
-    setCurrentImage(index);
-    setViewerIsOpen(true);
-  }, []);
+export default function Home() {
+  const [currentImage, setCurrentImage] = useState<number | null>(null);
+
+  const openLightbox: PhotoClickHandler<{}> = (event, obj) => {
+    setCurrentImage(obj.index);
+  };
 
   const closeLightbox = () => {
-    setCurrentImage(0);
-    setViewerIsOpen(false);
+    setCurrentImage(null);
   };
 
   return (
     <div>
       <Gallery photos={photos} onClick={openLightbox} />
-      <ModalGateway>
-        {viewerIsOpen ? (
-          <Modal onClose={closeLightbox}>
-            <Carousel
-              currentIndex={currentImage}
-              views={photos.map((x) => ({
-                ...x,
-                srcset: x.srcSet,
-                caption: x.title,
-              }))}
+      {currentImage !== null && (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
+          <div className="relative w-full h-full">
+            <Image
+              src={photos[currentImage].src}
+              alt="{photos[currentImage].title}"
+              layout="fill" // Set layout to fill for full-width display
+              objectFit="contain"
             />
-          </Modal>
-        ) : null}
-      </ModalGateway>
+            <button
+              className="absolute top-0 right-0 p-4 text-white"
+              onClick={closeLightbox}
+            >
+              <X />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

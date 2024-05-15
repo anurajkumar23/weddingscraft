@@ -25,8 +25,12 @@ const Navbar: React.FC = () => {
             <li className='hidden md:flex'>
               <Link href="/BanquetHall">Banquet Halls</Link>
             </li>
+            <Link href="/Caterers">
             <li className='hidden md:flex'>Caterer</li>
+            </Link>
+            <Link href="/Decorators">
             <li className='hidden md:flex'>Decorators</li>
+            </Link>
             <li className='hidden md:flex'>
               <Link href="/Photographers">Photographers</Link>
             </li>
