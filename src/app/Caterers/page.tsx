@@ -36,7 +36,7 @@ const page = () => {
         />
       </div>
 
-      <div className="absolute hidden lg:bottom-14 top-2 left-0 z-30 p-5">
+      <div className="absolute hidden lg:block lg:bottom-14  -left-10 z-30 mx-10 w-80 p-5">
         <p className="text-white text-sm font-semibold">*Enjoy personalized catering services for your special event</p>
       </div>
     </div>
