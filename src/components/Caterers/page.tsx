@@ -174,7 +174,7 @@ const CardPage = ({ color, name }: any) => {
                                 <Plus />
                             </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent className='w-1/3'>
+                        <AlertDialogContent className='md:w-1/3'>
                             <AlertDialogHeader>
                                 <AlertDialogTitle className='justify-center flex place-center'>Add Foods</AlertDialogTitle>
                             </AlertDialogHeader>
