@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import InnerPage from "./page";
-import { getBanquet } from "@/utils/banquet/GetBanquet";
+// import { getBanquet } from "@/utils/banquet/GetBanquet";
 
 export interface Card {
   _id: string;
@@ -21,22 +21,14 @@ export interface Card {
   like:[]
 }
 
-const InnerCardPage: React.FC = () => {
-  const [banquetData, setBanquetData] = useState<Card[]>([]);
+export interface InnerCardProps{
+  banquetData:Card[],
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getBanquet();
-        if (data && data.data && data.data.banquet) {
-          setBanquetData(data.data.banquet);
-        }
-      } catch (error) {
-        console.error("Error fetching banquet data:", error);
-      }
-    }
-    fetchData();
-  }, []);
+const InnerCardPage: React.FC<InnerCardProps> = ({
+  banquetData
+}) => {
+
 
   return (
     <div className="pt-10 w-full">

@@ -3,9 +3,8 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Card } from "./InnerCardPage"; // Import your Card interface
+import { Card } from "./InnerCardPage";
 
-// Define the type of props using the imported Card interface
 const InnerPage: React.FC<Card> = ({
   billboard,
   alt,
@@ -18,7 +17,6 @@ const InnerPage: React.FC<Card> = ({
   link,
   like
 }) => {
- 
   return (
     <div>
       <Link href={`/${link}/${_id}`} key={_id}>
@@ -48,9 +46,15 @@ const InnerPage: React.FC<Card> = ({
                   <MapPin className="mr-2" />
                 </Link>
                 <span className="text-gray-600">Location: </span>
-                <p> {location.city},</p>
-                <p> {location.area},</p>
-                <p> {location.pincode}</p>
+                {location ? (
+                  <>
+                    <p>{location.city},</p>
+                    <p>{location.area},</p>
+                    <p>{location.pincode}</p>
+                  </>
+                ) : (
+                  <p>No location information available</p>
+                )}
               </div>
               <h1>Details: {description}</h1>
             </div>

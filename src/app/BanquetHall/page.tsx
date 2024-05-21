@@ -1,8 +1,13 @@
 import InnerCardPage from '@/components/InnerCard/InnerCardPage';
+import getBanquet from '@/utils/banquet/GetBanquet';
 import { SlidersHorizontal } from 'lucide-react';
 import React from 'react';
 
-const Page = () => {
+const Page = async () => {
+
+  const Banquet = await getBanquet()
+
+
   return (
     <div className='px-6 py-4'>
       <h1 className='text-2xl font-medium mb-4'>Top Banquet Halls in Patna</h1>
@@ -12,7 +17,7 @@ const Page = () => {
           <span className='text-base font-medium'>Filters</span>
         </div>
       </div>
-      <InnerCardPage/>
+      <InnerCardPage banquetData={Banquet}  />
     </div>
   );
 };
