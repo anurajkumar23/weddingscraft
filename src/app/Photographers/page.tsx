@@ -11,6 +11,20 @@ import { Search } from 'lucide-react';
 import backgroundImage from "../../../public/photographers background image with lotus Ankur.png"
 import Image from 'next/image';
 
+
+
+
+export const metadata = {
+  title: "Wedding Photographers",
+  description:
+    "Capture every special moment with professional wedding photographers. At Dream Wedding, discover talented photographers who specialize in capturing the essence and emotion of your big day. Whether you prefer candid shots, traditional poses, or artistic compositions, find the perfect photographer to create timeless memories.",
+  alternates: {
+    canonical: `/Photographers`
+  },
+};
+
+
+
 const Photographs = [
   { id: "1", src: phot1, alt: "Engagement", title: "Engagement", description: "Full Engagement + Album Shoot", Price: 3000 },
   { id: "2", src: phot1, alt: "Pre-wedding", title: "Pre wedding", description: "Full Engagement + Album Shoot", Price: 3000 },

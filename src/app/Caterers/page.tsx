@@ -3,6 +3,18 @@ import React from 'react'
 import ChefImage from "../../../public/Confident-smiling-female-chef-holding-two-plates-cooked-food-in-kitchen.jpeg"
 import Image from 'next/image';
 
+
+
+export const metadata = {
+  title: "Wedding Caterers",
+  description:
+    "Delight your guests with exquisite cuisine from the best wedding caterers. At Dream Wedding, find top-rated caterers who offer a variety of menus to suit your taste and budget. Whether you prefer traditional dishes or gourmet specialties, ensure your wedding is a culinary success with exceptional catering services.",
+  alternates: {
+    canonical: `/Caterers`
+  },
+};
+
+
 const page = () => {
 
   const cards = [

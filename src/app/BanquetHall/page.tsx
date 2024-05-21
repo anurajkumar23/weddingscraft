@@ -3,6 +3,17 @@ import getBanquet from '@/utils/banquet/GetBanquet';
 import { SlidersHorizontal } from 'lucide-react';
 import React from 'react';
 
+
+export const metadata = {
+  title: "Banquet Halls / Marriage Hall",
+  description:
+    "Discover and book the best banquet halls and marriage halls for your special occasions. With Dream Wedding, find the perfect venue that fits your style and budget. Enjoy seamless planning and exceptional service to make your wedding day truly unforgettable.",
+  alternates: {
+    canonical: `/BanquetHall`
+  },
+};
+
+
 const Page = async () => {
 
   const Banquet = await getBanquet()

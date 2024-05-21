@@ -1,6 +1,18 @@
 import React from 'react'
 import Decorators from './Decorators'
 
+
+export const metadata = {
+    title: "Wedding Decorators",
+    description:
+      "Transform your wedding venue with the best decorators. At Dream Wedding, connect with top-rated wedding decorators who can bring your vision to life. Whether you desire a traditional, modern, or unique theme, find the perfect decorator to make your special day beautiful and unforgettable.",
+    alternates: {
+      canonical: `/Decorators`
+    },
+  };
+  
+
+
 const page = () => {
     const decoratorsData = [
         { id: "1", name: "Stage Decorators", desc: "lorem ipsum dolor sit amet" },
