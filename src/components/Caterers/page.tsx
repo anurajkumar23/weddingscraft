@@ -18,70 +18,27 @@ import {
 
 import { IceCream, Martini, Plus, Sandwich, Soup, X, Check, ChevronDown, ChevronUp } from 'lucide-react';
 
-const CardPage = ({ color, name, Caterer }: any) => {
+interface Props {
+    // color: string;
+    name: string;
+    veg: Record<string, string[]>;
+    nonveg: Record<string, string[]>;
+    price: number;
+    addon: Record<string, { name: string; price: number }[]>;
+}
 
-    console.log(Caterer, "🐷🐷🐷🐷🐷🥳🎉")
-    const foodData: {
-        veg: Record<string, string[]>;
-        nonveg: Record<string, string[]>;
-        addon: Record<string, { name: string; price: number }[]>;
-    } = {
-        "veg": {
-            "starter": ["Paneer Tikka", "Hara Bhara Kabab"],
-            "maincourse": ["Paneer Butter Masala", "Vegetable Biryani"],
-            "desert": ["Gulab Jamun", "Rasgulla"],
-            "welcomedrink": ["Mango Lassi", "Buttermilk"],
-            "breads": ["Naan", "Roti"],
-            "rice": ["Jeera Rice", "Veg Pulao"]
-        },
-        "nonveg": {
-            "starter": ["Chicken Tikka", "Fish Fry"],
-            "maincourse": ["Butter Chicken", "Fish Curry", "Chicken Butter Masala"],
-            "desert": ["Rasmalai", "Shahi Tukda"],
-            "welcomedrink": ["Sweet Lime Soda", "Masala Chaas"],
-            "breads": ["Naan", "Tandoori Roti"],
-            "rice": ["Chicken Biryani", "Mutton Biryani"]
-        },
-        "addon": {
-            "starter": [
-                { "name": "Samosa", "price": 30 },
-                { "name": "Pakora", "price": 25 }
-            ],
-            "maincourse": [
-                { "name": "Chole Bhature", "price": 50 },
-                { "name": "Dosa", "price": 40 }
-            ],
-            "desert": [
-                { "name": "Ice Cream", "price": 35 },
-                { "name": "Gajar Ka Halwa", "price": 45 }
-            ],
-            "welcomedrink": [
-                { "name": "Cold Coffee", "price": 40 },
-                { "name": "Lemonade", "price": 30 }
-            ],
-            "breads": [
-                { "name": "Kulcha", "price": 20 },
-                { "name": "Puri", "price": 15 }
-            ],
-            "rice": [
-                { "name": "Fried Rice", "price": 35 },
-                { "name": "Puliyogare", "price": 30 }
-            ]
-        }
-    };
+const CardPage: React.FC<Props> = ({ name, veg, nonveg, addon, price }) => {
 
-    const getIconForCategory = (category: string) => {
-        switch (category) {
-            case 'welcomedrink':
-                return <Martini size={25} className="text-blue-500" />;
-            case 'starter':
-                return <Sandwich size={25} className="text-yellow-500" />;
-            case 'maincourse':
-                return <Soup size={25} className="text-green-500" />;
-            case 'desert':
-                return <IceCream size={25} className="text-red-500" />;
+    const getColor = (name: string) => {
+        switch (name.toLowerCase()) {
+            case 'basic':
+                return 'bg-gradient-to-l from-indigo-400 to-purple-700';
+            case 'standard':
+                return 'bg-gradient-to-r from-amber-500 to-pink-500';
+            case 'delux':
+                return 'bg-gradient-to-r from-emerald-400 to-cyan-400';
             default:
-                return null;
+                return '';
         }
     };
 
@@ -118,9 +75,24 @@ const CardPage = ({ color, name, Caterer }: any) => {
         setActiveCategory(category === activeCategory ? null : category);
     };
 
+    const getIconForCategory = (category: string) => {
+        switch (category) {
+            case 'welcomedrink':
+                return <Martini size={25} className="text-blue-500" />;
+            case 'starter':
+                return <Sandwich size={25} className="text-yellow-500" />;
+            case 'maincourse':
+                return <Soup size={25} className="text-green-500" />;
+            case 'desert':
+                return <IceCream size={25} className="text-red-500" />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="border">
-            <div className={`mb-4 border p-4 rounded-sm ${color}`}>
+            <div className={`mb-4 border p-4 rounded-sm ${getColor(name)}`}>
                 <div className='justify-center flex items-center'>
                     <h1 className='text-white font-bold text-2xl'>{name}</h1>
                 </div>
@@ -157,11 +129,11 @@ const CardPage = ({ color, name, Caterer }: any) => {
                 <div className='grid grid-cols-10'>
                     <div className='p-4 col-span-6 '>
                         <h1 className='font-semibold pb-4'>Food Items</h1>
-                        {Object.keys(foodData[foodType]).map((category, index) => (
-                            <div key={index} className='pb-2 text-sm '>
+                        {Object.keys(foodType === 'veg' ? veg : nonveg).map((category, index) => (
+                            <div key={index} className='pb-2 text-sm'>
                                 <h1>{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
                                 {/* <ul className="list-disc pl-6">
-                                    {foodData[foodType][category].map((item: string, idx: number) => (
+                                    {(foodType === 'veg' ? veg[category] : nonveg[category]).map((item: string, idx: number) => (
                                         <li key={idx}>{item}</li>
                                     ))}
                                 </ul> */}
@@ -171,30 +143,32 @@ const CardPage = ({ color, name, Caterer }: any) => {
                     <div className='col-span-4 text-center'>
                         <h1 className='font-semibold'>Packages</h1>
                         <div className='text-xs flex justify-center'>
-                            <h1 className='font-semibold pb-4'> ₹ 700 </h1>
+                            <h1 className='font-semibold pb-4'> ₹ {price} </h1>
                             <h1>/Plate</h1>
                         </div>
-                        {Object.keys(foodData[foodType]).map((category, index) => (
+                        {Object.keys(foodType === 'veg' ? veg : nonveg).map((category, index) => (
                             <div key={index} className='pb-2 text-sm'>
-                                <h1>{foodData[foodType][category].length}</h1>
+                                <h1>{(foodType === 'veg' ? veg[category] : nonveg[category]).length}</h1>
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className='w-full'>
-                    {selectedFoods.map((food, index) => (
-                        <div key={index} className='justify-between mx-5  mb-2 flex  text-sm'>
-                            <h1>{food}</h1>
-                            <Button
-                                variant="outline"
-                                className="text-red-600"
-                                onClick={() => handleRemoveFood(index)}
-                            >
-                                <X />
-                            </Button>
-                        </div>
-                    ))}
-                </div>
+                {selectedFoods.length > 0 && (
+                    <div className='w-full'>
+                        {selectedFoods.map((food, index) => (
+                            <div key={index} className='justify-between mx-5 mb-2 flex text-sm'>
+                                <h1>{food}</h1>
+                                <Button
+                                    variant="outline"
+                                    className="text-red-600"
+                                    onClick={() => handleRemoveFood(index)}
+                                >
+                                    <X />
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                )}
                 <div>
                     <AlertDialog>
                         <AlertDialogTrigger className='justify-between w-full flex '>
@@ -217,11 +191,11 @@ const CardPage = ({ color, name, Caterer }: any) => {
                             </AlertDialogHeader>
                             <AlertDialogDescription>
                                 <div className="grid mt-4">
-                                    {Object.keys(foodData.addon).map((category, index) => (
+                                    {Object.keys(addon).map((category, index) => (
                                         <div key={index}>
                                             <Button
                                                 variant="ghost"
-                                                className="flex  items-center justify-between w-full"
+                                                className="flex items-center justify-between w-full"
                                                 onClick={() => handleCategoryChange(category)}
                                             >
                                                 <span className={`font-semibold ${activeCategory === category ? 'text-blue-500' : 'text-black'}`}>
@@ -229,7 +203,7 @@ const CardPage = ({ color, name, Caterer }: any) => {
                                                 </span>
                                                 {activeCategory === category ? <ChevronUp /> : <ChevronDown />}
                                             </Button>
-                                            {activeCategory === category && foodData.addon[category].map((service, idx) => (
+                                            {activeCategory === category && addon[category].map((service, idx) => (
                                                 <div key={idx} className="mx-4 pb-4 justify-between flex items-center">
                                                     <h1>{service.name}</h1>
                                                     <Button
@@ -268,17 +242,17 @@ const CardPage = ({ color, name, Caterer }: any) => {
                             </AlertDialogHeader>
                             <AlertDialogDescription>
                                 <div className="grid grid-cols-2 mt-4">
-                                    {Object.keys(foodData[foodType]).map((category, index) => (
-                                        <div key={index} className="pb-4 flex items-center">
-                                            {getIconForCategory(category)}
-                                            <div>
-                                                <h1 className="font-semibold">{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
-                                                <ul className="list-disc pl-6">
-                                                    {foodData[foodType][category].map((item, idx) => (
-                                                        <li key={idx}>{item}</li>
-                                                    ))}
-                                                </ul>
+                                    {Object.keys(foodType === 'veg' ? veg : nonveg).map((category, index) => (
+                                        <div key={index} className='pb-2 text-sm'>
+                                            <div className="flex items-center">
+                                                {getIconForCategory(category)}
+                                                <h1 className="ml-2">{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
                                             </div>
+                                            <ul className="list-disc pl-6">
+                                                {(foodType === 'veg' ? veg[category] : nonveg[category]).map((item: string, idx: number) => (
+                                                    <li key={idx}>{item}</li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     ))}
                                 </div>
