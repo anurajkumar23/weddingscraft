@@ -6,7 +6,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import QuickInfo from './QuickInfo';
 import Link from 'next/link';
 
-interface BanquetVenue {
+export interface BanquetVenue {
     location: {
         city: string;
         pincode: string;
@@ -46,7 +46,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
     const { location, name, rating, locationUrl, price } = banquetData;
 
     return (
-        <div className='w-full h-full grid md:grid-cols-12 gap-2'>
+        <div className='h-full grid md:grid-cols-12 gap-2'>
             <div className='md:col-span-8'>
                 <div>
                     <Image
@@ -91,7 +91,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                     </div>
                 </div>
             </div>
-            <div className='border-2 rounded-sm md:col-span-4 p-2 pb-6'>
+            <div className='hidden md:block border-2 rounded-sm md:col-span-4 p-2 pb-6'>
                 <div className='pb-4'>
                     <div className='border w-full shadow-md p-4 cursor-pointer rounded-sm'>
                         <p className='text-red-600 text-2xl font-semibold pb-4 '>Starting Price</p>

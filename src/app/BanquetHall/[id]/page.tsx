@@ -8,8 +8,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <div className='px-4 py-6'>
-        <h1 className='text-3xl font-medium mb-4'>Top Banquet Halls in Patna</h1>
+      <div className='md:mx-4 py-6'>
+        <h1 className='mx-4 sm:mx-0 text-3xl font-medium mb-4'>Top Banquet Halls in Patna</h1>
         <MainCardPage banquetData={banquetData} />
       </div>
     </div>

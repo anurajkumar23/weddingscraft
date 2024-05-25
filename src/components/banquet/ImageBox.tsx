@@ -1,5 +1,6 @@
-import ImageContainer from "./Imagecontainer";
+// import ImageContainer from "./Imagecontainer";
 import Photo from "../../../public/Banquet-1.jpg";
+import Gallery from "../Gallery/Gallary"
 
 interface JoinUsFormProps {
     onClose: () => void;
@@ -8,20 +9,6 @@ interface JoinUsFormProps {
 
 const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
 
-    const Images = [
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-        { id: "1", src: Photo, alt: "Photo" },
-
-    ];
     return (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
             <div className="bg-white rounded-lg p-8 max-w-6xl max-h-6xl h-full w-full relative overflow-auto">
@@ -47,14 +34,15 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
                 <h1 className='items-center text-center pb-2 font-bold'>
                     Photos/Video
                 </h1>
-                <div className="grid grid-cols-6 gap-2">
-                    {Images.map((image) => (
+                <div className="">
+                    {/* {Images.map((image) => (
                         <ImageContainer
                             key={image.id}
                             img={image.src}
                             alt={image.alt}
                         />
-                    ))}
+                    ))} */}
+                    <Gallery/>
                 </div>
 
             </div>

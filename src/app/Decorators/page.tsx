@@ -1,5 +1,6 @@
 import React from 'react'
 import Decorators from './Decorators'
+import getDecorator from '@/utils/decorator/getDecorator';
 
 
 export const metadata = {
@@ -13,12 +14,19 @@ export const metadata = {
   
 
 
-const page = () => {
-    const decoratorsData = [
-        { id: "1", name: "Stage Decorators", desc: "lorem ipsum dolor sit amet" },
-        { id: "2", name: "Mehndi ceremoney", desc: "lorem ipsum dolor sit amet" },
-        { id: "3", name: "extra", desc: "lorem ipsum dolor sit amet" }
-    ]
+const page = async () => {
+
+ const decoratorsData = await getDecorator()
+
+
+
+
+
+    // const decoratorsData = [
+    //     { id: "1", name: "Stage Decorators", desc: "lorem ipsum dolor sit amet" },
+    //     { id: "2", name: "Mehndi ceremoney", desc: "lorem ipsum dolor sit amet" },
+    //     { id: "3", name: "extra", desc: "lorem ipsum dolor sit amet" }
+    // ]
 
     return (
         <div className='mx-2'>
@@ -31,12 +39,12 @@ const page = () => {
                 </div>
             </div>
             <div className='grid grid-cols-3 gap-6 py-6 '>
-                {decoratorsData.map((items) => (
+                {decoratorsData.map((items:any) => (
                     <Decorators
                         key={items.id}
                         id={items.id}
                         title={items.name}
-                        description={items.desc}
+                        description={items.description}
                     />
                 ))}
 

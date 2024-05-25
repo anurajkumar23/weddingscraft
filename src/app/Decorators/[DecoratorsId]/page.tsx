@@ -4,7 +4,7 @@ import photo1 from "../../../../public/Banquet-1.jpg"
 import photo2 from "../../../../public/Banquet-2.jpg"
 import photo3 from "../../../../public/image-1.avif"
 
-import GalleryImage from './Gallary'
+import GalleryImage from '../../../components/Gallery/Gallary'
 import { Button } from '@/components/ui/button'
 import { PhoneCall } from 'lucide-react'
 

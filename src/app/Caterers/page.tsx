@@ -2,6 +2,7 @@ import CardPage from '@/components/Caterers/page'
 import React from 'react'
 import ChefImage from "../../../public/Confident-smiling-female-chef-holding-two-plates-cooked-food-in-kitchen.jpeg"
 import Image from 'next/image';
+import getCaterer from '@/utils/caterer/GetCaterer';
 
 
 
@@ -15,7 +16,11 @@ export const metadata = {
 };
 
 
-const page = () => {
+const page = async() => {
+
+  const Caterer = await getCaterer()
+
+  console.log(Caterer, "🐷🐷🐷🐷🐷🥳🎉")
 
   const cards = [
     { color: 'bg-gradient-to-l from-indigo-400 to-purple-700', name: 'Starter' },
@@ -54,7 +59,7 @@ const page = () => {
     </div>
       <div className='mx-8 md:grid grid-cols-3 gap-4 py-4'>
         {cards.map((card, index) => (
-          <CardPage key={index} color={card.color} name={card.name} />
+          <CardPage key={index} color={card.color} name={card.name} Caterer={Caterer} />
         ))}
       </div>
     </div>

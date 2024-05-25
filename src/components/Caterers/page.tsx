@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import Veg from "../../../public/Veg_symbol.svg";
@@ -16,53 +16,69 @@ import {
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 
-import { IceCream, Martini, Plus, Sandwich, Soup, X, Check } from 'lucide-react'; // Import Check and X icons
+import { IceCream, Martini, Plus, Sandwich, Soup, X, Check, ChevronDown, ChevronUp } from 'lucide-react';
 
-const CardPage = ({ color, name }: any) => {
-    const FoodItems = [
-        { name: 'Welcome Drinks', items: 2 },
-        { name: 'Starter', items: 2 },
-        { name: 'Main Courses', items: 3 },
-        { name: 'Salad', items: 2 },
-        { name: 'Rice/Biryani', items: 1 },
-        { name: 'Desserts', items: 2 },
-    ];
+const CardPage = ({ color, name, Caterer }: any) => {
 
-    const AddFood = [
-        { name: 'Briyani', price: 130 },
-        { name: 'Nan', price: 50 },
-        { name: 'Matter Paneer', price: 200 },
-        { name: 'Suwar🐷', price: 400 },
-    ];
-
-    const servicesData = [
-        {
-            category: 'Welcome Drinks',
-            items: ["Sprite", "CocaCola", "Mirinda", "Lemonade", "Iced Tea", "Fruit Punch"]
+    console.log(Caterer, "🐷🐷🐷🐷🐷🥳🎉")
+    const foodData: {
+        veg: Record<string, string[]>;
+        nonveg: Record<string, string[]>;
+        addon: Record<string, { name: string; price: number }[]>;
+    } = {
+        "veg": {
+            "starter": ["Paneer Tikka", "Hara Bhara Kabab"],
+            "maincourse": ["Paneer Butter Masala", "Vegetable Biryani"],
+            "desert": ["Gulab Jamun", "Rasgulla"],
+            "welcomedrink": ["Mango Lassi", "Buttermilk"],
+            "breads": ["Naan", "Roti"],
+            "rice": ["Jeera Rice", "Veg Pulao"]
         },
-        {
-            category: 'Starters',
-            items: ["Paneer Tikka", "Chicken Tikka", "Vegetable Spring Rolls", "Samosas", "Chicken Satay", "Bruschetta"]
+        "nonveg": {
+            "starter": ["Chicken Tikka", "Fish Fry"],
+            "maincourse": ["Butter Chicken", "Fish Curry", "Chicken Butter Masala"],
+            "desert": ["Rasmalai", "Shahi Tukda"],
+            "welcomedrink": ["Sweet Lime Soda", "Masala Chaas"],
+            "breads": ["Naan", "Tandoori Roti"],
+            "rice": ["Chicken Biryani", "Mutton Biryani"]
         },
-        {
-            category: 'Main Course',
-            items: ["Butter Chicken", "Veg Biryani", "Dal Makhani", "Tandoori Roti", "Chicken Curry", "Palak Paneer"]
-        },
-        {
-            category: 'Desserts',
-            items: ["Gulab Jamun", "Rasgulla", "Rasmalai", "Ice Cream", "Fruit Salad", "Kheer"]
-        },
-    ];
+        "addon": {
+            "starter": [
+                { "name": "Samosa", "price": 30 },
+                { "name": "Pakora", "price": 25 }
+            ],
+            "maincourse": [
+                { "name": "Chole Bhature", "price": 50 },
+                { "name": "Dosa", "price": 40 }
+            ],
+            "desert": [
+                { "name": "Ice Cream", "price": 35 },
+                { "name": "Gajar Ka Halwa", "price": 45 }
+            ],
+            "welcomedrink": [
+                { "name": "Cold Coffee", "price": 40 },
+                { "name": "Lemonade", "price": 30 }
+            ],
+            "breads": [
+                { "name": "Kulcha", "price": 20 },
+                { "name": "Puri", "price": 15 }
+            ],
+            "rice": [
+                { "name": "Fried Rice", "price": 35 },
+                { "name": "Puliyogare", "price": 30 }
+            ]
+        }
+    };
 
     const getIconForCategory = (category: string) => {
         switch (category) {
-            case 'Welcome Drinks':
+            case 'welcomedrink':
                 return <Martini size={25} className="text-blue-500" />;
-            case 'Starters':
+            case 'starter':
                 return <Sandwich size={25} className="text-yellow-500" />;
-            case 'Main Course':
+            case 'maincourse':
                 return <Soup size={25} className="text-green-500" />;
-            case 'Desserts':
+            case 'desert':
                 return <IceCream size={25} className="text-red-500" />;
             default:
                 return null;
@@ -71,6 +87,8 @@ const CardPage = ({ color, name }: any) => {
 
     const [showAllServices, setShowAllServices] = useState(false);
     const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
+    const [foodType, setFoodType] = useState<'veg' | 'nonveg'>('veg');
+    const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
     const toggleShowAllServices = () => {
         setShowAllServices(!showAllServices);
@@ -92,6 +110,14 @@ const CardPage = ({ color, name }: any) => {
         return selectedFoods.includes(foodName);
     };
 
+    const handleFoodTypeChange = (type: 'veg' | 'nonveg') => {
+        setFoodType(type);
+    };
+
+    const handleCategoryChange = (category: string) => {
+        setActiveCategory(category === activeCategory ? null : category);
+    };
+
     return (
         <div className="border">
             <div className={`mb-4 border p-4 rounded-sm ${color}`}>
@@ -100,7 +126,11 @@ const CardPage = ({ color, name }: any) => {
                 </div>
             </div>
             <div className='flex px-4 items-center justify-between pb-2 '>
-                <Button variant="secondary" className='gap-x-2 bg-slate-200'>
+                <Button
+                    variant="secondary"
+                    className={`gap-x-2 ${foodType === 'veg' ? 'bg-slate-200' : 'bg-slate-100'}`}
+                    onClick={() => handleFoodTypeChange('veg')}
+                >
                     <Image
                         src={Veg}
                         alt="Veg"
@@ -109,7 +139,11 @@ const CardPage = ({ color, name }: any) => {
                     />
                     Vegetarian
                 </Button>
-                <Button variant="secondary" className='gap-x-2'>
+                <Button
+                    variant="secondary"
+                    className={`gap-x-2 ${foodType === 'nonveg' ? 'bg-slate-200' : 'bg-slate-100'}`}
+                    onClick={() => handleFoodTypeChange('nonveg')}
+                >
                     <Image
                         src={NonVeg}
                         alt="NonVeg"
@@ -123,9 +157,14 @@ const CardPage = ({ color, name }: any) => {
                 <div className='grid grid-cols-10'>
                     <div className='p-4 col-span-6 '>
                         <h1 className='font-semibold pb-4'>Food Items</h1>
-                        {FoodItems.map((item, index) => (
+                        {Object.keys(foodData[foodType]).map((category, index) => (
                             <div key={index} className='pb-2 text-sm '>
-                                <h1>{item.name}</h1>
+                                <h1>{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
+                                {/* <ul className="list-disc pl-6">
+                                    {foodData[foodType][category].map((item: string, idx: number) => (
+                                        <li key={idx}>{item}</li>
+                                    ))}
+                                </ul> */}
                             </div>
                         ))}
                     </div>
@@ -135,9 +174,9 @@ const CardPage = ({ color, name }: any) => {
                             <h1 className='font-semibold pb-4'> ₹ 700 </h1>
                             <h1>/Plate</h1>
                         </div>
-                        {FoodItems.map((item, index) => (
+                        {Object.keys(foodData[foodType]).map((category, index) => (
                             <div key={index} className='pb-2 text-sm'>
-                                <h1>{item.items}</h1>
+                                <h1>{foodData[foodType][category].length}</h1>
                             </div>
                         ))}
                     </div>
@@ -156,14 +195,12 @@ const CardPage = ({ color, name }: any) => {
                         </div>
                     ))}
                 </div>
-                <div >
-
+                <div>
                     <AlertDialog>
                         <AlertDialogTrigger className='justify-between w-full flex '>
                             <Button
                                 variant="outline"
                                 className="text-red-600 border-red-600 "
-
                             >
                                 Add Food items
                             </Button>
@@ -180,16 +217,30 @@ const CardPage = ({ color, name }: any) => {
                             </AlertDialogHeader>
                             <AlertDialogDescription>
                                 <div className="grid mt-4">
-                                    {AddFood.map((service, index) => (
-                                        <div key={index} className="pb-4 justify-between flex items-center">
-                                            <h1>{service.name}</h1>
+                                    {Object.keys(foodData.addon).map((category, index) => (
+                                        <div key={index}>
                                             <Button
-                                                variant="outline"
-                                                className='text-green-600 border-green-500 mr-3'
-                                                onClick={() => handleAddFood(service.name)}
+                                                variant="ghost"
+                                                className="flex  items-center justify-between w-full"
+                                                onClick={() => handleCategoryChange(category)}
                                             >
-                                                {isFoodSelected(service.name) ? <Check /> : <Plus />}
+                                                <span className={`font-semibold ${activeCategory === category ? 'text-blue-500' : 'text-black'}`}>
+                                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                                </span>
+                                                {activeCategory === category ? <ChevronUp /> : <ChevronDown />}
                                             </Button>
+                                            {activeCategory === category && foodData.addon[category].map((service, idx) => (
+                                                <div key={idx} className="mx-4 pb-4 justify-between flex items-center">
+                                                    <h1>{service.name}</h1>
+                                                    <Button
+                                                        variant="outline"
+                                                        className='text-green-600 border-green-500 mr-3'
+                                                        onClick={() => handleAddFood(service.name)}
+                                                    >
+                                                        {isFoodSelected(service.name) ? <Check /> : <Plus />}
+                                                    </Button>
+                                                </div>
+                                            ))}
                                         </div>
                                     ))}
                                 </div>
@@ -217,13 +268,13 @@ const CardPage = ({ color, name }: any) => {
                             </AlertDialogHeader>
                             <AlertDialogDescription>
                                 <div className="grid grid-cols-2 mt-4">
-                                    {servicesData.map((service, index) => (
+                                    {Object.keys(foodData[foodType]).map((category, index) => (
                                         <div key={index} className="pb-4 flex items-center">
-                                            {getIconForCategory(service.category)}
+                                            {getIconForCategory(category)}
                                             <div>
-                                                <h1 className="font-semibold">{service.category}</h1>
+                                                <h1 className="font-semibold">{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
                                                 <ul className="list-disc pl-6">
-                                                    {service.items.map((item, idx) => (
+                                                    {foodData[foodType][category].map((item, idx) => (
                                                         <li key={idx}>{item}</li>
                                                     ))}
                                                 </ul>
@@ -244,5 +295,3 @@ const CardPage = ({ color, name }: any) => {
 };
 
 export default CardPage;
-
-

@@ -10,7 +10,7 @@ interface cardProps {
     alt: string;
     title: string;
     description: string;
-    Price: number
+    Price: number[];
 }
 
 
@@ -37,7 +37,7 @@ const card: React.FC<cardProps> = ({ img, alt, title, description, Price, id }) 
                         </div>
                         <div className='justify-between pt-2'>
                             <h1 className='text-gray-600 text-xs'>{description}</h1>
-                            {/* <h1 className='text-xl font-bold'>₹{Price}</h1> */}
+                            <h1 className='text-xl font-bold'>₹{Price[0]}</h1>
                         </div>
                         <hr className='h-px  mt-8 bg-black border-0' />
                         <h1 className='mt-2 justify-center flex font-bold cursor-pointer'>ORDER</h1>
