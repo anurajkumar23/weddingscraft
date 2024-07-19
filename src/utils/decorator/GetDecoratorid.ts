@@ -1,7 +1,7 @@
-export default async function getDecoratorId(id: string) {
+  export default async function getDecoratorId(id: string) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/decorator/${id}`,
+        `http://localhost:3000/api/decor/${id}`,
         { cache: 'no-store' }
       );
   

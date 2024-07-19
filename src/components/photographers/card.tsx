@@ -5,7 +5,7 @@ import React from 'react';
 
 
 interface cardProps {
-    id: string;
+    _id: string;
     img: string | StaticImageData;
     alt: string;
     title: string;
@@ -14,10 +14,10 @@ interface cardProps {
 }
 
 
-const card: React.FC<cardProps> = ({ img, alt, title, description, Price, id }) => {
+const card: React.FC<cardProps> = ({ img, alt, title, description, Price, _id }) => {
     return (
         <div className='cursor-pointer  justify-center items-center '>
-            <Link href={`/Photographers/${id}`}>
+            <Link href={`/Photographers/${_id}`}>
                 <div className='grid grid-cols-10 md:w-48 sm:block bg-white z-10  border border-purple-300 p-2 rounded-2xl hover:scale-105 hover:border-purple-400 hover:border-4 transition duration-300 hover:shadow-lg'>
                     <div className='col-span-5'>
                     <Image

@@ -2,11 +2,15 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { photos } from "./photo";
+// import { photos } from "./photo";
 import Gallery, { PhotoClickHandler } from "react-photo-gallery";
 import { X } from "lucide-react";
 
-export default function Home() {
+interface HomeProps {
+  photos: { src: string; width: number; height: number }[];
+}
+
+const Home: React.FC<HomeProps> = ({ photos }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null);
 
   const openLightbox: PhotoClickHandler<{}> = (event, obj) => {
@@ -28,6 +32,7 @@ export default function Home() {
               alt="{photos[currentImage].title}"
               layout="fill" // Set layout to fill for full-width display
               objectFit="contain"
+               loading="lazy"
             />
             <button
               className="absolute top-0 right-0 p-4 text-white"
@@ -41,3 +46,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

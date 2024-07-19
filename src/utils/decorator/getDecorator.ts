@@ -1,7 +1,7 @@
 export default async function getDecorator() {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/decorator`,
+        `http://localhost:3000/api/decor`,
         { cache: 'no-store' }
       );
       const data = await response.json();

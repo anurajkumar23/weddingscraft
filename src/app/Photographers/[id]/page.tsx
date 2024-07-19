@@ -3,8 +3,14 @@ import React from 'react'
 import bgImage from "../../../../public/2nd backgroun image Prototype_20240426_220425_0000.png"
 import InnerCard from '@/components/photographers/InnerCard'
 import element3 from "../../../../public/elements/11_20240427_221554_0004.png";
+import getPhotographerId from '@/utils/Photographer/GetPhotographerId';
 
-const page = () => {
+
+const page = async ({ params }: { params: { id: string } }) => {
+
+  const photographer = await getPhotographerId(params.id)
+
+  // console.log(photographer,"😀😀😀😀🎆🎆🎉🐷🎇")
 
   const data = [
     { id: "1", title: "Standard", description1: "Capture Cherished Moments",description2:"Coverage of the ceremony and reception Digital photo album with basic editing", Price: 3000 },

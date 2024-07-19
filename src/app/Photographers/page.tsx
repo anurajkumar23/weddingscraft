@@ -73,7 +73,7 @@ const page = async () => {
 
             <Card
               key={card.id}
-              id={card.id}
+              _id={card._id}
               img={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/photographer/${card.billboard}`}
               alt={card.billboard}
               title={card.name}
