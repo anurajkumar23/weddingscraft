@@ -43,7 +43,7 @@ const Decorators: React.FC<DecoratorsProps> = ({ title, img, description, _id })
                       alt="img"
                       layout="fill"
                       objectFit="contain"
-                     className='object-cover md:w-48 md:h-48 w-36 h-36 hover:scale-105 transition-transform duration-300 cursor-pointer'
+                     className='object-contain hover:scale-105 transition-transform duration-300 cursor-pointer'
                      loading="lazy"
                     />
                   </div>

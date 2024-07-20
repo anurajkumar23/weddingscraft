@@ -8,7 +8,13 @@ interface JoinUsFormProps {
 
 
 const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
-
+    // const photos = Decorator.photos.map((photo: string) => {
+    //     const dimension = getRandomDimension();
+    //     return {
+    //       src: `${process.env.NEXT_PUBLIC_Backend_Url_Image}images/decorator/media/${photo}`,
+    //       ...dimension,
+    //     };
+    //   });
     return (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
             <div className="bg-white rounded-lg p-8 max-w-6xl max-h-6xl h-full w-full relative overflow-auto">
@@ -42,7 +48,9 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
                             alt={image.alt}
                         />
                     ))} */}
-                    <Gallery/>
+                    <Gallery
+                    
+                    />
                 </div>
 
             </div>

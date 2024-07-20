@@ -1,9 +1,7 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
-// import { photos } from "./photo";
-import Gallery, { PhotoClickHandler } from "react-photo-gallery";
 import { X } from "lucide-react";
 
 interface HomeProps {
@@ -13,8 +11,8 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ photos }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null);
 
-  const openLightbox: PhotoClickHandler<{}> = (event, obj) => {
-    setCurrentImage(obj.index);
+  const openLightbox = (index: number) => {
+    setCurrentImage(index);
   };
 
   const closeLightbox = () => {
@@ -23,16 +21,31 @@ const Home: React.FC<HomeProps> = ({ photos }) => {
 
   return (
     <div>
-      <Gallery photos={photos} onClick={openLightbox} />
+      <section id="photos">
+        <div className="columns-2 gap-1 sm:columns-3">
+          {photos.map((photo, idx) => (
+            <Image
+              key={idx}
+              className="mb-4 size-full rounded-lg object-contain cursor-pointer"
+              src={photo.src}
+              alt=""
+              width={500}
+              height={500}
+              onClick={() => openLightbox(idx)}
+              loading="lazy"
+            />
+          ))}
+        </div>
+      </section>
       {currentImage !== null && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
           <div className="relative w-full h-full">
             <Image
               src={photos[currentImage].src}
-              alt="{photos[currentImage].title}"
-              layout="fill" // Set layout to fill for full-width display
+              alt={`Photo ${currentImage}`}
+              layout="fill"
               objectFit="contain"
-               loading="lazy"
+              loading="lazy"
             />
             <button
               className="absolute top-0 right-0 p-4 text-white"
@@ -45,6 +58,6 @@ const Home: React.FC<HomeProps> = ({ photos }) => {
       )}
     </div>
   );
-}
+};
 
 export default Home;
