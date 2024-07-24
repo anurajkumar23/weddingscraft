@@ -4,33 +4,33 @@ import { PhoneCall } from 'lucide-react';
 import getDecoratorId from '@/utils/decorator/GetDecoratorid';
 import GalleryImage from '../../../components/Gallery/Gallary';
 
-const predefinedDimensions = [
-    { width: 4, height: 3 },
-    { width: 1, height: 1 },
-    { width: 3, height: 4 },
-    { width: 4, height: 3 },
-    { width: 3, height: 4 },
-    { width: 4, height: 3 },
-    { width: 3, height: 4 },
-    { width: 1, height: 1 },
-    { width: 4, height: 3 },
-  ];
+// const predefinedDimensions = [
+//     { width: 4, height: 3 },
+//     { width: 1, height: 1 },
+//     { width: 3, height: 4 },
+//     { width: 4, height: 3 },
+//     { width: 3, height: 4 },
+//     { width: 4, height: 3 },
+//     { width: 3, height: 4 },
+//     { width: 1, height: 1 },
+//     { width: 4, height: 3 },
+//   ];
   
-  const getRandomDimension = () => {
-    return predefinedDimensions[Math.floor(Math.random() * predefinedDimensions.length)];
-  };
+  // const getRandomDimension = () => {
+  //   return predefinedDimensions[Math.floor(Math.random() * predefinedDimensions.length)];
+  // };
   
   const Page = async ({ params }: { params: { id: string } }) => {
     const Decorator = await getDecoratorId(params.id);
   
     // Convert photos to the required format for the Gallery component with random dimensions
-    const photos = Decorator.photos.map((photo: string) => {
-      const dimension = getRandomDimension();
-      return {
-        src: `${process.env.NEXT_PUBLIC_Backend_Url_Image}images/decorator/media/${photo}`,
-        ...dimension,
-      };
-    });
+    // const photos = Decorator.photos.map((photo: string) => {
+    //   const dimension = getRandomDimension();
+    //   return {
+    //     src: `${process.env.NEXT_PUBLIC_Backend_Url_Image}images/decorator/media/${photo}`,
+    //     ...dimension,
+    //   };
+    // });
   return (
 
 <div className='py-6 mx-4'>
@@ -38,7 +38,8 @@ const predefinedDimensions = [
     <div className='border rounded-sm m-1 w-full flex overflow-y-scroll h-96 2xl:h-screen'>
 
         <GalleryImage
-            photos={photos}
+            photos={Decorator.photos}
+            category='decorator'
         />
         
     </div>
