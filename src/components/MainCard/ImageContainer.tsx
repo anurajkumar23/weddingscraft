@@ -6,14 +6,14 @@ import ImageBox from '../banquet/ImageBox';
 
 
 interface ImageProps{
-    img: string| StaticImageData;
+    photos: string[];
     alt: string;
     title: string;
     number:string|number
 }
 
 
-const ImageContainer: React.FC<ImageProps> = ({ img, alt, title, number }) => {
+const ImageContainer: React.FC<ImageProps> = ({ photos, alt, title, number }) => {
   const [showModal, setShowModal] = useState(false);
   const handleJoinUsClick = () => {
     setShowModal(true);
@@ -28,7 +28,7 @@ const ImageContainer: React.FC<ImageProps> = ({ img, alt, title, number }) => {
     <div className='mb-6'>
       <button onClick={handleJoinUsClick}>
       <Image
-        src={img}
+        src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/media/${photos[0]}`}
         alt={alt}
         width={800} // Set the width of the image
         height={600} // Set the height of the image
@@ -42,7 +42,7 @@ const ImageContainer: React.FC<ImageProps> = ({ img, alt, title, number }) => {
       </div>
       <p>{number} {title === 'Photos' ? `${title}/video` : title}</p>
       </div>
-      {showModal && <ImageBox onClose={handleCloseModal} />}
+      {showModal && <ImageBox onClose={handleCloseModal} photos={photos}/>}
     </div>
   );
 };
