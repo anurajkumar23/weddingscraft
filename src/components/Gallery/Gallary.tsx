@@ -5,10 +5,11 @@ import Image from "next/image";
 import { X } from "lucide-react";
 
 interface HomeProps {
-  photos: string[];
+  photos: string[] ;
+  category:string;
 }
 
-const Home: React.FC<HomeProps> = ({ photos }) => {
+const Home: React.FC<HomeProps> = ({ photos,category }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null);
 
   const openLightbox = useCallback((index: number) => {
@@ -27,7 +28,7 @@ const Home: React.FC<HomeProps> = ({ photos }) => {
             <Image
               key={idx}
               className="mb-4 size-full rounded-lg object-contain cursor-pointer"
-              src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/media/${photo}`}
+              src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${photo}`}
               alt=""
               width={500}
               height={500}
@@ -41,7 +42,7 @@ const Home: React.FC<HomeProps> = ({ photos }) => {
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75">
           <div className="relative w-full h-full">
             <Image
-              src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/media/${photos[currentImage]}`}
+              src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${photos[currentImage]}`}
               alt={`Photo ${currentImage}`}
               layout="fill"
               objectFit="contain"

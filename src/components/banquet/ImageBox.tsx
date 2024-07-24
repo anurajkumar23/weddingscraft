@@ -44,7 +44,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose,photos }) => {
                 </h1>
                 <div className="">
                   
-                    <Gallery photos={photos}/>
+                    <Gallery photos={photos} category="banquet"/>
                 </div>
 
             </div>
