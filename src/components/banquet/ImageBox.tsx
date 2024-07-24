@@ -43,15 +43,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose,photos }) => {
                     Photos/Video
                 </h1>
                 <div className="">
-                    {photos.map((image,index) => (
-                        
-                        <ImageContainer
-                            key={index}
-                        
-                            img={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/media/${image}`}
-                            alt={image}
-                        />
-                    ))}
+                  
                     <Gallery photos={photos}/>
                 </div>
 
