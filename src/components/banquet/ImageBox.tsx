@@ -1,13 +1,15 @@
 // import ImageContainer from "./Imagecontainer";
 import Photo from "../../../public/Banquet-1.jpg";
 import Gallery from "../Gallery/Gallary"
+import ImageContainer from "./ImageContainer";
 
 interface JoinUsFormProps {
     onClose: () => void;
+    photos:string[]
 }
 
 
-const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
+const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose,photos }) => {
     // const photos = Decorator.photos.map((photo: string) => {
     //     const dimension = getRandomDimension();
     //     return {
@@ -41,16 +43,16 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({ onClose }) => {
                     Photos/Video
                 </h1>
                 <div className="">
-                    {/* {Images.map((image) => (
+                    {photos.map((image,index) => (
+                        
                         <ImageContainer
-                            key={image.id}
-                            img={image.src}
-                            alt={image.alt}
+                            key={index}
+                        
+                            img={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/media/${image}`}
+                            alt={image}
                         />
-                    ))} */}
-                    <Gallery
-                    
-                    />
+                    ))}
+                    <Gallery photos={photos}/>
                 </div>
 
             </div>

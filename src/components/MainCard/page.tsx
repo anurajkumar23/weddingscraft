@@ -5,7 +5,6 @@ import { Button } from '../ui/button';
 import { FaWhatsapp } from 'react-icons/fa';
 import QuickInfo from './QuickInfo';
 import Link from 'next/link';
-
 export interface BanquetVenue {
     location: {
         city: string;
@@ -19,7 +18,7 @@ export interface BanquetVenue {
     locationUrl: string;
     description: string;
     price: number;
-    like: any[]; // Define the type for like array based on its content
+    like: Like[]; // Define the type for like array based on its content
     capacity: number;
     specialFeature: string[];
     yearOfEstd: number;
@@ -29,10 +28,28 @@ export interface BanquetVenue {
     billboard: string;
     openHours: string;
     operatingDays: string;
-    reviews: any[]; // Define the type for reviews array based on its content
-    gallery: string[]; // Assuming gallery URLs are strings
+    reviews: Review[]; // Define the type for reviews array based on its content
+    gallery: {
+        name: string;
+        photos: string[]; // Assuming gallery URLs are strings
+        _id: string;
+    }[];
     __v: number;
 }
+
+// Example types for 'like' and 'review' arrays
+interface Like {
+    userId: string;
+    timestamp: Date;
+}
+
+interface Review {
+    userId: string;
+    comment: string;
+    rating: number;
+    date: Date;
+}
+
 
 interface BanquetProps {
     banquetData: BanquetVenue
@@ -42,6 +59,9 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
     if (!banquetData) {
         return <div>Loading...</div>;
     }
+
+
+    
 
     const { location, name, rating, locationUrl, price } = banquetData;
 

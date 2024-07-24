@@ -40,6 +40,7 @@ const predefinedDimensions = [
         <GalleryImage
             photos={photos}
         />
+        
     </div>
     <div className='w-full h-full m-4 '>
         {Decorator.name}
