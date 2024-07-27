@@ -34,9 +34,11 @@ const Navbar: React.FC = () => {
             <li className='hidden md:flex'>
               <Link href="/Photographers">Photographers</Link>
             </li>
+            <Link href="/auth/login">
             <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
               Login /SignUp
             </li>
+            </Link>
             <li>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
