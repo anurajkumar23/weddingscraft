@@ -33,6 +33,7 @@ const ImageContainer: React.FC<ImageProps> = ({ photos, alt, title, number }) =>
         width={800} // Set the width of the image
         height={600} // Set the height of the image
         className=' object-cover md:w-44 md:h-44  cursor-pointer rounded-2xl'
+        loading='lazy'
       />
        
       </button>

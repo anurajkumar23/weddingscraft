@@ -27,6 +27,7 @@ const InnerPage: React.FC<Card> = ({
               alt={alt}
               width={400}
               height={300}
+              loading='lazy'
               className="object-cover md:w-60 md:h-60 sm:w-60 sm:h-64 w-48 h-56 cursor-pointer rounded-2xl"
             />
             <div className="w-full px-4 m-3 mb-2">

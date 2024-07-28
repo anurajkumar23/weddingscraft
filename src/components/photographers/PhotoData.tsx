@@ -16,16 +16,19 @@ const PhotoData = () => {
                 src={element1}
                 alt="background image"
                 className="relative w-80 -z-0 -bottom-[250px] left-28 overflow-hidden"
+                loading='lazy'
             />
             <Image
                 src={element1}
                 alt="background image"
                 className="relative w-80 -z-0 rotate-180 bottom-[273px] right-28 overflow-hidden"
+                loading='lazy'
             />
             <Image
                 src={element2}
                 alt="background image"
                 className="photographer_element2 overflow-hidden relative z-0  max-w-[900px] right-[315px] bottom-[450px]"
+                loading='lazy'
             />
         </div>
     );

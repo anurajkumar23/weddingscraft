@@ -108,6 +108,7 @@ const CardPage: React.FC<Props> = ({ name, veg, nonveg, addon, price }) => {
                         alt="Veg"
                         width={20}
                         height={20}
+                        loading='lazy'
                     />
                     Vegetarian
                 </Button>
@@ -121,6 +122,7 @@ const CardPage: React.FC<Props> = ({ name, veg, nonveg, addon, price }) => {
                         alt="NonVeg"
                         width={20}
                         height={20}
+                        loading='lazy'
                     />
                     Non-Vegetarian
                 </Button>

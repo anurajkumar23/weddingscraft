@@ -20,6 +20,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ img, alt, title,link }) => 
                         src={img}
                         alt={alt}
                         className='object-cover md:w-48 md:h-48 w-36 h-36 hover:scale-105 transition-transform duration-300 cursor-pointer'
+                        loading='lazy'
                     />
                 </div>
                 <h1 className='text-center font-medium'>{title}</h1>

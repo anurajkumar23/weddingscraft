@@ -76,6 +76,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                         alt="BanquetHall"
                         loading="lazy"
                         className='w-full h-96 rounded-sm object-cover'
+                        
                     />
                     <div className='relative bottom-20 mx-4 bg-white rounded-sm p-4 shadow-xl border'>
                         <div className='flex justify-between items-center pb-2'>

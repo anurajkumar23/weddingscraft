@@ -57,16 +57,19 @@ const InnerCard: React.FC<CardProps> = ({ title, description1, description2, Pri
                         src={element1}
                         alt="background image"
                         className="relative w-80 -z-0 -bottom-[292px] left-28 overflow-hidden"
+                        loading='lazy'
                     />
                     <Image
                         src={element1}
                         alt="background image"
                         className="relative w-80 -z-0 rotate-180 bottom-[230px] right-28 overflow-hidden"
+                        loading='lazy'
                     />
                     <Image
                         src={element2}
                         alt="background image"
                         className="photographer_element2 overflow-hidden relative z-0  max-w-[900px] right-[315px] bottom-[410px]"
+                        loading='lazy'
                     />
                     {showPhotoData && (
                         <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-10 duration-300">
