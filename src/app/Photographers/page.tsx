@@ -51,6 +51,7 @@ const page = async () => {
         src={backgroundImage}
         alt='background image'
         className='absolute -z-1 object-cover h-full w-full'
+        loading='lazy'
       />
 
       <div className='absolute  w-full py-14 z-20 sm:justify-end justify-center flex sm:px-20 '>

@@ -29,7 +29,7 @@ const Home: React.FC<HomeProps> = ({ photos,category }) => {
               key={idx}
               className="mb-4 size-full rounded-lg object-contain cursor-pointer"
               src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${photo}`}
-              alt=""
+              alt={`media photo-${idx}`}
               width={500}
               height={500}
               onClick={() => openLightbox(idx)}

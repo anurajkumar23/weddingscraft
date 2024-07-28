@@ -48,6 +48,7 @@ const page = async () => {
             layout="responsive"
             width={500}
             height={500}
+            loading='lazy'
           />
         </div>
 

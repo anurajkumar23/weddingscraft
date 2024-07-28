@@ -19,6 +19,7 @@ const Card: React.FC<CardProps> = ({ img, alt, title }) => {
         width={800} // Set the width of the image
         height={600} // Set the height of the image
         className=' object-cover md:w-80 md:h-80 sm:w-80 sm:h-64  cursor-pointer rounded-2xl'
+        loading='lazy'
       />
       <div className=" mt-3">
       <div className='flex justify-between'>

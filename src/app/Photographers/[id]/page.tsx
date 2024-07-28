@@ -26,6 +26,8 @@ const page = async ({ params }: { params: { id: string } }) => {
         src={bgImage}
         alt='background image'
         className='absolute -z-1 object-cover md:h-full h-full w-full '
+        loading='lazy'
+        
       />
       <div className='w-full bg-red z-10 h-24 relative flex justify-center items-center overflow-hidden'>
         <Image
@@ -33,6 +35,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           alt="background image"
           // layout="fill"
           objectFit="cover"
+          loading='lazy'
           objectPosition="center"
           className="absolute max-w-[900px] -z-1  overflow-hidden "
         />

@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
-import logo from "../../public/Dream Wedding Logo_20240417_103338_0000.png"
+import logo from "../../public/Dream_Wedding_Logo.png"
 
 const Navbar: React.FC = () => {
   return (
@@ -15,6 +15,9 @@ const Navbar: React.FC = () => {
               src={logo}
               alt='Dream Wedding logo'
               className='w-80 cursor-pointer '
+              priority={false}
+              loading='lazy'
+          
             />
           </Link>
         </div>
@@ -39,12 +42,14 @@ const Navbar: React.FC = () => {
               Login /SignUp
             </li>
             </Link>
+            <Link href='/user/profile'>
             <li>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </li>
+            </Link>
           </ul>
         </div>
       </div>

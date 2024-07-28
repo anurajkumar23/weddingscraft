@@ -25,6 +25,7 @@ const card: React.FC<cardProps> = ({ img, alt, title, description, Price, _id })
                         alt={alt}
                         width={500}
                         height={500}
+                        loading='lazy'
                         className='object-cover  md:w-48 w-44 h-44 cursor-pointer rounded-2xl'
                     />
                     </div>
