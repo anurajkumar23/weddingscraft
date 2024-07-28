@@ -137,24 +137,12 @@
   transform: rotateY(180deg)
 } 
 
- 
-/* Swiper js */
-
-
-/* .mySlider{
-  height: 615px;
-  z-index: 1;
+/* Global Stylesheet or CSS Module */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-@media (max-width:700px){
-  .mySlider{
-      height: 50vh;
-      
-  }
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
 }
-
-@media (max-width:400px){
-  .mySlider{
-      height: 43vh;
-  }
-} */
