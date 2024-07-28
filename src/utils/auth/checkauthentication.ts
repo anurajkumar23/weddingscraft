@@ -2,7 +2,7 @@ export default async function checkAuthentication() {
     try {
       const token = localStorage.getItem("jwt_token");
       if (!token) {
-          throw new Error("No token found");
+          return false;
         }
         console.log("🚀 ~ checkAuthentication ~ token:", token)
   
