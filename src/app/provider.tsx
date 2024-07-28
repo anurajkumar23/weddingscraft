@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { AuthProvider } from "./authContext";
 
 
 
 const Provider = ({ children }: { children: any }) => {
 
   return ( 
-    <>
+    <AuthProvider>
      {children}
-    </>
+    </AuthProvider>
    );
 }
  

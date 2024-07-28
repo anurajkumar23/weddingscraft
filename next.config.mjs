@@ -2,10 +2,11 @@
 const nextConfig = {
     images: {
         remotePatterns: [
-            { hostname: 'source.unsplash.com', protocol: 'https' },
+            { hostname: 'localhost:3000', protocol: 'http' },
+            { hostname: 'localhost:3000', protocol: 'http' },
             { hostname: 'localhost', protocol: 'http' },
         ],
-        domains: ['localhost'],
+        domains: ['localhost:3000','localhost:3001'],
     },
 };
 

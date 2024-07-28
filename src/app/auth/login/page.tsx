@@ -7,6 +7,7 @@ import { Loading } from '@/utils/loading';
 import { useFormik } from "formik";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation"; 
+import { useAuth } from '@/app/authContext';
 
 
 
@@ -23,6 +24,8 @@ export default function Login() {
     const [loading,setLoading] = useState<boolean>(false);
     const isSubmitClicked = useRef(false)
     const router = useRouter();
+    const { user,setUser} =   useAuth();
+    
     
     const {
       errors,
@@ -48,6 +51,7 @@ export default function Login() {
 
          if(data.success===true){
           console.log("entered")
+          setUser(data.user)
           router.push("/user/profile"); 
          }
         } catch (error) {
