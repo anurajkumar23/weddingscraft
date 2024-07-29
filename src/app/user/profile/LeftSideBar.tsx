@@ -46,9 +46,6 @@ const LeftSideBar: React.FC = () => {
           </div>
         ))}
       </div>
-      {/* <div className="flex gap-4 text-body-medium items-center">
-        <p>Edit Profile</p>
-      </div> */}
     </div>
   );
 };
