@@ -1,15 +1,8 @@
 // /lib/constants.tsx
 
 import {
-  LayoutDashboard,
-  ShoppingBag,
-  UsersRound,
-  Building,
-  SprayCan,
-  Utensils,
-  Camera,
-  // Transaction,
-  Globe,
+
+
   Bell,
   Headset,
   Briefcase,
@@ -17,28 +10,35 @@ import {
   MessageCircle,
   HelpCircle,
   LogOut,
+  ClipboardCheck,
+  Heart,
+  Bookmark,
+  UserRoundPen,
+ 
 } from "lucide-react";
 import { NavLink } from "./types";
 
+
+
 export const navLinks: NavLink[] = [
   {
-    url: "/",
-    icon: <LayoutDashboard />,
+    url: "/favorites",
+    icon: <Heart />,
     label: "Favorites",
   },
   {
-    url: "/orders",
-    icon: <ShoppingBag />,
+    url: "/saved",
+    icon: <Bookmark />,
     label: "Saved",
   },
   {
-    url: "/users",
-    icon: <UsersRound />,
+    url: "/editProfile",
+    icon: <UserRoundPen />,
     label: "Edit Profile",
   },
   {
     url: "/transactions",
-    icon: "<Transaction />",
+    icon: <ClipboardCheck />,
     label: "My Transaction",
   },
   // {

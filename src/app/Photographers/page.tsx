@@ -43,8 +43,6 @@ const page = async () => {
 
   const Photographs = await getPhotographer()
 
-  console.log(Photographs, "✔️✔️✔️✔️✔️✔️🎇")
-
   return (
     <div className='w-full h-auto bg-gradient-to-r from-violet-200 to-pink-50'>
       <Image

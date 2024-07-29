@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
           <li>Photographers</li>
         </ul>
       </div> */}
-      <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 ${menuOpen ? 'block' : 'hidden'}`} onClick={handleNav}>
+      <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 backdrop-blur-sm bg-opacity-75 z-50 ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`} onClick={handleNav}>
         <div className={`fixed right-0 top-0 w-[365px] h-full bg-slate-50  ease-in duration-500 ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`} onClick={(e) => e.stopPropagation()}>
           <div className='p-4 flex cursor-pointer items-center justify-start mb-4'>
             <AiOutlineClose size={25} onClick={handleNav} />
@@ -91,16 +91,16 @@ const Navbar: React.FC = () => {
             <p className="text-blue-500 cursor-pointer">Click to view profile</p>
           </div>
           <hr className="w-full border-t border-gray-300" />
-          <ul className="p-2 pb-36 overflow-y-auto h-full hide-scrollbar">
+          <ul className="p-2 pb-36 overflow-y-auto h-full hide-scrollbar text-black font-medium">
             {navLinks.map((link, index) => (
               <div key={link.label}>
-                <li
+                <Link href={link.url}
                   // variant="outline"
                   className="p-4 flex w-full justify-start space-x-2  hover:bg-gray-200 hover:rounded-md"
                 >
                   {link.icon}
                   <span>{link.label}</span>
-                </li>
+                </Link>
                 {index === 3 ||  index === 5 || index === 6 || index === 9 ? (
                   <div className='mt-4 pb-4'>
                     <hr className="w-full border-t border-gray-300" />
