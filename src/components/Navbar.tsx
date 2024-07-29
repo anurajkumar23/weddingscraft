@@ -82,6 +82,7 @@ const Navbar: React.FC = () => {
           <div className='p-4 flex cursor-pointer items-center justify-start mb-4'>
             <AiOutlineClose size={25} onClick={handleNav} />
           </div>
+          <Link href="/user/profile">
           <div className=" flex flex-col items-center text-center">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
@@ -90,6 +91,7 @@ const Navbar: React.FC = () => {
             <p className="mt-4 font-semibold text-lg">Anuraj</p>
             <p className="text-blue-500 cursor-pointer">Click to view profile</p>
           </div>
+          </Link>
           <hr className="w-full border-t border-gray-300" />
           <ul className="p-2 pb-36 overflow-y-auto h-full hide-scrollbar text-black font-medium">
             {navLinks.map((link, index) => (

@@ -22,22 +22,22 @@ import { NavLink } from "./types";
 
 export const navLinks: NavLink[] = [
   {
-    url: "/favorites",
+    url: "/user/profile/favorites",
     icon: <Heart />,
     label: "Favorites",
   },
   {
-    url: "/saved",
+    url: "/user/profile/saved",
     icon: <Bookmark />,
     label: "Saved",
   },
   {
-    url: "/editProfile",
+    url: "/user/profile/editProfile",
     icon: <UserRoundPen />,
     label: "Edit Profile",
   },
   {
-    url: "/transactions",
+    url: "/user/profile/transactions",
     icon: <ClipboardCheck />,
     label: "My Transaction",
   },
@@ -48,17 +48,17 @@ export const navLinks: NavLink[] = [
   //   // subLabel: "English",
   // },
   {
-    url: "/notifications",
+    url: "/user/profile/notifications",
     icon: <Bell />,
     label: "Notifications",
   },
   {
-    url: "/customer-service",
+    url: "/user/profile/customer-service",
     icon: <Headset />,
     label: "Customer Service",
   },
   {
-    url: "/investor-relations",
+    url: "/user/profile/investor-relations",
     icon: <Briefcase />,
     label: "Investor Relations",
   },
