@@ -77,9 +77,9 @@ export const navLinks: NavLink[] = [
     icon: <HelpCircle />,
     label: "Help",
   },
-  {
-    url: "/logout",
-    icon: <LogOut />,
-    label: "Logout",
-  },
+  // {
+  //   url: "",
+  //   icon: <LogOut />,
+  //   label: "Logout",
+  // },
 ];
