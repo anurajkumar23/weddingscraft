@@ -3,17 +3,24 @@ import { useAuth } from '@/app/authContext';
 import checkAuthentication from '@/utils/auth/checkauthentication';
 import { redirect, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import LeftSideBar from './LeftSideBar';
-import UserLayout from './layout';
 import Image from 'next/image';
 import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
+
+function formatDate(dateString:string) {
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-GB', options);
+}
 
 export default function Page() {
   const { user, setUser } = useAuth();
   const router = useRouter()
   console.log("🚀 ~ Page ~ user:", user)
-
+  let joined
+  if(user){
+    joined= formatDate(user.createdAt)
+  }
   useEffect(() => {
 
     const fetchUserData = async () => {
@@ -61,10 +68,10 @@ export default function Page() {
       </div>
      
         <div className='text-center'>
-          <p className='font-semibold text-lg'>Anuraj Kumar</p>
-          <p className='text-gray-600'>anurajkumar6294@gmail.com</p>
-          <p className='text-gray-600'>+916294806963</p>
-          <p className='text-gray-600'>Joined on: 27 July 2024</p>
+          <p className='font-semibold text-lg'>{user && (user.name || "Not Provided")}</p>
+          <p className='text-gray-600'>{user && (user.email || "Not Provided")}</p>
+          <p className='text-gray-600'>Phone: {user && (user.phone || "Not Provided")}</p>
+          <p className='text-gray-600'>Joined on: {user && joined}</p>
         </div>
      
     </div>
