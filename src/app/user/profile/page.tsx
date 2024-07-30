@@ -18,8 +18,12 @@ export default function Page() {
 
     const fetchUserData = async () => {
       try {
+        const token = localStorage.getItem("jwt_token")
+        console.log(token,"token")
+      if(!token){
+        router.push("/auth/login")
+      }
         const data = await checkAuthentication();
-        console.log("🚀 ~ fetchUserData ~ data:", data)
         if (data) {
           setUser(data.message);
         }else{
@@ -29,7 +33,6 @@ export default function Page() {
         console.error('Error during authentication:', error);
       }
     };
-
     if (!user) {
       fetchUserData();
     }
