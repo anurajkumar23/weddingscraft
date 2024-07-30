@@ -14,26 +14,26 @@ export default function Page() {
   const router = useRouter()
   console.log("🚀 ~ Page ~ user:", user)
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const data = await checkAuthentication();
-  //       console.log("🚀 ~ fetchUserData ~ data:", data)
-  //       if (data) {
-  //         setUser(data.message);
-  //       }else{
-  //         router.push("/auth/login")
-  //       }
-  //     } catch (error) {
-  //       console.error('Error during authentication:', error);
-  //     }
-  //   };
+    const fetchUserData = async () => {
+      try {
+        const data = await checkAuthentication();
+        console.log("🚀 ~ fetchUserData ~ data:", data)
+        if (data) {
+          setUser(data.message);
+        }else{
+          router.push("/auth/login")
+        }
+      } catch (error) {
+        console.error('Error during authentication:', error);
+      }
+    };
 
-  //   if (!user) {
-  //     fetchUserData();
-  //   }
-  // }, [user, setUser]);
+    if (!user) {
+      fetchUserData();
+    }
+  }, [user, setUser]);
 
   return (
 

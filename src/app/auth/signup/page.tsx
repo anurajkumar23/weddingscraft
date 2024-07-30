@@ -8,6 +8,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation"; 
+import { useAuth } from "@/app/authContext";
 
 interface Signup{
     name:string;
@@ -21,6 +22,7 @@ function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showsetPassword, SetshowsetPassword] = useState(false);
   const router = useRouter(); // Initialize router
+  const { user, setUser } = useAuth();
 
 
   const signup = async (userData: { name: string ;  password: string; email: string; phone: string; }) => {
@@ -44,14 +46,14 @@ function SignupForm() {
       toast.dismiss(loadingToast);
       toast.success("Sign up successful!");
   
-      const redirectUrl = localStorage.getItem("gotourl");
-      console.log(redirectUrl, "doneeeeeeeeeeee");
+      // const redirectUrl = localStorage.getItem("gotourl");
+     
       
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-      } else {
-        router.push("/user/profile"); 
-      }
+      // if (redirectUrl) {
+      //   window.location.href = redirectUrl;
+      // } else {
+      //   router.push("/user/profile"); 
+      // }
       
   
       return response.data;
@@ -87,13 +89,18 @@ function SignupForm() {
     onSubmit: async (values: Signup) => {
 
 
-      const response = await signup({
+      const data = await signup({
      
         name:values.name,
         password: values.password,
         email: values.email,
         phone: values.phone,
       })
+      if (data.success === true) {
+        console.log("entered");
+        setUser(data.user);
+        router.push("/user/profile");
+      }
 
       // action.resetForm();
     },
