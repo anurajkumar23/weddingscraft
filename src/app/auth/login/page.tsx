@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { useAuth } from '@/app/authContext';
+import Image from 'next/image';
 
 interface login {
   email: string;
@@ -87,16 +88,22 @@ export default function Login() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex items-center justify-center min-h-screen bg-black">
-          <div className="w-[500px] custom-shadow">
-            <p className='text-white'>Add Dream wedding image here.....</p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="max-w-sm w-full space-y-6 p-10 bg-white rounded-xl shadow-lg">
+            <Image src="/elements/logo.png" alt="logo" width={200} height={70} priority={false} loading="lazy" />
+            <div className='gap-y-2'>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Sign in
+              </h1>
+              <p className='text-gray-500'>to continue to Dream Wedding</p>
+            </div>
             <form
               onSubmit={handleSubmit}
-              className="mt-6 flex w-full flex-col gap-y-4"
+              className="mt-8 space-y-6"
             >
               <label className="w-full">
-                <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-slate-200 z-[50]">
-                  Email please <sup className="text-[#EF476F]">*</sup>
+                <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-gray-900 z-[50]">
+                  Email please <sup className="text-red-500">*</sup>
                 </p>
                 <input
                   type="email"
@@ -107,7 +114,7 @@ export default function Login() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full rounded-[0.5rem] p-[12px] bg-[#E6E6E6]"
+                  className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
                 {errors.email && touched.email && (
                   <p className="text-[#b40e0e] font-semibold ">{errors.email}</p>
@@ -115,8 +122,8 @@ export default function Login() {
               </label>
 
               <label className="relative">
-                <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-slate-200">
-                  Password <sup className="text-[#EF476F]">*</sup>
+                <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-gray-900">
+                  Password <sup className="text-red-500">*</sup>
                 </p>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -127,7 +134,7 @@ export default function Login() {
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="w-full rounded-[0.5rem] bg-[#E6E6E6] p-[12px] pr-12"
+                  className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
                 {errors.password && touched.password && (
                   <p className="text-[#b40e0e] font-semibold">
@@ -137,21 +144,40 @@ export default function Login() {
                 <br />
                 <span
                   onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-[38px] z-[10] cursor-pointer"
+                  className="absolute ml-[270px] top-[34px] z-[10] cursor-pointer"
                 >
                   {showPassword ? (
-                    <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
+                    <AiOutlineEyeInvisible size={24} fill="#AFB2BF" />
                   ) : (
-                    <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+                    <AiOutlineEye size={24} fill="#AFB2BF" />
                   )}
                 </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      id="remember_me"
+                      name="remember_me"
+                      type="checkbox"
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
+                      Remember me
+                    </label>
+                  </div>
+                  <div className="text-sm">
+                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                      Forgot your password?
+                    </a>
+                  </div>
+                </div>
               </label>
+
               <button
                 type="submit"
-                className="mt-6 rounded-[8px] bg-[#5bc2eb] py-[9px] px-[12px] font-medium text-[#000814] duration-500"
+               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={!isValid}
               >
-                Login
+                Sign in
               </button>
             </form>
             <div className="toast-wrapper">
