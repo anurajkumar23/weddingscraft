@@ -7,10 +7,17 @@ import Image from 'next/image';
 import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
 
+interface Options {
+  year: 'numeric';
+  month:'long';
+  day:'numeric';
+
+}
+
 function formatDate(dateString:string) {
   const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-GB', options);
+  const options:Options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-GB', options );
 }
 
 export default function Page() {
@@ -72,6 +79,10 @@ export default function Page() {
           <p className='text-gray-600'>{user && (user.email || "Not Provided")}</p>
           <p className='text-gray-600'>Phone: {user && (user.phone || "Not Provided")}</p>
           <p className='text-gray-600'>Joined on: {user && joined}</p>
+          <p className='text-gray-600'>Address: {user && (user.address || "Not Provided")}</p>
+          <p className='text-gray-600'>Pincode: {user && (user.pincode || "Not Provided")}</p>
+          <p className='text-gray-600'>City: {user && (user.city || "Not Provided")}</p>
+          <p className='text-gray-600'>State: {user && (user.state || "Not Provided")}</p>
         </div>
      
     </div>
