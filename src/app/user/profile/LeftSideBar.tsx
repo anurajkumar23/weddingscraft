@@ -5,8 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import logo from "../../../public/Dream Wedding Logo_20240417_103338_0000.png";
-
 import { navLinks } from "@/lib/constants";
 import { NavLink } from "@/lib/types";
 import { User,  LogOut } from "lucide-react";

@@ -7,13 +7,27 @@ import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { navLinks } from '@/lib/constants';
 import { NavLink } from '@/lib/types';
+import { LogOut } from 'lucide-react';
+import { useAuth } from '@/app/authContext';
+import { useRouter } from 'next/navigation';
+
 
 const Navbar: React.FC = () => {
 
   const [menuOpen, setMenuOpen] = useState(false)
+  const { user, setUser } = useAuth();
+
+  const router = useRouter()
 
   const handleNav = () => {
     setMenuOpen(!menuOpen)
+  }
+
+  function handlelogout(){
+    localStorage.clear()
+    setUser(null)
+    router.push("/")
+  
   }
 
   return (
@@ -93,7 +107,7 @@ const Navbar: React.FC = () => {
           </div>
           </Link>
           <hr className="w-full border-t border-gray-300" />
-          <ul className="p-2 pb-36 overflow-y-auto h-full hide-scrollbar text-black font-medium">
+          <ul className="p-2 overflow-y-auto pb-60  h-full hide-scrollbar text-black font-medium">
             {navLinks.map((link, index) => (
               <div key={link.label}>
                 <Link href={link.url}
@@ -110,6 +124,13 @@ const Navbar: React.FC = () => {
                 ) : null}
               </div>
             ))}
+             <div  
+             onClick={handlelogout}            
+              className={`flex gap-4 p-4 text-body-medium hover:bg-red-100 hover:rounded-md  cursor-pointer "text-grey-1"
+                }`}
+            >
+              <LogOut/><p className="cursor-pointer">Logout</p>
+            </div>
           </ul>
         </div>
       </div>
