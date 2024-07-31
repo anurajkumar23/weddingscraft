@@ -9,6 +9,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { useAuth } from '@/app/authContext';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface login {
   email: string;
@@ -134,7 +135,7 @@ export default function Login() {
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="w-full border px-3 py-2 border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 p-[12px] pr-10 sm:text-sm"
                 />
                 {errors.password && touched.password && (
                   <p className="text-[#b40e0e] font-semibold">
@@ -174,12 +175,19 @@ export default function Login() {
 
               <button
                 type="submit"
-               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 disabled={!isValid}
               >
                 Sign in
               </button>
             </form>
+            <div className="text-sm flex gap-x-2">
+              <p className='text-gray-500'>No account?
+              </p>
+              <Link href="/auth/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Sign up
+              </Link>
+            </div>
             <div className="toast-wrapper">
               {/* <Toaster position="top-center" reverseOrder={false} /> */}
             </div>
