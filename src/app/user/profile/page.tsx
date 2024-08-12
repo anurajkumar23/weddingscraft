@@ -1,91 +1,100 @@
 "use client";
 import { useAuth } from '@/app/authContext';
 import checkAuthentication from '@/utils/auth/checkauthentication';
-import { redirect, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
+import Loading from './loading';
 
 interface Options {
   year: 'numeric';
-  month:'long';
-  day:'numeric';
-
+  month: 'long';
+  day: 'numeric';
 }
 
-function formatDate(dateString:string) {
+function formatDate(dateString: string) {
   const date = new Date(dateString);
-  const options:Options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-GB', options );
+  const options: Options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return date.toLocaleDateString('en-GB', options);
 }
 
 export default function Page() {
   const { user, setUser } = useAuth();
-  const router = useRouter()
-  console.log("🚀 ~ Page ~ user:", user)
-  let joined
-  if(user){
-    joined= formatDate(user.createdAt)
-  }
-  useEffect(() => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true);
 
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("jwt_token")
-        console.log(token,"token")
-      if(!token){
-        router.push("/auth/login")
-      }
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+          router.push("/auth/login");
+          return;
+        }
+
         const data = await checkAuthentication();
         if (data) {
           setUser(data.message);
-        }else{
-          router.push("/auth/login")
+        } else {
+          router.push("/auth/login");
         }
       } catch (error) {
         console.error('Error during authentication:', error);
+        router.push("/auth/login");
+      }finally{
+        setLoading(false);
       }
     };
+
     if (!user) {
       fetchUserData();
+    }else{
+      setLoading(false);
     }
-  }, [user, setUser]);
+  }, [user, setUser, router]); // Add `router` to the dependency array
+
+  const joined = user ? formatDate(user.createdAt) : '';
+
+
+  if(loading){
+    return <Loading/>
+  }
 
   return (
-
     <div className='p-4 w-full h-full'>
-      
       <div className='border m-4 p-2 flex flex-col items-center relative'>
-       <Link href="profile/editProfile"> 
-        <button className='absolute top-4 right-4 bg-blue-400 text-white p-2 rounded flex items-center'>
-          <UserRoundPen className='mr-2' /> Edit Profile
-        </button>
-       </Link>
-        <p className='font-semibold text-xl mb-4'>Welcome, {user ? user.name : 'Guest'}! This is a protected page.</p>
+        <Link href="/profile/editProfile">
+          <button className='absolute top-4 right-4 bg-blue-400 text-white p-2 rounded flex items-center'>
+            <UserRoundPen className='mr-2' /> Edit Profile
+          </button>
+        </Link>
+        <p className='font-semibold text-xl mb-4'>
+          Welcome, {user ? user.name : 'Guest'}! This is a protected page.
+        </p>
         <div className='border overflow-hidden flex justify-center items-center rounded-full mb-4'>
-        <Image
-          src="https://source.unsplash.com/2ShvY8Lf6l0/800x599"
-          alt="Profile Picture"
-          width={500}
-          height={500}
-          className='object-cover w-48 h-48 hover:scale-105 transition-transform duration-300 cursor-pointer rounded-full'
-          loading='lazy'
-        />
-      </div>
-     
-        <div className='text-center'>
-          <p className='font-semibold text-lg'>{user && (user.name || "Not Provided")}</p>
-          <p className='text-gray-600'>{user && (user.email || "Not Provided")}</p>
-          <p className='text-gray-600'>Phone: {user && (user.phone || "Not Provided")}</p>
-          <p className='text-gray-600'>Joined on: {user && joined}</p>
-          <p className='text-gray-600'>Address: {user && (user.address || "Not Provided")}</p>
-          <p className='text-gray-600'>Pincode: {user && (user.pincode || "Not Provided")}</p>
-          <p className='text-gray-600'>City: {user && (user.city || "Not Provided")}</p>
-          <p className='text-gray-600'>State: {user && (user.state || "Not Provided")}</p>
+          <Image
+            src="https://source.unsplash.com/2ShvY8Lf6l0/800x599"
+            alt="Profile Picture"
+            width={500}
+            height={500}
+            className='object-cover w-48 h-48 hover:scale-105 transition-transform duration-300 cursor-pointer rounded-full'
+            loading='lazy'
+          />
         </div>
-     
+
+        <div className='text-center'>
+          <p className='font-semibold text-lg'>{user?.name || "Not Provided"}</p>
+          <p className='text-gray-600'>{user?.email || "Not Provided"}</p>
+          <p className='text-gray-600'>Phone: {user?.phone || "Not Provided"}</p>
+          <p className='text-gray-600'>Joined on: {joined}</p>
+          <p className='text-gray-600'>Address: {user?.address || "Not Provided"}</p>
+          <p className='text-gray-600'>Pincode: {user?.pincode || "Not Provided"}</p>
+          <p className='text-gray-600'>City: {user?.city || "Not Provided"}</p>
+          <p className='text-gray-600'>State: {user?.state || "Not Provided"}</p>
+        </div>
+      </div>
     </div>
-  </div>
   );
 }

@@ -4,7 +4,9 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/page";
 import Provider from "./provider";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ProgressBarProvider from "./progressBarprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Dream Wedding",
   },
   description:
-  "Dream Wedding is your ultimate destination for planning the perfect wedding. Discover and book top-rated banquet halls, marriage halls, and wedding venues. Connect with professional caterers, photographers, and decorators who will make your special day unforgettable. Enjoy affordable pricing and exceptional service with Dream Wedding, your partner in creating beautiful and memorable wedding experiences.",
+    "Dream Wedding is your ultimate destination for planning the perfect wedding. Discover and book top-rated banquet halls, marriage halls, and wedding venues. Connect with professional caterers, photographers, and decorators who will make your special day unforgettable. Enjoy affordable pricing and exceptional service with Dream Wedding, your partner in creating beautiful and memorable wedding experiences.",
   keywords: [
     "Dream Wedding",
     "Wedding Venues",
@@ -56,13 +58,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider>
-          <Navbar />
-          <div>
+        <ProgressBarProvider>
+
+          <ToastContainer />
+          <Provider>
+            <Navbar />
             {children}
-          </div>
-          <Footer />
-        </Provider>
+            <Footer />
+          </Provider>
+        </ProgressBarProvider>
       </body>
     </html>
   );

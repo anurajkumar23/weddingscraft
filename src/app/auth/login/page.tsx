@@ -1,15 +1,15 @@
-"use client"
-import React, { useRef, useState } from 'react';
-import { LogInSchema } from '@/components/Auth/formvalidator';
-import toast, { Toaster } from 'react-hot-toast';
+"use client";
+import React, { useRef, useState, useEffect } from "react";
+import { LogInSchema } from "@/components/Auth/formvalidator";
+import {  toast } from 'react-toastify';
 import axios from "axios";
-import { Loading } from '@/utils/loading';
+import { Loading } from "@/utils/loading";
 import { useFormik } from "formik";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import { useAuth } from '@/app/authContext';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useAuth } from "@/app/authContext";
+import Image from "next/image";
+import Link from "next/link";
 
 interface login {
   email: string;
@@ -36,7 +36,7 @@ export default function Login() {
   } = useFormik({
     initialValues,
     validationSchema: LogInSchema,
-    onSubmit: async (values: { email: string; password: string; }) => {
+    onSubmit: async (values: { email: string; password: string }) => {
       try {
         setLoading(true);
         const data = await login({
@@ -48,6 +48,7 @@ export default function Login() {
         if (data.success === true) {
           console.log("entered");
           setUser(data.user);
+          toast.success("Login successful!");
           router.push("/user/profile");
         }
       } catch (error) {
@@ -84,6 +85,13 @@ export default function Login() {
     }
   };
 
+  // Ensure the router is a dependency for useEffect
+  useEffect(() => {
+    if (user) {
+      router.push("/user/profile");
+    }
+  }, [user, router]);
+
   return (
     <>
       {loading ? (
@@ -91,17 +99,19 @@ export default function Login() {
       ) : (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="max-w-sm w-full space-y-6 p-10 bg-white rounded-xl shadow-lg">
-            <Image src="/elements/logo.png" alt="logo" width={200} height={70} priority={false} loading="lazy" />
-            <div className='gap-y-2'>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Sign in
-              </h1>
-              <p className='text-gray-500'>to continue to Dream Wedding</p>
+            <Image
+              src="/elements/logo.png"
+              alt="logo"
+              width={200}
+              height={70}
+              priority={false}
+              loading="lazy"
+            />
+            <div className="gap-y-2">
+              <h1 className="text-2xl font-bold text-gray-900">Sign in</h1>
+              <p className="text-gray-500">to continue to Dream Wedding</p>
             </div>
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 space-y-6"
-            >
+            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <label className="w-full">
                 <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-gray-900 z-[50]">
                   Email please <sup className="text-red-500">*</sup>
@@ -118,7 +128,9 @@ export default function Login() {
                   className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 />
                 {errors.email && touched.email && (
-                  <p className="text-[#b40e0e] font-semibold ">{errors.email}</p>
+                  <p className="text-[#b40e0e] font-semibold ">
+                    {errors.email}
+                  </p>
                 )}
               </label>
 
@@ -161,12 +173,18 @@ export default function Login() {
                       type="checkbox"
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                    <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-900">
+                    <label
+                      htmlFor="remember_me"
+                      className="ml-2 block text-sm text-gray-900"
+                    >
                       Remember me
                     </label>
                   </div>
                   <div className="text-sm">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a
+                      href="#"
+                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                    >
                       Forgot your password?
                     </a>
                   </div>
@@ -182,19 +200,17 @@ export default function Login() {
               </button>
             </form>
             <div className="text-sm flex gap-x-2">
-              <p className='text-gray-500'>No account?
-              </p>
-              <Link href="/auth/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <p className="text-gray-500">No account?</p>
+              <Link
+                href="/auth/signup"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
                 Sign up
               </Link>
-            </div>
-            <div className="toast-wrapper">
-              {/* <Toaster position="top-center" reverseOrder={false} /> */}
             </div>
           </div>
         </div>
       )}
-      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 }
