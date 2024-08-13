@@ -7,32 +7,17 @@ import { createContext, useContext, useState, useEffect } from "react";
 interface AuthContextType {
   user: any;
   setUser: (user: any) => void;
-  updateAuth: () => void;
+
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState<any>(null);
-  
 
-  const checkToken = () => {
-    const token = localStorage.getItem('jwt_token');
-    return !!token;
-  };
-
-  const updateAuth = () => {
-    setUser(checkToken());
-  };
-
-  useEffect(() => {
-    updateAuth();
-    window.addEventListener('storage', updateAuth); // Listen to storage events
-    return () => window.removeEventListener('storage', updateAuth);
-  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, updateAuth}}>
+    <AuthContext.Provider value={{ user, setUser,}}>
       {children}
     </AuthContext.Provider>
   );
