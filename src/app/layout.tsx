@@ -7,6 +7,7 @@ import Provider from "./provider";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProgressBarProvider from "./progressBarprovider";
+import { AuthProvider } from "./authContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,13 +60,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ProgressBarProvider>
-
           <ToastContainer />
-          <Provider>
-            <Navbar />
-            {children}
-            <Footer />
-          </Provider>
+          <AuthProvider>
+            <Provider>
+              <Navbar />
+              {children}
+              <Footer />
+            </Provider>
+          </AuthProvider>
         </ProgressBarProvider>
       </body>
     </html>

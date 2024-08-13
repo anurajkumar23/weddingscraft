@@ -6,10 +6,10 @@ import logo from "../../public/Dream_Wedding_Logo.png"
 import { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { navLinks } from '@/lib/constants';
-import { NavLink } from '@/lib/types';
 import { LogOut } from 'lucide-react';
 import { useAuth } from '@/app/authContext';
 import { useRouter } from 'next/navigation';
+import { ShowLogin, ShowLogout } from '@/utils/protect/protect';
 
 
 const Navbar: React.FC = () => {
@@ -63,18 +63,24 @@ const Navbar: React.FC = () => {
             <li className='hidden md:flex'>
               <Link href="/Photographers">Photographers</Link>
             </li>
+            <ShowLogout>
             <Link href="/auth/login">
               <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
                 Login /SignUp
               </li>
             </Link>
+            </ShowLogout>
             {/* <Link href='/user/profile'> */}
+            <ShowLogin>
             <li>
+             
               <Avatar onClick={handleNav}>
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
+              
             </li>
+            </ShowLogin>
             {/* </Link> */}
           </ul>
         </div>
