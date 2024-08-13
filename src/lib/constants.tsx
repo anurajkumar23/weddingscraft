@@ -9,11 +9,12 @@ import {
   FileText,
   MessageCircle,
   HelpCircle,
-  LogOut,
   ClipboardCheck,
   Heart,
   Bookmark,
   UserRoundPen,
+  User,
+  LayoutDashboard,
  
 } from "lucide-react";
 import { NavLink } from "./types";
@@ -21,6 +22,17 @@ import { NavLink } from "./types";
 
 
 export const navLinks: NavLink[] = [
+
+ {
+  url: "/user/profile",
+  icon:  <User />,
+  label: "Profile",
+ },
+ {
+  url: "/user/profile/dashboard",
+  icon:  <LayoutDashboard />,
+  label: "Dashboard",
+},
   {
     url: "/user/profile/favorites",
     icon: <Heart />,

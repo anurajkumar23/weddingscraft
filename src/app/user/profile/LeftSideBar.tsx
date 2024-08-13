@@ -38,13 +38,13 @@ const LeftSideBar: React.FC = () => {
 
       <div className="flex flex-col gap-3 ">
         <div>
-          <Link
+          {/* <Link
             href="/user/profile"
             className={`flex gap-4 p-4 text-body-medium hover:bg-red-100 hover:rounded-md ${pathname === "/user/profile" ? "text-red-600 bg-red-100 rounded-md" : "text-grey-1"
               }`}
           >
             <User /> <p>Profile</p>
-          </Link>
+          </Link> */}
         </div>
         {navLinks.map((link: NavLink) => (
           <div key={link.label}>

@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
+
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  // console.log(request.cookies);
-  // const allCookies = request.cookies.getAll();
-  // console.log("All cookies:", allCookies);
-
   const AuthToken = request.cookies.get("jwt")?.value;
 
   const loggedInUserNotAccessPaths =
@@ -21,10 +19,12 @@ export function middleware(request: NextRequest) {
     if (!AuthToken) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
+
   }
+
+  return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/user/profile", "/api/:path*"],
+  matcher: ["/user/profile", "/user/profile/dashboard", "/api/:path*"],
 };

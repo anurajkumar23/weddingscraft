@@ -19,6 +19,10 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
     const router = useRouter()
 
 
+    // if (user?.role === 'admin') {
+    //     console.log("😀😀😀😀😀😀😀 Admin access granted");
+    //   }
+
     function handleLogout() {
         localStorage.clear()
         setUser(null)
