@@ -25,3 +25,13 @@ export const ShowLogout: React.FC<ProtectProps> = ({ children }) => {
 
   return <>{children}</>;
 };
+
+
+export const IsAdminOrSeller: React.FC<ProtectProps> =({children}) =>{
+  const { user } = useContext(AuthContext) || {}
+
+  if(user?.role !== 'admin' && user?.role !== 'seller'){
+   return null;
+  }
+  return <>{children}</>
+}

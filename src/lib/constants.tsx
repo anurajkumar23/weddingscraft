@@ -20,7 +20,6 @@ import {
 import { NavLink } from "./types";
 
 
-
 export const navLinks: NavLink[] = [
 
  {
@@ -28,11 +27,7 @@ export const navLinks: NavLink[] = [
   icon:  <User />,
   label: "Profile",
  },
- {
-  url: "/user/profile/dashboard",
-  icon:  <LayoutDashboard />,
-  label: "Dashboard",
-},
+
   {
     url: "/user/profile/favorites",
     icon: <Heart />,
@@ -89,9 +84,4 @@ export const navLinks: NavLink[] = [
     icon: <HelpCircle />,
     label: "Help",
   },
-  // {
-  //   url: "",
-  //   icon: <LogOut />,
-  //   label: "Logout",
-  // },
 ];

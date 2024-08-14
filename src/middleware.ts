@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
       );
       const userRole = payload.role; 
 
-
+      // console.log(userRole,"🐷🐷🐷🐷🐷")
       // Role-based access control for the /user/dashboard route
       if (request.nextUrl.pathname === "/user/profile/dashboard") {
         if (userRole === "seller" || userRole === "admin") {
