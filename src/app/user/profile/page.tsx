@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { UserRoundPen } from 'lucide-react';
 import Link from 'next/link';
-import Loading from './loading';
+// import Loading from './loading';
 
 interface Options {
   year: 'numeric';
@@ -58,9 +58,6 @@ export default function Page() {
   const joined = user ? formatDate(user.createdAt) : '';
 
 
-  if(loading){
-    return <Loading/>
-  }
 
   return (
     <div className='p-4 w-full h-full'>
