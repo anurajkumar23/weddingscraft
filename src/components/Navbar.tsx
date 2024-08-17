@@ -20,19 +20,17 @@ const Navbar: React.FC = () => {
  
 
   return (
-    <nav className=" z-50 w-full h-20 shadow-xl bg-slate-100 ">
+    <nav className="text-black z-50 w-full h-20 shadow-xl bg-slate-100 ">
       <div className="flex justify-between gap-4 items-center h-full font-semibold w-full px-2 2xl:px-14 xl:px-10">
         <div className='cursor-pointer flex '>
           <Link href='/'>
-            <Image
-              width={500}
-              height={500}
-              src={logo}
-              alt='Dream Wedding logo'
-              className='w-80 cursor-pointer '
+          <Image
+              src="/elements/logo.png"
+              alt="logo"
+              width={260}
+              height={70}
               priority={false}
-              loading='lazy'
-
+              loading="lazy"
             />
           </Link>
         </div>
@@ -52,6 +50,9 @@ const Navbar: React.FC = () => {
             <li className='hidden md:flex'>
               <Link href="/Photographers">Photographers</Link>
             </li>
+            <Link href="/seller">
+              <li className='hidden md:flex'>Seller</li>
+            </Link>
             <ShowLogout>
             <Link href="/auth/login">
               <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
