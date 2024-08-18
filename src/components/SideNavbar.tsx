@@ -6,7 +6,7 @@ import { useAuth } from '@/app/authContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { IsAdminOrSeller } from '@/utils/protect/protect';
+// import { IsAdminOrSeller } from '@/utils/protect/protect';
 
 
 interface SideNavbarProps {
@@ -54,7 +54,7 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                     </Link>
                     <hr className="w-full border-t border-gray-300" />
                     <ul className="p-2 overflow-y-auto pb-60  h-full hide-scrollbar text-black font-medium">
-                        <IsAdminOrSeller>
+                        {/* <IsAdminOrSeller> */}
                             <Link
                                 href="/user/profile/dashboard"
                                 className="p-4 flex w-full justify-start space-x-2  hover:bg-gray-200 hover:rounded-md"
@@ -62,7 +62,7 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                             >
                                 <LayoutDashboard /> <p>Dashboard</p>
                             </Link>
-                        </IsAdminOrSeller>
+                        {/* </IsAdminOrSeller> */}
                         {navLinks.map((link, index) => (
                             <div key={link.label}>
                                 <Link href={link.url}

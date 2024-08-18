@@ -10,7 +10,7 @@ import { NavLink } from "@/lib/types";
 import { LogOut, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/app/authContext";
 import { useRouter } from "next/navigation"; 
-import { IsAdminOrSeller } from "@/utils/protect/protect";
+// import { IsAdminOrSeller } from "@/utils/protect/protect";
 
 
 
@@ -39,7 +39,7 @@ const LeftSideBar: React.FC = () => {
       {/* <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy"/> */}
 
       <div className="flex flex-col gap-3 ">
-      <IsAdminOrSeller>
+      {/* <IsAdminOrSeller> */}
           <Link
             href="/user/profile/dashboard"
             className={`flex gap-4 p-4 text-body-medium hover:bg-red-100 hover:rounded-md ${pathname === "/user/profile/dashboard" ? "text-red-600 bg-red-100 rounded-md" : "text-grey-1"
@@ -47,7 +47,7 @@ const LeftSideBar: React.FC = () => {
           >
            <LayoutDashboard /> <p>Dashboard</p>
           </Link>
-          </IsAdminOrSeller>
+          {/* </IsAdminOrSeller> */}
         {navLinks.map((link: NavLink) => (
           <div key={link.label}>
             <Link

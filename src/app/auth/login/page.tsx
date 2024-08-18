@@ -48,6 +48,7 @@ export default function Login() {
         if (data.success === true) {
           console.log("entered");
           setUser(data.user);
+          localStorage.setItem("user_id",data.user._id)
           toast.success("Login successful!");
           router.push("/user/profile");
         }
@@ -86,12 +87,31 @@ export default function Login() {
   };
 
   // Ensure the router is a dependency for useEffect
+  
   useEffect(() => {
-    if (user) {
-      router.push("/user/profile");
-    }
-  }, [user, router]);
+    const fetchUserData = async () => {
+      const id = localStorage.getItem("user_id");
+      if (id) {
+        if (user) {
+          router.push("/user/profile");
+        } else {
+          try {
+            const response = await axios.get(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${id}`
+            );
+            // Handle the response data as needed
+            console.log(response.data);
+            setUser(response.data.user);
+            router.push("/user/profile");
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+          }
+        }
+      }
+    };
 
+    fetchUserData();
+  }, [user, router]);
   return (
     <>
       {loading ? (
