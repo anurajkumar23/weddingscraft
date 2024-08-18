@@ -25,7 +25,11 @@ const formSchema = z.object({
     whatsappNumber: z.string().min(10, { message: "Please enter a valid WhatsApp number" }),
 });
 
-const PersonalInformation = () => {
+type PersonalInformationProps = {
+    onComplete: () => void;
+  };
+
+const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -41,6 +45,7 @@ const PersonalInformation = () => {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         console.log(values);
+        onComplete();
     };
 
     return (

@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
       // If JWT verification fails, redirect to login
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
-  } else  {
+  } else if (NotLoggedINUserNotAccessPaths)  {
     // If there's no token, redirect to login
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
