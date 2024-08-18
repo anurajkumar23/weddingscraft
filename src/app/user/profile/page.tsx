@@ -57,7 +57,7 @@ export default function Page() {
 
   const joined = user ? formatDate(user.createdAt) : '';
 
-
+  console.log(user,"User form user page")
 
   return (
     <div className='p-4 w-full h-full'>

@@ -10,14 +10,14 @@ interface AuthContextType {
 
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState<any>(null);
-
+  
 
   return (
-    <AuthContext.Provider value={{ user, setUser,}}>
+    <AuthContext.Provider value={{ user, setUser}}>
       {children}
     </AuthContext.Provider>
   );

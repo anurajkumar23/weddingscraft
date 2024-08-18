@@ -4,20 +4,31 @@ import Image from 'next/image';
 import Link from 'next/link';
 import logo from "../../public/Dream_Wedding_Logo.png"
 import { useState } from 'react';
-import { ShowLogin, ShowLogout } from '@/utils/protect/protect';
+// import { ShowLogin, ShowLogout } from '@/utils/protect/protect';
 import SideNavbar from './SideNavbar';
+import { useAuth } from '@/app/authContext';
+import { useRouter } from "next/navigation"; 
+
 
 
 const Navbar: React.FC = () => {
 
   const [menuOpen, setMenuOpen] = useState(false)
+  const {user,setUser} = useAuth()
+  console.log(user,"navbar")
+  const router = useRouter()
 
 
   const handleNav = () => {
     setMenuOpen(!menuOpen)
   }
 
- 
+  function handlelogout(){
+    localStorage.clear()
+    setUser(null)
+    router.push("/")
+  
+  }
 
   return (
     <nav className="text-black z-50 w-full h-20 shadow-xl bg-slate-100 ">
@@ -53,14 +64,20 @@ const Navbar: React.FC = () => {
             <Link href="/seller">
               <li className='hidden md:flex'>Seller</li>
             </Link>
-            <ShowLogout>
-            <Link href="/auth/login">
+            {/* <ShowLogout> */}
+            {!user ? ( <Link href="/auth/login">
               <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
                 Login /SignUp
               </li>
-            </Link>
-            </ShowLogout>
-            <ShowLogin>
+            </Link>):( <div className='' onClick={handlelogout}>
+              <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
+                Logout
+              </li>
+            </div>)}
+           
+           
+            {/* </ShowLogout>
+            <ShowLogin> */}
             <li>
              
               <Avatar onClick={handleNav}>
@@ -69,7 +86,7 @@ const Navbar: React.FC = () => {
               </Avatar>
               
             </li>
-            </ShowLogin>
+            {/* </ShowLogin> */}
 
           </ul>
         </div>
