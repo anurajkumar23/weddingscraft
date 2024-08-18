@@ -47,6 +47,8 @@ const SellerForm = () => {
             <Step stepsConfig={steps.map((step) => ({
               ...step,
               currentStep,
+              nextStep,
+              prevStep,
               isComplete: completedSteps.includes(step.stepNumber),
             }))} />
           </div>

@@ -7,30 +7,20 @@ type StepProps = {
     currentStep: number;
     sectionTitle: string;
     isComplete: boolean;
+    nextStep: () => void
+    prevStep: () => void
   }[];
 };
 
 export default function Step({ stepsConfig }: StepProps) {
-  const totalSteps = stepsConfig.length;
-  const completedSteps = stepsConfig.filter((step) => step.isComplete).length;
-  const progressPercentage = (completedSteps / totalSteps) * 100;
-
   return (
-    <div className="flex flex-col space-y-4">
-      <div className="relative w-full h-2 bg-gray-300 rounded-full overflow-hidden mb-4">
-        <div
-          className="absolute left-0 top-0 h-full bg-blue-600 rounded-full transition-all duration-300"
-          style={{ width: `${progressPercentage}%` }}
-        ></div>
-      </div>
-      {stepsConfig.map((step) => (
-        <div
-          key={step.stepNumber}
-          className="py-2 px-2 rounded-md flex justify-start items-center"
-        >
+    <div className="relative flex flex-col items-start space-y-8">
+      {stepsConfig.map((step, index) => (
+        <div key={step.stepNumber} className="relative flex items-center">
+          {/* Step circle */}
           <div
             className={cn(
-              "text-sm font-bold border m-2 rounded-full z-10 w-10 h-10 flex justify-center items-center transition-colors duration-200",
+              "text-sm font-bold border rounded-full z-10 w-10 h-10 flex justify-center items-center transition-colors duration-200",
               {
                 "bg-green-600 text-white font-semibold": step.isComplete,
                 "bg-blue-600 text-white font-semibold":
@@ -40,13 +30,30 @@ export default function Step({ stepsConfig }: StepProps) {
               }
             )}
           >
-            {step.isComplete ? (
-              <span>&#10003;</span>
-            ) : (
-              step.stepNumber
-            )}
+            {step.isComplete ? <span>&#10003;</span> : step.stepNumber}
           </div>
-          <div className="text-xs ml-2">{step.sectionTitle}</div>
+
+          {/* Connecting line */}
+          {index < stepsConfig.length - 1 && (
+            <div className="absolute left-[1.125rem] bg-slate-300 top-full w-[2px] h-full z-0">
+              <div
+                className={cn(
+                  "h-full bg-green-600 transition-all duration-500 ease-in-out",
+                  {
+                    "scale-y-100 origin-top": 
+                      stepsConfig[index + 1].stepNumber <= step.currentStep ||
+                      stepsConfig[index + 1].isComplete,
+                    "scale-y-0 origin-top": 
+                      stepsConfig[index + 1].stepNumber > step.currentStep &&
+                      !stepsConfig[index + 1].isComplete,
+                  }
+                )}
+              ></div>
+            </div>
+          )}
+
+          {/* Section title */}
+          <div className="ml-4 text-xs">{step.sectionTitle}</div>
         </div>
       ))}
     </div>
