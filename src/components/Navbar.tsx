@@ -69,23 +69,25 @@ const Navbar: React.FC = () => {
               <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
                 Login /SignUp
               </li>
-            </Link>):( <div className='' onClick={handlelogout}>
+            </Link>):( <><div className='' onClick={handlelogout}>
               <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
                 Logout
               </li>
-            </div>)}
+              
+           
+            </div> <li>
+             
+             <Avatar onClick={handleNav}>
+               <AvatarImage src="https://github.com/shadcn.png" />
+               <AvatarFallback>CN</AvatarFallback>
+             </Avatar>
+             
+           </li></>)}
            
            
             {/* </ShowLogout>
             <ShowLogin> */}
-            <li>
-             
-              <Avatar onClick={handleNav}>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              
-            </li>
+       
             {/* </ShowLogin> */}
 
           </ul>

@@ -88,30 +88,39 @@ export default function Login() {
 
   // Ensure the router is a dependency for useEffect
   
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const id = localStorage.getItem("user_id");
-      if (id) {
-        if (user) {
-          router.push("/user/profile");
-        } else {
-          try {
-            const response = await axios.get(
-              `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${id}`
-            );
-            // Handle the response data as needed
-            console.log(response.data);
-            setUser(response.data.user);
-            router.push("/user/profile");
-          } catch (error) {
-            console.error("Error fetching user data:", error);
-          }
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const id = localStorage.getItem("user_id");
+  //     if (id) {
+  //       if (user) {
+  //         router.push("/user/profile");
+  //       } else {
+  //         try {
+  //           const response = await axios.get(
+  //             `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${id}`
+  //           );
+  //           // Handle the response data as needed
+  //           console.log(response.data);
+  //           setUser(response.data.user);
+  //           router.push("/user/profile");
+  //         } catch (error) {
+  //           console.error("Error fetching user data:", error);
+  //         }
+  //       }
+  //     }
+  //   };
 
-    fetchUserData();
-  }, [user, router]);
+  //   fetchUserData();
+  // }, [user, router, setUser]);
+
+  useEffect(()=>{
+    if(user){
+      router.push("/user/profile")
+    }
+  },[router, user])
+
+
+
   return (
     <>
       {loading ? (
