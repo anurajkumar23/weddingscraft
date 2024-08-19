@@ -16,14 +16,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
-    firstName: z.string().min(2, { message: "Please enter a valid first name" }),
+    firstName: z.string()
+      .min(2, { message: "Please enter a valid first name" })
+      .max(25, { message: "First name must be at most 25 characters" }),
     middleName: z.string().optional(),
-    lastName: z.string().min(2, { message: "Please enter a valid last name" }),
+    lastName: z.string()
+      .min(2, { message: "Please enter a valid last name" })
+      .max(25, { message: "Last name must be at most 25 characters" }),
     email: z.string().email({ message: "Please enter a valid email address" }),
-    phoneNumber: z.string().min(10, { message: "Please enter a valid phone number" }),
+    phoneNumber: z.string().length(10, { message: "Phone number must be exactly 10 digits" }),
     address: z.string().min(5, { message: "Please enter a valid address" }),
-    whatsappNumber: z.string().min(10, { message: "Please enter a valid WhatsApp number" }),
-});
+    whatsappNumber: z.string().length(10, { message: "WhatsApp number must be exactly 10 digits" }),
+  });
+  
+  
 
 type PersonalInformationProps = {
     onComplete: () => void;

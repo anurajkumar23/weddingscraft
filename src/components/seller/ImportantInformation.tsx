@@ -16,20 +16,31 @@ import { Button } from "@/components/ui/button";
 
 // Form validation schema
 const formSchema = z.object({
-    pancard: z.string().min(5, { message: "Please enter a valid PAN card number" }),
-    GSTNO: z.string().min(15, { message: "Please enter a valid GST number" }),
-    address: z.string().min(5, { message: "Please enter a valid address" }),
+    pancard: z.string()
+      .length(10, { message: "PAN card number must be exactly 10 characters" }),
+    GSTNO: z.string()
+      .length(15, { message: "GST number must be exactly 15 characters" }),
+    address: z.string()
+      .min(5, { message: "Please enter a valid address" }),
     bank: z.object({
-        name: z.string().min(2, { message: "Please enter a valid bank name" }),
-        account: z.string().min(8, { message: "Please enter a valid account number" }),
-        reenterAccount: z.string().min(8, { message: "Please re-enter your account number" }),
-        ifsc: z.string().min(11, { message: "Please enter a valid IFSC code" }),
-        holdername: z.string().min(2, { message: "Please enter a valid account holder name" }),
+      name: z.string()
+        .min(2, { message: "Please enter a valid bank name" }),
+      account: z.string()
+        .min(8, { message: "Please enter a valid account number" })
+        .max(16, { message: "Account number must be at most 16 characters" }),
+      reenterAccount: z.string()
+        .min(8, { message: "Please re-enter your account number" })
+        .max(16, { message: "Re-entered account number must be at most 16 characters" }),
+      ifsc: z.string()
+        .min(11, { message: "Please enter a valid IFSC code" }),
+      holdername: z.string()
+        .min(2, { message: "Please enter a valid account holder name" }),
     }).refine(data => data.account === data.reenterAccount, {
-        path: ["reenterAccount"],
-        message: "Account numbers do not match",
+      path: ["reenterAccount"],
+      message: "Account numbers do not match",
     }),
-});
+  });
+  
 
 type ImportantInformationProps = {
     onComplete: () => void;
