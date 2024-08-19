@@ -41,7 +41,7 @@ const SellerForm = () => {
 
   return (
     <div className="py-6 w-full h-full bg-gray-100 flex items-center justify-center">
-      <div className="bg-white shadow-lg rounded-lg max-w-4xl w-full">
+      <div className=" bg-white shadow-lg rounded-lg max-w-4xl w-full">
         <div className="grid md:grid-cols-10 gap-6">
           <div className="md:col-span-3 bg-slate-100 p-6 rounded-lg shadow-inner">
             <Step stepsConfig={steps.map((step) => ({
