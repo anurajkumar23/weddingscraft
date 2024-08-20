@@ -13,46 +13,44 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useAuth } from "@/app/authContext";
 
 // Form validation schema
 const formSchema = z.object({
-    pancard: z.string()
-      .length(10, { message: "PAN card number must be exactly 10 characters" }),
     GSTNO: z.string()
-      .length(15, { message: "GST number must be exactly 15 characters" }),
-    address: z.string()
-      .min(5, { message: "Please enter a valid address" }),
+        .length(15, { message: "GST number must be exactly 15 characters" }),
     bank: z.object({
-      name: z.string()
-        .min(2, { message: "Please enter a valid bank name" }),
-      account: z.string()
-        .min(8, { message: "Please enter a valid account number" })
-        .max(16, { message: "Account number must be at most 16 characters" }),
-      reenterAccount: z.string()
-        .min(8, { message: "Please re-enter your account number" })
-        .max(16, { message: "Re-entered account number must be at most 16 characters" }),
-      ifsc: z.string()
-        .min(11, { message: "Please enter a valid IFSC code" }),
-      holdername: z.string()
-        .min(2, { message: "Please enter a valid account holder name" }),
+        name: z.string()
+            .min(2, { message: "Please enter a valid bank name" }),
+        account: z.string()
+            .min(8, { message: "Please enter a valid account number" })
+            .max(16, { message: "Account number must be at most 16 characters" }),
+        reenterAccount: z.string()
+            .min(8, { message: "Please re-enter your account number" })
+            .max(16, { message: "Re-entered account number must be at most 16 characters" }),
+        ifsc: z.string()
+            .min(11, { message: "Please enter a valid IFSC code" }),
+        holdername: z.string()
+            .min(2, { message: "Please enter a valid account holder name" }),
     }).refine(data => data.account === data.reenterAccount, {
-      path: ["reenterAccount"],
-      message: "Account numbers do not match",
+        path: ["reenterAccount"],
+        message: "Account numbers do not match",
     }),
-  });
-  
+});
 
 type ImportantInformationProps = {
     onComplete: () => void;
 };
 
 const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
+    const { user } = useAuth();
+    
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            pancard: "",
             GSTNO: "",
-            address: "",
             bank: {
                 name: "",
                 account: "",
@@ -63,9 +61,24 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values);
-        onComplete();
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+        console.log(values,"values")
+        try {
+            const response = await axios.patch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user._id}/sellerdraft?draft=importantInfo`,
+                values
+            );
+
+            console.log(response.data, "Important info response");
+
+            toast.success("Information submitted successfully!");
+
+            onComplete();
+        } catch (error) {
+            console.error("Error submitting important info", error);
+            toast.error("Failed to submit, please try again later.");
+        }
     };
 
     return (
@@ -75,24 +88,6 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* <FormField
-                                control={form.control}
-                                name="pancard"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>PAN Card Number</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Enter your PAN card number"
-                                                {...field}
-                                                aria-invalid={!!form.formState.errors.pancard}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
                             <FormField
                                 control={form.control}
                                 name="GSTNO"
@@ -109,27 +104,8 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            /> */}
-
-                            <FormField
-                                control={form.control}
-                                name="address"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Address</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Enter your address"
-                                                {...field}
-                                                aria-invalid={!!form.formState.errors.address}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
                             />
 
-                            {/* Bank Information */}
                             <FormField
                                 control={form.control}
                                 name="bank.name"

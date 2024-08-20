@@ -13,21 +13,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/app/authContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 // Form validation schema
 const formSchema = z.object({
-  pancard: z
-    .string()
-    .min(5, { message: "Please enter a valid PAN card number" }),
-  GSTNO: z.string().min(15, { message: "Please enter a valid GST number" }),
-  documentImages: z
-    .array(z.object({
-      name: z.string(), // Validate file name
-      type: z.string().regex(/application\/pdf/, { message: "Only PDF files are allowed" }), // Validate file type
-      size: z.number().max(5 * 1024 * 1024, { message: "File size must be less than 5MB" }) // Validate file size
-    }))
+  pancard: z.string()
+    .length(10, { message: "PAN card number must be exactly 10 characters" })
+    .toUpperCase(),
+
+  documentImages: z.array(z.instanceof(File))
     .min(1, { message: "Please upload a document" })
-    .max(1, { message: "Only one file is allowed" })
+    .max(1, { message: "Only one file is allowed" }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,25 +35,45 @@ type ImportantInformationProps = {
 };
 
 const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
+  const { user } = useAuth();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       pancard: "",
-      GSTNO: "",
-      documentImages: [],
+      documentImages:[],
     },
   });
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
-    onComplete();
+  const onSubmit = async (values: FormValues) => {
+    console.log(values)
+    const formData = new FormData();
+    formData.append("pancard", values.pancard);
+    formData.append("document", values.documentImages[0]); // Append the file to FormData
+
+    try {
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user._id}/sellerdraft?draft=governmentInfo`,
+        formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(response.data, "Government certificate response");
+
+      toast.success("Information submitted successfully!");
+      onComplete();
+    } catch (error) {
+      console.error("Error submitting government certificate", error);
+      toast.error("Failed to submit, please try again later.");
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // Get the selected file (only one since 'multiple' is removed)
+    const file = e.target.files?.[0]; // Get the selected file
     if (file) {
-      // Update the form's documentImages field with the selected file
-      form.setValue("documentImages", [{ name: file.name, type: file.type, size: file.size }]);
+      form.setValue("documentImages", [file]); // Store the File object directly
     }
   };
 
@@ -79,24 +97,6 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
                         placeholder="Enter your PAN card number"
                         {...field}
                         aria-invalid={!!form.formState.errors.pancard}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="GSTNO"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>GST Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your GST number"
-                        {...field}
-                        aria-invalid={!!form.formState.errors.GSTNO}
                       />
                     </FormControl>
                     <FormMessage />

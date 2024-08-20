@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useAuth } from "@/app/authContext";
+import { toast } from "react-toastify";
 
 const formSchema = z.object({
     firstName: z.string()
@@ -27,6 +30,9 @@ const formSchema = z.object({
     phoneNumber: z.string().length(10, { message: "Phone number must be exactly 10 digits" }),
     address: z.string().min(5, { message: "Please enter a valid address" }),
     whatsappNumber: z.string().length(10, { message: "WhatsApp number must be exactly 10 digits" }),
+    pincode: z.string().length(6, { message: "Pincode must be exactly 6 digits" }),
+    city: z.string().min(2, { message: "Please enter a valid city" }),
+    state: z.string().min(2, { message: "Please enter a valid state" }),
   });
   
   
@@ -36,6 +42,8 @@ type PersonalInformationProps = {
   };
 
 const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
+    const {user} =useAuth()
+  
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -46,13 +54,40 @@ const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
             phoneNumber: "",
             address: "",
             whatsappNumber: "",
+            pincode: "",
+            city: "",
+            state: "",
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
-        onComplete();
+    
+        console.log(user._id,"hehehehehhehe")
+        try {
+            const response = await axios.patch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user._id}/sellerdraft?draft=personalInfo`,
+                values
+            );
+    
+            console.log(response.data, "personal info response");
+    
+            // Optionally display a success message
+            toast.success("Information submitted successfully!");
+            
+            // Call the onComplete callback to proceed with the next step
+            onComplete();
+        } catch (error) {
+            console.error("Error submitting personal info", error);
+            
+            // Show error notification
+            toast.error("Failed to submit, please try again later.");
+            
+            // Re-throw the error if further handling is needed
+            throw error;
+        }
     };
+    
 
     return (
         <div className="w-full">
@@ -144,7 +179,47 @@ const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
                                     </FormItem>
                                 )}
                             />
+  <FormField
+                                control={form.control}
+                                name="pincode"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Pincode</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your pincode" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
+                            <FormField
+                                control={form.control}
+                                name="city"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>City</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your city" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="state"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>State</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your state" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="whatsappNumber"
