@@ -1,14 +1,24 @@
+"use client"
 import SellerForm from '@/components/seller/SellerForm'
-import React from 'react'
+import { useEffect, useState } from 'react'
+import { currentUser } from '@/utils/user/getcurrentuser'
+import { useAuth } from '../authContext'
 
-const page = () => {
+
+const Page = () => {
+  const{user}=useAuth()
+ 
   return (
+
     <div className='w-full h-full'>
-     <div >
+    {user && user.sellerRequest!=="none" && user.sellerRequest!=="accepted" ? ( <div>
+      your seller account is on Pending state. It will take 24 hrs to verify.
+    </div>):(<div >
         <SellerForm/>
-        </div> 
+        </div> ) }
+     
     </div>
   )
 }
 
-export default page
+export default Page

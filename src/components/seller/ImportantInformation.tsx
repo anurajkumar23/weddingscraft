@@ -45,7 +45,7 @@ type ImportantInformationProps = {
 };
 
 const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
-    const { user } = useAuth();
+    const { user,setUser } = useAuth();
     
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -72,8 +72,8 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
 
             console.log(response.data, "Important info response");
 
-            toast.success("Information submitted successfully!");
-
+            toast.success(" Important Information submitted successfully!");
+            setUser(response.data);
             onComplete();
         } catch (error) {
             console.error("Error submitting important info", error);

@@ -9,6 +9,7 @@ import Step from "./Step";
 import { useAuth } from "@/app/authContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+// import { useRouter } from "next/navigation";
 
 const steps = [
   { stepNumber: 1, sectionTitle: "Personal Information" },
@@ -21,6 +22,7 @@ const SellerForm = () => {
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const { user } = useAuth();
   const [loading, setLoading] = useState(true); 
+  // const router = useRouter()
 
  
   useEffect(() => {
@@ -80,6 +82,7 @@ const SellerForm = () => {
       if(response.data.message==="success"){
 
         toast.success("Request submitted successfully!");
+        
       }
 
   } catch (error) {
