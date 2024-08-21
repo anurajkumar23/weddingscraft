@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/app/authContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 // Form validation schema
 const formSchema = z.object({
@@ -36,11 +37,12 @@ type ImportantInformationProps = {
 
 const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
   const { user,setUser } = useAuth();
+  const router = useRouter()
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pancard: "",
-      documentImages:[],
+      pancard: user.draft?.governmentInfo?.pancard || "",
+      documentImages: [], 
     },
   });
 
@@ -64,6 +66,7 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
 
       toast.success("Government certificate submitted successfully!");
       setUser(response.data);
+      router.reload()
       onComplete();
     } catch (error) {
       console.error("Error submitting government certificate", error);

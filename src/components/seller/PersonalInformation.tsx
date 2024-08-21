@@ -47,18 +47,18 @@ const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            firstName: "",
-            middleName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            address: "",
-            whatsappNumber: "",
-            pincode: "",
-            city: "",
-            state: "",
+          firstName: user?.draft?.personalInfo?.firstName || "",
+          middleName: user?.draft?.personalInfo?.middleName || "",
+          lastName: user?.draft?.personalInfo?.lastName || "",
+          email: user?.draft?.personalInfo?.email || "",
+          phoneNumber: user?.draft?.personalInfo?.phoneNumber || "",
+          address: user?.draft?.personalInfo?.address || "",
+          whatsappNumber: user?.draft?.personalInfo?.whatsappNumber || "",
+          pincode: user?.draft?.personalInfo?.pincode || "",
+          city: user?.draft?.personalInfo?.city || "",
+          state: user?.draft?.personalInfo?.state || "",
         },
-    });
+      });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);

@@ -50,13 +50,13 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            GSTNO: "",
+            GSTNO: user.draft?.importantInfo?.GSTNO || "",
             bank: {
-                name: "",
-                account: "",
-                reenterAccount: "",
-                ifsc: "",
-                holdername: "",
+                name: user.draft?.importantInfo?.bank?.name || "",
+                account: user.draft?.importantInfo?.bank?.account || "",
+                reenterAccount: user.draft?.importantInfo?.bank?.account || "", // Assuming the user should re-enter the same account number
+                ifsc: user.draft?.importantInfo?.bank?.ifsc || "",
+                holdername: user.draft?.importantInfo?.bank?.holdername || "",
             },
         },
     });
