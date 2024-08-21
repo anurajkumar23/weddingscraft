@@ -35,7 +35,7 @@ type ImportantInformationProps = {
 };
 
 const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
-  const { user } = useAuth();
+  const { user,setUser } = useAuth();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,7 +62,8 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
 
       console.log(response.data, "Government certificate response");
 
-      toast.success("Information submitted successfully!");
+      toast.success("Government certificate submitted successfully!");
+      setUser(response.data);
       onComplete();
     } catch (error) {
       console.error("Error submitting government certificate", error);

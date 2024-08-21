@@ -42,7 +42,7 @@ type PersonalInformationProps = {
   };
 
 const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
-    const {user} =useAuth()
+    const {user,setUser} =useAuth()
   
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -73,8 +73,8 @@ const PersonalInformation = ({ onComplete }:PersonalInformationProps ) => {
             console.log(response.data, "personal info response");
     
             // Optionally display a success message
-            toast.success("Information submitted successfully!");
-            
+            toast.success("personal Information submitted successfully!");
+            setUser(response.data);
             // Call the onComplete callback to proceed with the next step
             onComplete();
         } catch (error) {
