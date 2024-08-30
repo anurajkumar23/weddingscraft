@@ -13,7 +13,7 @@ const BanquetPage: React.FC = () => {
 ];
 
   return (
-    <div className="pt-10">
+    <div className="">
       <h1 className="px-10 font-semibold text-2xl">Banquet Halls</h1>
     <div className='w-auto px-8 mt-5 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-6'>
       

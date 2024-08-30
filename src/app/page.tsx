@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Home: React.FC = () => {
   return (
-    <div >           
+    <div>           
         <HomePage />
         <BanquetPage />
        

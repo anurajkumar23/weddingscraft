@@ -1,44 +1,34 @@
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { MapPin } from "lucide-react";
+/* eslint-disable react/no-unescaped-entities */
+
 import CategoryPage from "./category/CategoryPage";
-
-
+import Image from "next/image";
+import bg from "../../../public/Design_elements/ritual-with-coconut-leaves-during-traditional-hindu-wedding-ceremony 1.png"
+import SearchBar from "./SearchBar/SearchBar";
+import { Heart } from "lucide-react";
 
 const HomePage: React.FC = () => {
   return (
-    <div className="w-full">
-      <div className="py-4 px-10 ">
-        <h1 className="text-3xl font-bold italic ">Discover everything you need</h1>
-        <div className="flex mt-4 gap-x-4">
-          <div className="border-2 border-gray-800 rounded-sm w-1/5 items-center px-2 justify-star flex gap-x-1 ">
-            <MapPin />
-            <h1 className="text-lg">Patna</h1></div>
-          <div className="rounded-sm border-2 border-gray-800 w-2/5">
-            <Command>
-              <CommandInput  placeholder="Type a command or search..." />
-              {/* <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Suggestions">
-              <CommandItem>Calendar</CommandItem>
-              <CommandItem>Search Emoji</CommandItem>
-              <CommandItem>Calculator</CommandItem>
-            </CommandGroup>
-            <CommandSeparator />
-          </CommandList> */}
-            </Command>
-          </div>
+    <div className="w-full h-full relative ">
+      <Image
+        className="w-full max-h-full absolute -z-10 "
+        alt="Traditional Hindu Wedding Ritual"
+        src={bg}
+        width={1200}
+        height={900}
+      />
+
+      <SearchBar />
+      <div className="container text-white">
+        <div className=" flex items-center justify-center  gap-2 ">
+          <h1 className="font-light  text-3xl flex gap-2 text-center ">When your</h1>
+          <Heart fill="white" className="w-6 h-6" />
+        </div>
+        <div className="items-center justify-center">
+          <p className="text-center text-4xl font-semibold pb-2">Dream Wedding come true</p>
+          <p className="text-center font-light">"once in a while, right in the middle of an</p>
+          <p className="text-center font-light">ordinary life, love gives us a fairy tale"</p>
         </div>
       </div>
-
-      <h1 className="font-semibold mt-3 px-10 text-2xl">Venue</h1>
       <CategoryPage />
 
     </div>
