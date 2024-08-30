@@ -13,7 +13,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ img, alt, title, link }) =>
     return (
         <div>
             <Link href={`/${link}`}>
-                <div className="relative flex flex-col items-center">
+                <div className="relative flex flex-col items-center mx-4">
                     {/* Wrapper for the outer circle with padding */}
                     <div className="relative flex justify-center items-center p-4">
                         {/* Outer border circle */}

@@ -5,7 +5,7 @@ import Banquet1 from "../../../../public/Banquet-1.jpg";
 import Banquet2 from "../../../../public/Banquet-2.jpg";
 import Catering from "../../../../public/cattering.jpg";
 import Photographer from "../../../../public/Photographer.jpeg";
-import Image from 'next/image';
+
 
 const CategoryPage: React.FC = () => {
     const categories = [
@@ -17,7 +17,7 @@ const CategoryPage: React.FC = () => {
 
 
     return (
-        <div className='mt-10 flex flex-wrap justify-around w-full h-full'>
+        <div className='mt-10 flex flex-wrap justify-around w-full h-full '>
             {categories.map((category) => (
                 <CategoryCard
                     key={category.id}
