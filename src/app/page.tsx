@@ -1,4 +1,5 @@
 import BanquetPage from "@/components/HomePage/banquet hall/page";
+import ShowCategory from "@/components/HomePage/cetergories/Showcategory";
 import HomePage from "@/components/HomePage/page";
 import Services from "@/components/HomePage/Services/Services";
 
@@ -9,6 +10,7 @@ const Home: React.FC = () => {
     <div>           
         <HomePage />
         <Services/>
+        <ShowCategory/>
         <BanquetPage />
        
     </div>
