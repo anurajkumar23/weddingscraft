@@ -36,7 +36,7 @@ const ShowCategory = () => {
         ))}
       </div>
 
-      <div className="pt-6 self-stretch flex flex-row items-start justify-center py-0 pl-6 pr-5">
+      <div className="pt-10 self-stretch flex flex-row items-start justify-center py-0 pl-6 pr-5">
         <button className="cursor-pointer p-3 bg-[#ff4444] rounded-[10px] flex flex-row items-start justify-start whitespace-nowrap hover:bg-[#ff5e5e]">
           <div className="text-[1.3rem] font-semibold text-white">
             More Categories

@@ -13,11 +13,11 @@ const Services = () => {
                             <p className='text-gray-400 text-xl'>Services </p>
                         </div>
                     </div>
-                    <div className='absolute left-[300px] top-[100px]'>
+                    <div className='absolute left-[300px] top-[80px] border p-2 rounded-lg shadow-xl bg-white'>
                         <p className='font-bold text-3xl text-red-500'>100+</p>
                         <p className='text-gray-400 text-xl'>Cities </p>
                     </div>
-                    <div className='absolute left-[400px] top-[230px]'>
+                    <div className='absolute left-[350px] border p-2 rounded-lg shadow-xl bg-white top-[210px]'>
                         <div className='w-full justify-center items-center text-center'>
                             <p className='font-bold text-3xl text-red-500'>500+</p>
                             <p className='text-gray-400 text-xl'>Banquets, caterers,</p>
