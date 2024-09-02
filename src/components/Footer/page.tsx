@@ -1,52 +1,96 @@
-// import Image from "next/image";
-import React from "react";
-import { RiFacebookLine } from "react-icons/ri";
-import { FaInstagram } from "react-icons/fa";
-import Link from "next/link";
+import { FunctionComponent } from "react";
+import BackgroundImage from "../../../public/Design_elements/7xm-3.png"
+import Logo from "../../../public/Design_elements/logo.png"
+import Instagram from "../../../public/Design_elements/Group-3.png"
+import Twitter from "../../../public/Design_elements/Group.png"
+import facebook from "../../../public/Design_elements/Group-1.png"
+import Image from "next/image";
 
-export default function footer() {
+
+export type Footer1Type = {
+  className?: string;
+};
+
+const Footer1: FunctionComponent<Footer1Type> = ({ className = "" }) => {
   return (
-    <div className="pt-[80px] bg-[#222222] mt-20">
-      <div className="flex md:flex-row flex-col text-[#888F93] mx-[10%]  ">
-        <div className="md:w-[30%] ">
-          <p className="uppercase mb-[7%]">Our Mission</p>
-          <p className="">
-          Driven by compassion, our NGO strives to uplift the disadvantaged through targeted and effective initiatives.
-We envision a world where every individual has access to essential resources and opportunities for a brighter future.
-          </p>
-          <div className="flex mt-5 mb-5">
-            <RiFacebookLine className=" w-10 h-5 cursor-pointer" />
-            <FaInstagram className=" w-10 h-5 cursor-pointer" />
+    <div
+      className={`self-stretch flex flex-row items-start justify-start py-[4.25rem] px-[4.625rem] box-border relative min-h-[24.75rem] max-w-full text-left text-[1.125rem] text-[#f16722]  mq750:pl-[2.313rem] mq750:pr-[2.313rem] mq750:box-border ${className}`}
+    >
+      <Image
+        className="h-full w-full absolute !m-[0] right-[0rem] bottom-[-0.031rem] left-[0rem] max-w-full overflow-hidden object-cover"
+        alt=""
+        src={BackgroundImage}
+      />
+  
+      <div className="w-[79.813rem] flex flex-row items-start justify-start gap-[6.75rem] max-w-full z-[1] text-[rgba(255,255,255,0.9)] font-[Poppins] mq750:gap-[1.688rem] mq1250:gap-[3.375rem] mq1250:flex-wrap">
+        <div className="w-[4.181rem] flex flex-row items-start justify-start text-center font-['Noto_Sans_Carian']">
+          <div className="flex-1 flex flex-row items-start justify-start">
+            <div className="flex-1 flex flex-row items-start justify-start gap-[0.156rem]">
+              <div className="h-[1.869rem] w-[1.4rem] relative hidden " />
+              <Image
+                className="self-stretch w-[1.4rem] relative max-h-full min-h-[1.875rem] z-[1]"
+                loading="lazy"
+                alt=""
+                src={facebook}
+              />
+              <Image
+                className="self-stretch w-[1.4rem] relative max-h-full min-h-[1.875rem] z-[1]"
+                loading="lazy"
+                alt=""
+                src={Twitter}
+              />
+              <Image
+                className="self-stretch w-[1.4rem] relative max-h-full min-h-[1.875rem] z-[1]"
+                loading="lazy"
+                alt=""
+                src={Instagram}
+              />
+            </div>
+            <Image
+              className="w-28 h-8 absolute  top-[8.25rem] left-[4.625rem]  z-[2]"
+              alt=""
+              src={Logo}
+            />
           </div>
-
-          <p>Phone: +958xxxxxxx</p>
         </div>
-        <div className="md:w-[50%] my-auto ">
-          {/* <Image
-            src="/images/asha-logo-1.png"
-            width={1000}
-            height={1000}
-            loading="lazy"
-            alt="logo"
-            className=" h-[4rem] w-[20rem] mx-auto my-auto"
-          /> */}
+        <div className="w-[12.625rem] relative capitalize inline-block text-[1.188rem]">
+          <p className="m-[0px] text-[1.688rem] leading-[2.188rem] font-semibold">
+            Services
+          </p>
+          <p className="m-[0px] leading-[1.563rem]">&nbsp;</p>
+          <p className="m-[0px] leading-[1.563rem]">event planning</p>
+          <p className="m-[0px] leading-[1.563rem]">protocal service</p>
+          <p className="m-[0px] leading-[1.563rem]">outside catering</p>
+          <p className="m-[0px] leading-[1.563rem]">food and beverage</p>
+          <p className="m-[0px] leading-[1.563rem]">venue planner</p>
+          <p className="m-[0px] leading-[1.563rem]">{`Video & photography`}</p>
         </div>
-        <div className="md:w-[20%] md:mb-[0]  mb-[7%]">
-            <p className="mb-[7%]">Useful Links</p>
-            <p><Link href="/#about"  >About Us</Link></p>
-            <p><Link href="/#gallery">Gallery</Link></p>
-
-            <p><Link href="/#booking">Donate</Link></p>
-         
-            <p><Link href="/#contact">Contact</Link></p>
-        
+        <h3 className="m-[0px] relative text-[1.188rem] leading-[1.563rem] font-normal font-[inherit]">
+          <p className="m-[0px]">Quick Links</p>
+          <p className="m-[0px]">&nbsp;</p>
+          <p className="m-[0px]">Home</p>
+          <p className="m-[0px]">About Us</p>
+          <p className="m-[0px]">Service</p>
+          <p className="m-[0px]">our work</p>
+          <p className="m-[0px]">Contact Us</p>
+        </h3>
+        <div className="w-[28.375rem] flex flex-col items-start justify-start pt-[0rem] px-[0rem] pb-[1.562rem] box-border gap-[1rem] max-w-full">
+          <div className="relative leading-[1.563rem] capitalize inline-block min-h-[6.25rem]">
+            <p className="m-[0px]">
+              we would love to work with you on planning and
+            </p>
+            <p className="m-[0px]">
+              organizing your events in order to make your dream Event come to
+              life.
+            </p>
+          </div>
+          <button className="bg-red-500 text-white py-3 px-8 rounded-full font-semibold hover:bg-red-600 transition">
+            Contact Us
+          </button>
         </div>
-      </div>
-      <hr className=" text-[#888F93] mb-5 pb-5 mx-[10%]"/>
-      <div className="text-center text-[#888F93] pb-5">
-      <p>Asha foundation © 2024. All rights reserved.</p> 
-        Designed & Developed By <strong>Meow corder</strong> 
       </div>
     </div>
   );
-}
+};
+
+export default Footer1;

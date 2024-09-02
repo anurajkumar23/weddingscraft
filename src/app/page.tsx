@@ -1,3 +1,4 @@
+import AboutTitle from "@/components/HomePage/About/AboutPage";
 import BanquetPage from "@/components/HomePage/banquet hall/page";
 import ShowCategory from "@/components/HomePage/cetergories/Showcategory";
 import OurServices from "@/components/HomePage/OurServices/OurServices";
@@ -14,6 +15,7 @@ const Home: React.FC = () => {
         <ShowCategory/>
         <BanquetPage />
         <OurServices/>
+        <AboutTitle/>
     </div>
   );
 }
