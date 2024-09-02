@@ -5,6 +5,7 @@ import Catering from "../../../../public/cattering.jpg";
 import Photographer from "../../../../public/Photographer.jpeg";
 import banquetBg from "../../../../public/Design_elements/Frame 5052.png";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 const BanquetPage: React.FC = () => {
   // Ensure unique IDs
@@ -43,7 +44,14 @@ const BanquetPage: React.FC = () => {
               <Card key={card.id} img={card.src} alt={card.alt} title={card.title} />
             ))}
             </div>
-          </div>
+            </div>
+            {/* View All Button */}
+        <div className="flex justify-center mt-12">
+          <button className="flex items-center gap-2 text-lg font-semibold text-red-600 hover:text-red-700 transition-all">
+            View All
+            <ChevronDown className="w-5 h-5" />
+          </button>
+        </div>
         </div>
       </div>
     </div>
