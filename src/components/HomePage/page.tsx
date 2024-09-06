@@ -8,9 +8,9 @@ import { Heart } from "lucide-react";
 
 const HomePage: React.FC = () => {
   return (
-    <div className="w-full h-full relative ">
+    <div className="w-full h-full relative">
       <Image
-        className="w-full max-h-full absolute -z-10 "
+        className="w-full max-sm:object-cover  min-h-full md:max-h-full absolute -z-10"
         alt="Traditional Hindu Wedding Ritual"
         src={bg}
         width={1200}
@@ -18,19 +18,18 @@ const HomePage: React.FC = () => {
       />
 
       <SearchBar />
-      <div className="container text-white">
-        <div className=" flex items-center justify-center  gap-2 ">
-          <h1 className="font-light  text-3xl flex gap-2 text-center ">When your</h1>
-          <Heart fill="white" className="w-6 h-6" />
+      <div className="container mx-auto px-4 text-white">
+        <div className="flex  md:flex-row items-center justify-center gap-2 md:gap-4">
+          <h1 className="font-light text-2xl md:text-3xl text-center">When your</h1>
+          <Heart fill="white" className="w-5 h-5 md:w-6 md:h-6" />
         </div>
-        <div className="items-center justify-center">
-          <p className="text-center text-4xl font-semibold pb-2">Dream Wedding come true</p>
-          <p className="text-center font-light">"once in a while, right in the middle of an</p>
-          <p className="text-center font-light">ordinary life, love gives us a fairy tale"</p>
+        <div className="flex flex-col items-center justify-center md:mt-4">
+          <p className="text-center text-2xl md:text-4xl font-semibold pb-2">Dream Wedding come true</p>
+          <p className="text-center text-sm md:text-base font-light">"once in a while, right in the middle of an</p>
+          <p className="text-center text-sm md:text-base font-light">ordinary life, love gives us a fairy tale"</p>
         </div>
       </div>
       <CategoryPage />
-
     </div>
   );
 };

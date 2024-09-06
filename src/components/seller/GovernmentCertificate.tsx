@@ -16,7 +16,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/app/authContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+
 
 // Form validation schema
 const formSchema = z.object({

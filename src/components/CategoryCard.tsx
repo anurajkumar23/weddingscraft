@@ -29,10 +29,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ img, alt, title, link }) =>
                             <Image
                                 src={img}
                                 alt={alt}
-                                className='object-cover md:w-48 md:h-48 w-36 h-36 hover:scale-105 transition-transform duration-300 cursor-pointer rounded-full'
+                                className='object-cover md:w-48 md:h-48 w-24 h-24 hover:scale-105 transition-transform duration-300 cursor-pointer rounded-full'
                                 loading='lazy'
                             />
-                    <h1 className='absolute text-white text-center font-semibold text-xl mt-2'>{title}</h1>
+                    <h1 className='absolute text-white text-center font-semibold md:text-xl text-xs mt-2'>{title}</h1>
                         </div>
                     </div>
                     {/* Title */}
