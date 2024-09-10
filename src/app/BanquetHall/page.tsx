@@ -28,7 +28,7 @@ const Page = async () => {
           <span className='text-base font-medium'>Filters</span>
         </div>
       </div>
-      <InnerCardPage banquetData={Banquet}  />
+      <InnerCardPage data={Banquet}  link="BanquetHall" imgLink="banquet"/>
     </div>
   );
 };

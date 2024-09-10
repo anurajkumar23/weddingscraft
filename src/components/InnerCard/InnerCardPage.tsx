@@ -1,8 +1,7 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import React from "react";
+
 import InnerPage from "./page";
-// import { getBanquet } from "@/utils/banquet/GetBanquet";
+
 
 export interface Card {
   _id: string;
@@ -19,19 +18,23 @@ export interface Card {
   link: string;
   billboard: string;
   like: [];
+  img: string[];
+  imgLink:string;
 }
 
 export interface InnerCardProps {
-  banquetData: Card[];
+  data: Card[];
+  link:string;
+  imgLink:string;
 }
 
-const InnerCardPage: React.FC<InnerCardProps> = ({ banquetData }) => {
+const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, imgLink }) => {
 
 
   return (
     <div className="pt-10 w-full">
       <div>
-        {banquetData.map((card) => (
+        {data.map((card: any) => (
           <div key={card._id}>
             <InnerPage
               billboard={card.billboard}
@@ -43,7 +46,9 @@ const InnerCardPage: React.FC<InnerCardProps> = ({ banquetData }) => {
               description={card.description}
               location={card.location}
               locationUrl={card.locationUrl}
-              link="BanquetHall"
+              link={link}
+              img={card.photos}
+              imgLink={imgLink}
             />
           </div>
         ))}
