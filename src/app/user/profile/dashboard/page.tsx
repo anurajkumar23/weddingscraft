@@ -1,10 +1,18 @@
+import CardsInsights from '@/components/ui/CardsInsights'
 import React from 'react'
+import { dummyDashboardData } from '@/lib/dummyData';
+
 
 const page = () => {
+
+  const dashboardData = dummyDashboardData;
+
   return (
-    <div>
-      Dashboard
-    </div>
+    <main className="flex flex-col gap-6">
+    <h1 className="text-3xl sm:text-4xl font-bold">Dashboard</h1>
+    <CardsInsights data={dashboardData} />
+  
+  </main>
   )
 }
 

@@ -9,10 +9,12 @@ interface UserLayoutProps {
 
 const UserLayout: React.FC<UserLayoutProps> = ({ children}) => {
   return (
-    <div className='flex max-lg:flex-col'>
+    <div className='flex max-lg:flex-col '>
       <LeftSideBar />
-      <div className='flex-1'>
+      <div className='w-full'>
+      <div className='p-4 sm:p-8'>
         {children}
+      </div>
       </div>
     </div>
   );
