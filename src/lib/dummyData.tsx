@@ -3,7 +3,7 @@ export const dummyDashboardData = {
       charts: {
         salesOverTime: {
           labels: ['2023-01-01', '2023-02-01', '2023-03-01'],
-          data: [100000, 150000, 200000],
+          data: [100, 1500, 100, 200, 200],
         },
         userEngagement: [
           { engagement: 5000, week: 'Week 1' },
