@@ -23,11 +23,11 @@ import ImageGallery from '@/components/Gallery/ImageGallery';
 
   const images = [
     'https://images.unsplash.com/photo-1682687220063-4742bd7fd538',
-    'https://images.unsplash.com/photo-1682687220199-d0124f48f95b',
-    'https://images.unsplash.com/photo-1682687220067-dced9a881b56',
-    'https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae?q=80&w=2008&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    'https://images.unsplash.com/photo-1682687220015-186f63b8850a',
-    'https://images.unsplash.com/photo-1682687220923-c58b9a4592ae',
+    // 'https://images.unsplash.com/photo-1682687220199-d0124f48f95b',
+    // 'https://images.unsplash.com/photo-1682687220067-dced9a881b56',
+    // 'https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae?q=80&w=2008&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    // 'https://images.unsplash.com/photo-1682687220015-186f63b8850a',
+    // 'https://images.unsplash.com/photo-1682687220923-c58b9a4592ae',
   ]
   
   const Page = async ({ params }: { params: { id: string } }) => {
@@ -43,7 +43,7 @@ import ImageGallery from '@/components/Gallery/ImageGallery';
             category='decorator'
         /> */}
 
-        <ImageGallery images={images} />
+        <ImageGallery  images={Decorator.photos}  category='decorator'/>
         
     </div>
     <div className='w-full h-full m-4 '>

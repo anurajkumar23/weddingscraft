@@ -5,10 +5,11 @@ import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ImageGalleryProps {
-    images: string[]
+    images: string[];
+    category: string;
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
     const [mainImage, setMainImage] = useState(0) // Main image state for slider
     const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
     const [sliderActive, setSliderActive] = useState(false) // Track if slider has been clicked
@@ -35,16 +36,18 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
         switch (images.length) {
             case 1:
                 return (
-                    <div className="w-full h-[400px]" onClick={() => openFullscreen(images[0])}>
-                        <Image
-                            src={images[0]}
-                            alt="Single image"
-                            layout="fill"
-                            objectFit="cover"
-                            loading="lazy"
-                            className="rounded-lg cursor-pointer"
-                            unoptimized
-                        />
+                    <div className='container mx-auto px-4'>
+                        <div className="w-full relative h-[400px]" onClick={() => openFullscreen(images[0])}>
+                            <Image
+                                src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[0]}`}
+                                //   src={images[0]}
+                                alt="Single image"
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-lg cursor-pointer"
+                                unoptimized
+                            />
+                        </div>
                     </div>
                 )
             case 2:
@@ -53,7 +56,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                         {images.map((image, index) => (
                             <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                 <Image
-                                    src={image}
+                                    src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
+                                    // src={image}
                                     alt={`Image ${index + 1}`}
                                     layout="fill"
                                     objectFit="cover"
@@ -70,7 +74,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     <div className="grid grid-cols-2 gap-2 h-[400px]">
                         <div className="relative" onClick={() => openFullscreen(images[0])}>
                             <Image
-                                src={images[0]}
+                                src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[0]}`}
+                                // src={images[0]}
                                 alt="Main image"
                                 layout="fill"
                                 objectFit="cover"
@@ -83,7 +88,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                             {images.slice(1).map((image, index) => (
                                 <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                     <Image
-                                        src={image}
+                                       src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
+                                        // src={image}
                                         alt={`Image ${index + 2}`}
                                         layout="fill"
                                         objectFit="cover"
@@ -101,7 +107,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                     <div className="grid grid-cols-2 gap-2 h-[400px]">
                         <div className="relative col-span-1" onClick={() => openFullscreen(images[0])}>
                             <Image
-                                src={images[0]}
+                               src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[0]}`}
+                                // src={images[0]}
                                 alt="Main image"
                                 layout="fill"
                                 objectFit="cover"
@@ -113,7 +120,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                         <div className="grid  grid-rows-2 gap-2 ">
                             <div className="relative col-span-1" onClick={() => openFullscreen(images[1])}>
                                 <Image
-                                    src={images[1]}
+                                   src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[1]}`}
+                                    // src={images[1]}
                                     alt="Image 2"
                                     layout="fill"
                                     objectFit="cover"
@@ -126,7 +134,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                                 {images.slice(2, 4).map((image, index) => (
                                     <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                         <Image
-                                            src={image}
+                                           src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
+                                            // src={image}
                                             alt={`Image ${index + 2}`}
                                             layout="fill"
                                             objectFit="cover"
@@ -134,7 +143,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                                             className="rounded-lg cursor-pointer"
                                             unoptimized
                                         />
-                                        {index === 1 && images.length > 5 && (
+                                        {index === 1 && images.length > 4 && (
                                             <div className="cursor-pointer absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
                                                 <span className="text-white font-bold">
                                                     +{images.length - 3} more
@@ -155,7 +164,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
             {sliderActive && (
                 <div className="relative w-full h-[400px]">
                     <Image
-                        src={images[mainImage]}
+                       src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[mainImage]}`}
+                        // src={images[mainImage]}
                         alt={`Main image ${mainImage + 1}`}
                         layout="fill"
                         objectFit="cover"
@@ -208,7 +218,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                 <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
                     <div className="relative max-w-4xl max-h-full">
                         <Image
-                            src={fullscreenImage}
+                        src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${fullscreenImage}`}
+                            // src={fullscreenImage}
                             alt="Fullscreen image"
                             width={1200}
                             height={900}
@@ -240,7 +251,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
                                 setFullscreenImage(images[nextIndex]);
                             }}
                         >
-                           <ChevronRight size={24} />
+                            <ChevronRight size={24} />
                         </button>
                         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                             {images.map((image, index) => (
