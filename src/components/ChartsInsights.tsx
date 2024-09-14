@@ -27,8 +27,8 @@ export default function ChartsInsights({ data }:{ data: DashboardData }) {
         </ResizablePanel>
         <ResizableHandle withHandle className="w-4 bg-transparent"/>
         <ResizablePanel defaultSize={35} minSize={30}>
-          {/* <UserPieChart data={data.dashboardData.charts.userEngagement} /> */}
-         <UserPieChart/>
+          <UserPieChart data={data.dashboardData.charts.userEngagement} />
+         {/* <UserPieChart /> */}
         </ResizablePanel>
       </ResizablePanelGroup>
     </section>

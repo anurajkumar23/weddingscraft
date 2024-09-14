@@ -3,6 +3,7 @@ import React from "react";
 import InnerPage from "./page";
 
 
+
 export interface Card {
   _id: string;
   alt: string;

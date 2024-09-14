@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { PhoneCall } from 'lucide-react';
 import getDecoratorId from '@/utils/decorator/GetDecoratorid';
 import GalleryImage from '../../../components/Gallery/Gallary';
+import ImageGallery from '@/components/Gallery/ImageGallery';
 
 // const predefinedDimensions = [
 //     { width: 4, height: 3 },
@@ -19,28 +20,30 @@ import GalleryImage from '../../../components/Gallery/Gallary';
   // const getRandomDimension = () => {
   //   return predefinedDimensions[Math.floor(Math.random() * predefinedDimensions.length)];
   // };
+
+  const images = [
+    'https://images.unsplash.com/photo-1682687220063-4742bd7fd538',
+    'https://images.unsplash.com/photo-1682687220199-d0124f48f95b',
+    'https://images.unsplash.com/photo-1682687220067-dced9a881b56',
+    'https://plus.unsplash.com/premium_photo-1683910767532-3a25b821f7ae?q=80&w=2008&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    'https://images.unsplash.com/photo-1682687220015-186f63b8850a',
+    'https://images.unsplash.com/photo-1682687220923-c58b9a4592ae',
+  ]
   
   const Page = async ({ params }: { params: { id: string } }) => {
     const Decorator = await getDecoratorId(params.id);
-  
-    // Convert photos to the required format for the Gallery component with random dimensions
-    // const photos = Decorator.photos.map((photo: string) => {
-    //   const dimension = getRandomDimension();
-    //   return {
-    //     src: `${process.env.NEXT_PUBLIC_Backend_Url_Image}images/decorator/media/${photo}`,
-    //     ...dimension,
-    //   };
-    // });
   return (
 
 <div className='py-6 mx-4'>
 <div className=' rounded-sm border'>
-    <div className='border rounded-sm m-1 w-full flex overflow-y-scroll h-96 2xl:h-screen'>
+    <div>
 
-        <GalleryImage
+        {/* <GalleryImage
             photos={Decorator.photos}
             category='decorator'
-        />
+        /> */}
+
+        <ImageGallery images={images} />
         
     </div>
     <div className='w-full h-full m-4 '>

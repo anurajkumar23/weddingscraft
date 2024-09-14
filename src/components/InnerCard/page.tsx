@@ -22,7 +22,7 @@ const InnerPage: React.FC<Card & { link: string }> = ({
   link,
   like,
   img,
-  imgLink
+  imgLink,
 }) => {
   return (
     <Link href={`/${link}/${_id}`} key={_id}>

@@ -1,8 +1,7 @@
 import InnerCardPage from '@/components/InnerCard/InnerCardPage';
 import getBanquet from '@/utils/banquet/GetBanquet';
 import { SlidersHorizontal } from 'lucide-react';
-import React from 'react';
-
+import { incrementPageView, incrementVisit } from '@/utils/analytics/analyticsService';
 
 export const metadata = {
   title: "Banquet Halls / Marriage Hall",
@@ -13,11 +12,13 @@ export const metadata = {
   },
 };
 
-
 const Page = async () => {
+  const Banquet = await getBanquet();
+  
+  // Increment page view for the BanquetHall page
+  incrementPageView(Banquet);
 
-  const Banquet = await getBanquet()
-
+  // console.log(incrementPageView,"🎉🎉🎉🎉🎉🎉🐷🐷")
 
   return (
     <div className='px-6 py-4'>
@@ -28,7 +29,7 @@ const Page = async () => {
           <span className='text-base font-medium'>Filters</span>
         </div>
       </div>
-      <InnerCardPage data={Banquet}  link="BanquetHall" imgLink="banquet"/>
+      <InnerCardPage data={Banquet} link="BanquetHall" imgLink="banquet"/>
     </div>
   );
 };

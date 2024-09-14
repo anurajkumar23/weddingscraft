@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
-
+import * as React from "react";
+import { TrendingUp } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -11,60 +10,49 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
+import { ChartData } from "@/customTypes/dashboard-data"; // Import your custom types
 
-export const description = "A donut chart with text"
+export const description = "A donut chart with sales data";
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
+// The component accepts 'data' prop of type 'ChartData'
+interface UserPieChartProps {
+  data: ChartData;
+}
 
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
+const chartConfig: ChartConfig = {
+  user: {
+    label: "User",
   },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
+  period: {
+    label: "Period",
   },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} satisfies ChartConfig
+};
 
-export default function UserPieChart() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-  }, [])
+export default function UserPieChart({ data }: UserPieChartProps) {
+  // Map data from props into chart format
+  const chartData = data.labels.map((label, index) => ({
+    period: label,
+    sales: data.data[index],
+    fill: `hsl(var(--chart-${index + 1}))`,
+  }));
+
+  // Calculate total sales
+  const totalSales = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.sales, 0);
+  }, [chartData]);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Pie Chart - Donut with Sales</CardTitle>
+        <CardDescription>January - May 2023</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -78,8 +66,8 @@ export default function UserPieChart() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="sales"
+              nameKey="period"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -98,17 +86,17 @@ export default function UserPieChart() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalSales.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Users
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -121,9 +109,9 @@ export default function UserPieChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing total Searches for the 1 months
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
