@@ -13,7 +13,6 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import ImageContainer from "./ImageContainer";
-import Banquet1 from "../../../public/Banquet-1.jpg";
 import UserReview from "./UserReview";
 import { Rate } from "antd";
 import Pricing from "./Pricing";
