@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { CalendarDatePicker } from "@/components/ui/calender-date-picker"
+import { CalendarDatePicker } from "@/components/calender-date-picker"
 import { Clock } from "lucide-react"
 
 export default function DecoratorBooking() {
@@ -42,7 +42,8 @@ export default function DecoratorBooking() {
           date={{ from: date.from, to: date.to }}
           onDateSelect={handleDateSelect}
           numberOfMonths={2}
-          closeOnSelect={false}
+        //   closeOnSelect={false}
+        
         />
       </div>
 
