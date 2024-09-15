@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
 
   const [menuOpen, setMenuOpen] = useState(false)
   const {user,setUser} = useAuth()
-  console.log(user,"navbar")
+  // console.log(user,"navbar")
   const router = useRouter()
 
 
