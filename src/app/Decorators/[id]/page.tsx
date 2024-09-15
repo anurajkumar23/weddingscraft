@@ -53,8 +53,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         </Button>
                         <div className="space-y-6 py-6">
                             <QuickInfo DecoratorData={Decorator} />
-                            <QuickInfo DecoratorData={Decorator} />
-                            <QuickInfo DecoratorData={Decorator} />
                         </div>
                     </div>
                     <div className=" md:w-1/3 bg-muted p-6">
