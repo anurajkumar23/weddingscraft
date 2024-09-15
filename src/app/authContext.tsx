@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${id}`
           );
-          console.log(response.data.data.user,"usedata from context")
+          // console.log(response.data.data.user,"usedata from context")
           setUser(response.data.data.user);
  
         } catch (error) {
@@ -50,7 +50,7 @@ export const useAuth = () => {
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  console.log("context",context)
+  // console.log("context",context)
 
   return context;
 };
