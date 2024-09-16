@@ -3,7 +3,7 @@ import { GoCheckCircleFill } from 'react-icons/go'
 import { Rate } from "antd";
 import UserReview from '@/components/MainCard/UserReview';
 
-const DecoratorDatas = {
+const data1 = {
   services: [
     "Wedding",
     "Corporate Event",
@@ -37,40 +37,61 @@ const userReviews = [
   },
 ];
 
-const QuickInfo = ({DecoratorData} : any) => {
+const QuickInfo = ({ data }: any) => {
   return (
     <div>
-    <div>
-           <div
-        id="Services"
-        className="container border w-full h-full rounded-sm bg-white py-6"
-      >
-        <div className="grid grid-cols-2">
-          <h1 className="text-2xl font-medium mb-6">Quick Information</h1>
-          <h1 className="text-2xl font-medium mr-6 mb-6">Timings</h1>
-          <div>
-            <h1 className="text-lg text-gray-600 ">Year of Establishment</h1>
-            <h1 className="text-lg font-semibold">{DecoratorData.yearOfEstd}</h1>
-          </div>
-          <div className="flex space-x-4">
-            <h1 className="font-medium text-lg">{DecoratorData.operatingDays}</h1>
-            <h1 className="text-gray-700">Open {DecoratorData.openHours}</h1>
+      <div>
+        <div
+          id="Services"
+          className="container border w-full h-full rounded-sm bg-white py-6"
+        >
+          <div className="grid grid-cols-2">
+            <h1 className="text-2xl font-medium mb-6">Quick Information</h1>
+            <h1 className="text-2xl font-medium mr-6 mb-6">Timings</h1>
+            <div>
+              <h1 className="text-lg text-gray-600 ">Year of Establishment</h1>
+              <h1 className="text-lg font-semibold">{data.yearOfEstd}</h1>
+            </div>
+            <div className="flex space-x-4">
+              <h1 className="font-medium text-lg">{data.operatingDays}</h1>
+              <h1 className="text-gray-700">Open {data.openHours}</h1>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
+      <div
         id="Services"
         className="container border w-full h-full rounded-sm bg-white py-6"
       >
         <h1 className="text-2xl font-medium mb-6">Services</h1>
         <div className="grid grid-cols-2">
-          {DecoratorDatas.services.map((service, index) => (
-            <div key={index} className="flex space-x-2 pb-3">
-              <GoCheckCircleFill size={25} className="text-green-600" />
-              <h1 className="font-semibold">{service}</h1>
-            </div>
-          ))}
+          {data?.services?.length ? (
+            data.services.map(
+              (
+                service: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined,
+                index: React.Key | null | undefined
+              ) => (
+                <div key={index} className="flex space-x-2 pb-3">
+                  <GoCheckCircleFill size={25} className="text-green-600" />
+                  <h1 className="font-semibold">{service}</h1>
+                </div>
+              )
+            )
+          ) : data1?.services?.length ? (
+            data1.services.map(
+              (
+                service: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined,
+                index: React.Key | null | undefined
+              ) => (
+                <div key={index} className="flex space-x-2 pb-3">
+                  <GoCheckCircleFill size={25} className="text-green-600" />
+                  <h1 className="font-semibold">{service}</h1>
+                </div>
+              )
+            )
+          ) : (
+            <p className="bg-gray-500 p-4 text-white">No location information available</p>
+          )}
         </div>
       </div>
       <div
@@ -81,10 +102,10 @@ const QuickInfo = ({DecoratorData} : any) => {
           <h1 className="text-2xl font-medium mb-6">Reviews & Ratings</h1>
           <div className="flex gap-x-4">
             <span className="border p-4 rounded-xl bg-green-600 text-white text-xl">
-              {DecoratorData.rating}
+              {data.rating}
             </span>
             <h1 className="text-2xl font-semibold items-center flex">
-              {DecoratorData.reviews.length} Reviews
+              {data.reviews.length} Reviews
             </h1>
           </div>
 

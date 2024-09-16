@@ -9,6 +9,7 @@ interface ImageGalleryProps {
     category: string;
 }
 
+
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
     const [mainImage, setMainImage] = useState(0) // Main image state for slider
     const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
@@ -57,7 +58,6 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                             <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
-                                    // src={image}
                                     alt={`Image ${index + 1}`}
                                     layout="fill"
                                     objectFit="cover"
@@ -121,7 +121,6 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                             <div className="relative col-span-1" onClick={() => openFullscreen(images[1])}>
                                 <Image
                                    src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[1]}`}
-                                    // src={images[1]}
                                     alt="Image 2"
                                     layout="fill"
                                     objectFit="cover"

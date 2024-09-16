@@ -15,7 +15,7 @@ export default function DecoratorBooking() {
   })
   const [timeSlot, setTimeSlot] = useState<string>("")
   const [name, setName] = useState<string>("")
-  const [email, setEmail] = useState<string>("")
+  const [phone, setPhone] = useState<string>("")
 
   const timeSlots = [
     "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
@@ -27,8 +27,8 @@ export default function DecoratorBooking() {
   }
 
   const handleBooking = () => {
-    console.log("Booking details:", { date, timeSlot, name, email })
-    // Here you would typically send this data to your backend
+    console.log("Booking details:", { date, timeSlot, name, phone })
+  
   }
 
   return (
@@ -42,8 +42,7 @@ export default function DecoratorBooking() {
           date={{ from: date.from, to: date.to }}
           onDateSelect={handleDateSelect}
           numberOfMonths={2}
-        //   closeOnSelect={false}
-        
+          closeOnSelect={false}
         />
       </div>
 
@@ -67,14 +66,14 @@ export default function DecoratorBooking() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Your Email</Label>
-        <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="john@example.com" />
+        <Label htmlFor="phone">Your Phone Number</Label>
+        <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="123-456-7890" />
       </div>
 
       <Button 
         onClick={handleBooking} 
-        className="w-full"
-        disabled={!date || !timeSlot || !name || !email}
+        className="w-full bg-green-600"
+        disabled={!date || !timeSlot || !name || !phone}
       >
         <Clock className="mr-2" />
         Confirm Booking
