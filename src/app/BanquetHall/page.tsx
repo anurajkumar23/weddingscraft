@@ -2,7 +2,7 @@
 
 import InnerCardPage from '@/components/InnerCard/InnerCardPage';
 import getBanquet from '@/utils/banquet/GetBanquet';
-import FilterData from './FilterData';
+import FilterData from '../../components/filter/FilterData';
 
 export const metadata = {
   title: "Banquet Halls / Marriage Hall",
