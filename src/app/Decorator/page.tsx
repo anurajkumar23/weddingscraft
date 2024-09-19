@@ -1,8 +1,7 @@
 import React from 'react';
-// import Decorators from './Decorators';
 import getDecorator from '@/utils/decorator/getDecorator';
-import { SlidersHorizontal } from 'lucide-react';
 import InnerCardPage from '@/components/InnerCard/InnerCardPage';
+import FilterData from '@/components/filter/FilterData';
 
 export const metadata = {
   title: "Wedding Decorators",
@@ -12,18 +11,13 @@ export const metadata = {
   },
 };
 
-const page = async () => {
-  const decoratorsData = await getDecorator();
+const page = async ({ searchParams }: { searchParams: Record<string, string> }) => {
+  const decoratorsData = await getDecorator(searchParams);
 
   return (
     <div className='px-6 py-4'>
       <h1 className='text-2xl font-medium mb-4'>Top Decorators</h1>
-      <div className='max-w-xs'>
-        <div className='border border-gray-500 rounded-md p-2 flex items-center cursor-pointer'>
-          <SlidersHorizontal className='mr-2' size={24} />
-          <span className='text-base font-medium'>Filters</span>
-        </div>
-      </div>
+      <FilterData />
       <InnerCardPage data={decoratorsData} link="Decorators" imgLink="decorator"/>
     </div>
   );
