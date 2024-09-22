@@ -1,20 +1,30 @@
+
+import axios from "axios";
+import { cookies } from "next/headers";
+
 export default async function getDecorator(filters = {}) {
-    try {
-      const queryString = new URLSearchParams(filters).toString();
-      const response = await fetch(
-        `http://localhost:3000/api/decor?${queryString}`,
-        { cache: 'no-store' }
-      );
-      const data = await response.json();
+  try {
+    const token = cookies().get('jwt')?.value || "";
   
-      if (data.message === "success") {
-        return data.data;
-      } else {
-        throw new Error("Failed to fetch Decorator data");
-      }
-    } catch (error) {
-      console.error("Error fetching Decorator:", error);
-      throw error;
+    const queryString = new URLSearchParams(filters).toString();
+
+    // Make the API request with token and content-type
+    const response= await axios.get(`http://localhost:8000/api/decor?${queryString}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        "Content-Type": "application/json",
+      },
+    });
+
+    
+
+    if (response.data.message === "success") {
+      return response.data.data;
+    } else {
+      throw new Error("Failed to fetch decorator data");
     }
+  } catch (error) {
+    console.error("Error fetching decorator:", error);
+    throw error;
   }
-  
+}

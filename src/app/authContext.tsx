@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -17,18 +17,22 @@ export const AuthProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const id = localStorage.getItem("user_id");
-      if (!id) return; // Early return if no user_id
+      const token = localStorage.getItem("jwt_token");
+      if (!token) return;
 
       if (!user) {
-        console.log("entered the use useeffect")
+        console.log("entered the use useeffect");
         try {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${id}`
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/verify`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Attach token here
+              },
+            }
           );
           // console.log(response.data.data.user,"usedata from context")
-          setUser(response.data.data.user);
- 
+          setUser(response.data.user);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }

@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Select from "react-select"; // Import react-select
 import {
   Form,
   FormControl,
@@ -18,16 +19,20 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-
 // Form validation schema
 const formSchema = z.object({
-  pancard: z.string()
+  pancard: z
+    .string()
     .length(10, { message: "PAN card number must be exactly 10 characters" })
     .toUpperCase(),
-
-  documentImages: z.array(z.instanceof(File))
+  documentImages: z
+    .array(z.instanceof(File))
     .min(1, { message: "Please upload a document" })
     .max(1, { message: "Only one file is allowed" }),
+  categories: z
+    .array(z.string())
+    .min(1, { message: "Select at least one category" })
+    .max(4, { message: "Select up to four categories" }), // Validate multi-select
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,37 +42,93 @@ type ImportantInformationProps = {
 };
 
 const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
-  const { user,setUser } = useAuth();
-  const router = useRouter()
+  const { user, setUser } = useAuth();
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       pancard: user.draft?.governmentInfo?.pancard || "",
-      documentImages: [], 
+      documentImages: [],
+      categories: [],
     },
   });
 
+  const categoryOptions = [
+    { value: "Banquet", label: "Banquet" },
+    { value: "Caterer", label: "Caterer" },
+    { value: "Photographer", label: "Photographer" },
+    { value: "Decorator", label: "Decorator" },
+  ];
+
   const onSubmit = async (values: FormValues) => {
-    console.log(values)
-    const formData = new FormData();
-    formData.append("pancard", values.pancard);
-    formData.append("document", values.documentImages[0]); // Append the file to FormData
+    console.log(values);
+    // const formData = new FormData();
+    // formData.append("pancard", values.pancard);
+    // formData.append("document", values.documentImages[0]); // Append the file to FormData
+    // formData.append("categories", JSON.stringify(values.categories)); // Append categories
+
 
     try {
+      const content = "application/pdf";
+      const token = localStorage.getItem("jwt_token");
+     
+
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user._id}/sellerdraft?draft=governmentInfo`,
-        formData, {
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${user._id}/sellerdraft?draft=governmentInfo`,
+        {pancard:values.pancard,allowed:values.categories},
+        {
           headers: {
-            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
-      console.log(response.data, "Government certificate response");
+      console.log(response.data.data, "Government certificate response");
+
+       const responsePresigned = await axios.post(
+        "http://localhost:8000/api/user/uploadDocs",
+        { id: user._id, content },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(responsePresigned,"presigned")
+      if (responsePresigned.status === 200) {
+        const presignedPUTURL = responsePresigned.data.data.presignedPUTURL;
+        const filename=responsePresigned.data.data.filename
+        console.log(filename,user._id)
+        const blob = new Blob([values.documentImages[0]]);
+        await fetch(presignedPUTURL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': content,
+          },
+          body: blob,
+        });
+        await axios.patch(
+          `http://localhost:8000/api/user/${user._id}/sellerdraft/documentupdate`,
+          { document: filename,draft:"governmentInfo"},
+          {
+            headers: {
+              Authorization: token,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+      }
+
+
+
+
+
 
       toast.success("Government certificate submitted successfully!");
-      setUser(response.data);
-      router.reload()
+      setUser(response.data.data);
+      // router.push(router.asPath);
       onComplete();
     } catch (error) {
       console.error("Error submitting government certificate", error);
@@ -80,6 +141,11 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
     if (file) {
       form.setValue("documentImages", [file]); // Store the File object directly
     }
+  };
+
+  const handleCategoryChange = (selectedOptions: any) => {
+    const categories = selectedOptions.map((option: any) => option.value);
+    form.setValue("categories", categories); // Store selected categories
   };
 
   return (
@@ -114,15 +180,32 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
                 name="documentImages"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Upload Document (PDF only)
-                    </FormLabel>
+                    <FormLabel>Upload Document (PDF only)</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
                         accept="application/pdf" // Only accept PDF files
                         onChange={handleFileChange}
                         aria-invalid={!!form.formState.errors.documentImages}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="categories"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Select Your Service</FormLabel>
+                    <FormControl>
+                      <Select
+                        isMulti
+                        options={categoryOptions}
+                        onChange={handleCategoryChange}
+                        aria-invalid={!!form.formState.errors.categories}
                       />
                     </FormControl>
                     <FormMessage />

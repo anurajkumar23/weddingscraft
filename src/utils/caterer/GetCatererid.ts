@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export default async function getBanquetId(id: string) {
+export default async function getCatererId(id: string) {
   try {
-    const { data } = await axios.get(`http://localhost:8000/api/banquet/${id}`, {
+    const { data } = await axios.get(`http://localhost:8000/api/caterer/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -10,10 +10,10 @@ export default async function getBanquetId(id: string) {
     if (data.message === "success") {
       return data.data;
     } else {
-      throw new Error("Failed to fetch banquet data");
+      throw new Error("Failed to fetch caterer data");
     }
   } catch (error) {
-    console.error("Error fetching banquet:", error);
+    console.error("Error fetching caterer:", error);
     throw error;
   }
 }

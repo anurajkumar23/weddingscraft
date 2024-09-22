@@ -1,8 +1,9 @@
 import React from 'react';
 
 import getCaterer from '@/utils/caterer/GetCaterer';
-import { SlidersHorizontal } from 'lucide-react';
 import InnerCardPage from '@/components/InnerCard/InnerCardPage';
+import FilterData from '@/components/filter/FilterData';
+import page from '../page';
 
 export const metadata = {
   title: "Wedding Caterers",
@@ -13,21 +14,26 @@ export const metadata = {
   },
 };
 
-const page = async () => {
-  const Caterer = await getCaterer()
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) => {
+  const Caterer = await getCaterer(searchParams); 
 
   return (
     <div className='px-6 py-4'>
       <h1 className='text-2xl font-medium mb-4'>Top Caterers</h1>
-      <div className='max-w-xs'>
+      <FilterData />
+      {/* <div className='max-w-xs'>
         <div className='border border-gray-500 rounded-md p-2 flex items-center cursor-pointer'>
           <SlidersHorizontal className='mr-2' size={24} />
           <span className='text-base font-medium'>Filters</span>
         </div>
-      </div>
-      <InnerCardPage data={Caterer} link="Caterers" imgLink="caterer"/>
+      </div> */}
+      <InnerCardPage data={Caterer} link="Caterer" imgLink="caterer"/>
     </div>
   );
 };
 
-export default page;
+export default Page;

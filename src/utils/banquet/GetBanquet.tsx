@@ -1,16 +1,24 @@
+import axios from "axios";
+import { cookies } from "next/headers";
+
 export default async function getBanquet(filters = {}) {
   try {
+    const token = cookies().get('jwt')?.value || "";
+  
     const queryString = new URLSearchParams(filters).toString();
-    // console.log(queryString,"query")
-    const response = await fetch(
-      `http://localhost:3000/api/banquet?${queryString}`,
-      { cache: 'no-store' }
-    );
-    const data = await response.json();
 
-    if (data.message === "success") {
+    // Make the API request with token and content-type
+    const response= await axios.get(`http://localhost:8000/api/banquet?${queryString}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        "Content-Type": "application/json",
+      },
+    });
 
-      return data.data;
+    
+
+    if (response.data.message === "success") {
+      return response.data.data;
     } else {
       throw new Error("Failed to fetch banquet data");
     }
