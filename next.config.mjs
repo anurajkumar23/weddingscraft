@@ -16,8 +16,12 @@ const nextConfig = {
           protocol: 'https',
           hostname: 'source.unsplash.com',
         },
+        {
+          protocol: 'https',
+          hostname: 'dream-wedding.s3.eu-north-1.amazonaws.com',
+        },
       ],
-      domains: ['localhost', 'source.unsplash.com'],
+      domains: ['localhost', 'source.unsplash.com',"dream-wedding.s3.eu-north-1.amazonaws.com"],
     },
   };
   

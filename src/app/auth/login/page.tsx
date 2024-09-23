@@ -43,12 +43,13 @@ export default function Login() {
           email: values.email,
           password: values.password,
         });
-        console.log(data.success, "user");
+        // console.log(data.success, "user");
 
-        if (data.success === true) {
-          console.log("entered");
-          setUser(data.user);
-          localStorage.setItem("user_id",data.user._id)
+        if (data.status === "success") {
+          // console.log(data);
+
+          setUser(data.data.user);
+          localStorage.setItem("user_id",data.data.user._id)
           toast.success("Login successful!");
           router.push("/user/profile");
         }
@@ -68,15 +69,17 @@ export default function Login() {
   const login = async (userData: login) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user/login`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/login`,
         userData
       );
+
       const token = response.data.token;
       document.cookie = `jwt=${token}; max-age=${60 * 60 * 24 * 7}; path=/`;
 
       localStorage.setItem("jwt_token", token);
 
       if (response.status === 200) {
+
         return response.data;
       }
     } catch (error) {

@@ -65,15 +65,21 @@ const ImportantInformation = ({ onComplete }: ImportantInformationProps) => {
 
         console.log(values,"values")
         try {
+            const token = localStorage.getItem("jwt_token");
             const response = await axios.patch(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user._id}/sellerdraft?draft=importantInfo`,
-                values
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${user._id}/sellerdraft?draft=importantInfo`,
+                values,  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                    },
+                  }
             );
 
-            console.log(response.data, "Important info response");
+            console.log(response.data.data, "Important info response");
 
             toast.success(" Important Information submitted successfully!");
-            setUser(response.data);
+            setUser(response.data.data);
             onComplete();
         } catch (error) {
             console.error("Error submitting important info", error);
