@@ -1,7 +1,7 @@
 import Banquet from '@/components/seller/post/Banquet';
 import Carterer from '@/components/seller/post/Carterer';
 import Decorator from '@/components/seller/post/Decorator';
-import Photographer from '@/components/seller/post/photographer';
+import Photographer from '@/components/seller/post/Photographer';
 import React from 'react';
 
 interface Props {
