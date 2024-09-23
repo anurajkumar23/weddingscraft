@@ -18,6 +18,7 @@ import { useAuth } from "@/app/authContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 // Form validation schema
 const formSchema = z.object({
@@ -44,12 +45,13 @@ type ImportantInformationProps = {
 const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
   const { user, setUser } = useAuth();
   const router = useRouter();
+  const [existingDocument, setExistingDocument] = useState<string | null>(null);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       pancard: user.draft?.governmentInfo?.pancard || "",
       documentImages: [],
-      categories: [],
+      categories: user.draft?.governmentInfo?.allowed || [],
     },
   });
 
@@ -59,6 +61,12 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
     { value: "Photographer", label: "Photographer" },
     { value: "Decorator", label: "Decorator" },
   ];
+
+  useEffect(() => {
+    if (user.draft?.governmentInfo?.document) {
+      setExistingDocument(user.draft.governmentInfo.document);
+    }
+  }, [user]);
 
   const onSubmit = async (values: FormValues) => {
     console.log(values);
@@ -190,6 +198,17 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
                       />
                     </FormControl>
                     <FormMessage />
+                    {existingDocument && (
+                      <p className="text-blue-500 mt-2">
+                        <a
+                          href={existingDocument}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View existing document
+                        </a>
+                      </p>
+                    )}
                   </FormItem>
                 )}
               />
@@ -204,6 +223,9 @@ const GovernmentCertificate = ({ onComplete }: ImportantInformationProps) => {
                       <Select
                         isMulti
                         options={categoryOptions}
+                        value={categoryOptions.filter(option =>
+                          field.value.includes(option.value)
+                        )}
                         onChange={handleCategoryChange}
                         aria-invalid={!!form.formState.errors.categories}
                       />

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { UserRoundPen } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { FaCheckCircle } from "react-icons/fa";
 // import Loading from './loading';
 
 interface Options {
@@ -113,10 +114,8 @@ export default function Page() {
           },
         }
       );
-      console.log(updateUser.data.data.user)
-      setUser(updateUser.data.data.user)
-
-
+      console.log(updateUser.data.data.user);
+      setUser(updateUser.data.data.user);
     } catch (error) {
       console.error("Error during photo upload:", error);
     }
@@ -135,13 +134,22 @@ export default function Page() {
         </p>
         <div className="border overflow-hidden flex justify-center items-center rounded-full mb-4">
           <Image
-            src={user ? user.image : "https://source.unsplash.com/2ShvY8Lf6l0/800x599"}
+            src={
+              user
+                ? user.image
+                : "https://source.unsplash.com/2ShvY8Lf6l0/800x599"
+            }
             alt="Profile Picture"
             width={500}
             height={500}
             className="object-cover w-48 h-48 hover:scale-105 transition-transform duration-300 cursor-pointer rounded-full"
             loading="lazy"
           />
+          {user?.sellerRequest === "accepted" && (
+            <div className="absolute bottom-2 right-2 flex items-center bg-blue-500 text-white rounded-full px-2 py-1 text-xs">
+              <FaCheckCircle className="mr-1" /> Verified Seller
+            </div>
+          )}
         </div>
         <input type="file" onChange={handleFileChange} accept="image/*" />
         <button
@@ -159,16 +167,6 @@ export default function Page() {
             Phone: {user?.phoneNumber || "Not Provided"}
           </p>
           <p className="text-gray-600">Joined on: {joined}</p>
-          <p className="text-gray-600">
-            Address: {user?.address || "Not Provided"}
-          </p>
-          <p className="text-gray-600">
-            Pincode: {user?.pincode || "Not Provided"}
-          </p>
-          <p className="text-gray-600">City: {user?.city || "Not Provided"}</p>
-          <p className="text-gray-600">
-            State: {user?.state || "Not Provided"}
-          </p>
         </div>
       </div>
     </div>
