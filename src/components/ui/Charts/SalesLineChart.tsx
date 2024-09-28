@@ -35,7 +35,7 @@ export default function SalesLineChart({ data }: { data: ChartData }) {
 
   return (
     <CardLayout
-      title="Sales Over Time"
+      title="Reach Over Time"
       description={`${formatDate(data.labels[data.labels.length - 1])} - ${formatDate(data.labels[0])}`}
     >
       <ChartContainer config={chartConfig} className="m-auto w-full h-[300px]">

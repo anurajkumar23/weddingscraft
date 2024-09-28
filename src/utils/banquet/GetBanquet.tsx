@@ -7,15 +7,16 @@ export default async function getBanquet(filters = {}) {
   
     const queryString = new URLSearchParams(filters).toString();
 
-    // Make the API request with token and content-type
-    const response= await axios.get(`http://localhost:8000/api/banquet?${queryString}`, {
+
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api';
+
+  
+    const response = await axios.get(`${API_URL}/banquet?${queryString}`, {
       headers: {
         Authorization: `Bearer ${token}`, 
         "Content-Type": "application/json",
       },
     });
-
-    
 
     if (response.data.message === "success") {
       return response.data.data;

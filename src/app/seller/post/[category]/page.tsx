@@ -1,4 +1,4 @@
-import Banquet from '@/components/seller/post/Banquet';
+import BanquetPageData from '@/components/seller/post/banquet-halls/page';
 import Carterer from '@/components/seller/post/Carterer';
 import Decorator from '@/components/seller/post/Decorator';
 import Photographer from '@/components/seller/post/Photographer';
@@ -17,7 +17,7 @@ const Page: React.FC<Props> = ({ params }) => {
 
   switch (category) {
     case 'banquet':
-      ContentComponent = Banquet;
+      ContentComponent = BanquetPageData;
       break;
     case 'caterer':
       ContentComponent = Carterer;
