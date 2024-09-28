@@ -4,32 +4,32 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 
 
-import { columns, BanquetColumn } from "./columns";
+import { columns, DecoratorColumn } from "./columns";
+// import { ApiList } from "@/components/ui/api-list";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-
-
-interface BanquetClientProps {
-  data: BanquetColumn[];
+interface DecoratorClientProps {
+  data: DecoratorColumn[];
 }
 
-export const BanquetClient: React.FC<BanquetClientProps> = ({
+export const DecoratorClient: React.FC<DecoratorClientProps> = ({
   data
 }) => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <>
       <div className="flex items-center justify-between">
-        <Heading title={`Banquets Data(${data.length})`} description="Manage Banquets for your store" />
-        <Button onClick={() => router.push(`/seller/post/banquet/new`)}>
+        <Heading title={`Decorators Data(${data.length})`} description="Manage Decorators for your store" />
+        <Button onClick={() => router.push(`/seller/post/decorators/new`)}>
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
+
     </>
   );
 };

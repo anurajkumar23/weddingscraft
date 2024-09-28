@@ -24,28 +24,43 @@ import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { MultiSelect } from "@/components/ui/multi-select"
+
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+
+  name: z.string().min(1, "Name is required").max(40, "Name cannot exceed 40 characters"),
   location: z.object({
     city: z.string().min(1, "City is required"),
     area: z.string().min(1, "Area is required"),
     pincode: z.string().min(1, "Pincode is required"),
   }),
-  services: z.array(z.string()).optional(),
   description: z.string().min(1, "Description is required"),
-  price: z.string().optional(),
-  capacity: z.string().optional(),
-  specialFeature: z.array(z.string()).optional(),
-  yearOfEstd: z.string().optional(),
-  availability: z.array(z.string()).optional(),
-  openHours: z.string().optional(),
-  operatingDays: z.string().optional(),
-  type: z.string().optional(),
-  billboard: z.string().optional(),
-});
 
+  price: z.string().min(1, "Price is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
+    message: "Price must be a number",
+  }),
+
+  capacity: z.string().min(1, "Capacity is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
+    message: "Capacity must be a number",
+  }),
+
+  services: z.array(z.string()).min(1, "At least one service is required"),
+
+  yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
+    message: "Year of ESTD> must be a number",
+  }),
+
+  availability: z.array(z.string()).min(1, "At least one availability is required"),
+
+  openHours: z.string().min(1, "Open hours are required"),
+  operatingDays: z.string().min(1, "Operating days are required").transform((val) => val.toUpperCase()),
+
+  type: z.enum(['AC', 'Non-AC']).optional(),
+
+  billboard: z.string().max(255).optional(),
+
+  specialFeature: z.array(z.string()).optional(),
+});
 type BanquetFormValues = z.infer<typeof formSchema>
 
 interface BanquetFormProps {
@@ -57,6 +72,8 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
+
+  const [serviceInput, setServiceInput] = useState("");
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,19 +90,26 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       location: { city: '', area: '', pincode: '' },
       services: [],
       description: '',
-      price: '',
-      capacity: '',
+      price: 0,
+      capacity: 0,
       specialFeature: [],
-      yearOfEstd: '',
+      yearOfEstd: new Date().getFullYear(),
       availability: [],
       openHours: '',
       operatingDays: '',
-      type: '',
+      type: 'AC',
       billboard: '',
     },
   });
 
   const onSubmit = async (data: BanquetFormValues) => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
     try {
       setLoading(true);
       const token = localStorage.getItem("jwt_token");
@@ -93,30 +117,17 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
         throw new Error("Authentication token not found");
       }
 
-      const payload = {
-        ...data,
-        price: parseFloat(data.price),
-        capacity: parseInt(data.capacity),
-        yearOfEstd: parseInt(data.yearOfEstd),
-      };
-
       if (initialData) {
-        await axios.patch(`http://localhost:8000/api/banquet/${params.id}`, payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        await axios.patch(`http://localhost:8000/api/banquet/${params.id}`, data, 
+          config
+        );
       } else {
-        await axios.post(`http://localhost:8000/api/banquet`, payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        await axios.post('http://localhost:8000/api/banquet', data, config );
       }
+
+      console.log()
       router.refresh();
-      router.push(`/banquet`);
+      router.push(`/seller/post/banquet`);
       toast.success(toastMessage);
     } catch (error: any) {
       console.error("Error submitting form:", error);
@@ -125,6 +136,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       setLoading(false);
     }
   };
+
 
   const onDelete = async () => {
     try {
@@ -151,6 +163,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       setOpen(false);
     }
   }
+
 
   return (
     <>
@@ -236,17 +249,41 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Services</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                     options={[
-                      { value: 'Catering', label: 'Catering' },
-                      { value: 'Decorations', label: 'Decorations' },
-                      { value: 'DJ', label: 'DJ' },
-                      { value: 'Photography', label: 'Photography' },
-                    ]}
-                    selected={field.value}
-                    onChange={field.onChange}
-                    placeholder="Select services"
-                    />
+                    <div className="space-y-4">
+                      {(field.value || []).map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            disabled={loading}
+                            placeholder="Services"
+                            value={item}
+                            onChange={(e) => {
+                              const updatedValue = [...(field.value || [])];
+                              updatedValue[index] = e.target.value;
+                              field.onChange(updatedValue);
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const updatedValue = (field.value || []).filter((_, i) => i !== index);
+                              field.onChange(updatedValue);
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const updatedValue = [...(field.value || []), ''];
+                          field.onChange(updatedValue);
+                        }}
+                      >
+                        Add New
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -296,18 +333,43 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
               name="specialFeature"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Special Features</FormLabel>
+                  <FormLabel>Special Feature</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                      // disabled={loading}
-                      placeholder="Select special features"
-                      options={[
-                        { value: 'Valet Parking', label: 'Valet Parking' },
-                        { value: 'Private Garden', label: 'Private Garden' },
-                      ]}
-                      selected={field.value}
-                      onChange={field.onChange}
-                    />
+                    <div className="space-y-4">
+                      {(field.value || []).map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            disabled={loading}
+                            placeholder="Special Feature"
+                            value={item}
+                            onChange={(e) => {
+                              const updatedValue = [...(field.value || [])];
+                              updatedValue[index] = e.target.value;
+                              field.onChange(updatedValue);
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const updatedValue = (field.value || []).filter((_, i) => i !== index);
+                              field.onChange(updatedValue);
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const updatedValue = [...(field.value || []), ''];
+                          field.onChange(updatedValue);
+                        }}
+                      >
+                        Add New
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -333,16 +395,41 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Availability</FormLabel>
                   <FormControl>
-                    <MultiSelect
-                      // disabled={loading}
-                      placeholder="Select availability"
-                      options={[
-                        { value: 'Weekdays', label: 'Weekdays' },
-                        { value: 'Weekends', label: 'Weekends' },
-                      ]}
-                      selected={field.value}
-                      onChange={field.onChange}
-                    />
+                    <div className="space-y-4">
+                      {(field.value || []).map((item, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input
+                            disabled={loading}
+                            placeholder="availability"
+                            value={item}
+                            onChange={(e) => {
+                              const updatedValue = [...(field.value || [])];
+                              updatedValue[index] = e.target.value;
+                              field.onChange(updatedValue);
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => {
+                              const updatedValue = (field.value || []).filter((_, i) => i !== index);
+                              field.onChange(updatedValue);
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const updatedValue = [...(field.value || []), ''];
+                          field.onChange(updatedValue);
+                        }}
+                      >
+                        Add New
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

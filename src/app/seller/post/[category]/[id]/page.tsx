@@ -9,28 +9,34 @@
 
 
 import { BanquetForm } from "@/components/seller/post/banquet/components/BanquetForm";
+import DecoratorForm from "@/components/seller/post/decorator/components/DecoratorForm";
 import getBanquetId from "@/utils/banquet/GetbanquetId";
+import getDecoratorId from "@/utils/decorator/GetDecoratorId";
 
 export default async function EditPage({ params }: { params: { category: string; id: string } }) {
-    const { category } = params;
+    const { category, id } = params;
     let data;
     let FormComponent;
 
-    const banquet = params.id === 'new' ? null : await getBanquetId(params.id);
+
 
     switch (category) {
         case 'banquet':
-            data = await banquet;
+            if (id !== 'new') {
+                data = await getBanquetId(id);
+            }
             FormComponent = BanquetForm;
             break;
         // case 'caterer':
         //   data = await getCatererById(id);
         //   FormComponent = CatererForm;
         //   break;
-        // case 'decorator':
-        //   data = await getDecoratorById(id);
-        //   FormComponent = DecoratorForm;
-        //   break;
+        case 'decorator':
+            if (id !== 'new') {
+                data = await getDecoratorId(id);
+            }
+            FormComponent = DecoratorForm;
+            break;
         // case 'photographer':
         //   data = await getPhotographerById(id);
         //   FormComponent = PhotographerForm;

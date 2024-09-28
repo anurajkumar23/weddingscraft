@@ -1,7 +1,8 @@
 
 import BanquetPageData from '@/components/seller/post/banquet/page';
 import Carterer from '@/components/seller/post/Carterer';
-import Decorator from '@/components/seller/post/Decorator';
+import DecoratorPage from '@/components/seller/post/decorator/page';
+
 import Photographer from '@/components/seller/post/Photographer';
 import React from 'react';
 
@@ -24,7 +25,7 @@ const Page: React.FC<Props> = ({ params }) => {
       ContentComponent = Carterer;
       break;
     case 'decorator':
-      ContentComponent = Decorator;
+      ContentComponent = DecoratorPage;
       break;
     case 'photographer':
       ContentComponent = Photographer;
