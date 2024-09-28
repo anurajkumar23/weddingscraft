@@ -2,7 +2,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-export default async function getDecorator(filters = {}) {
+export default async function getCaterer(filters = {}) {
   try {
     const token = cookies().get('jwt')?.value || "";
   

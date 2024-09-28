@@ -47,14 +47,7 @@ export const CellAction: React.FC<CellActionProps> = ({
     navigator.clipboard.writeText(id);
     toast.success('User ID copied to clipboard.');
   }
-  function handleAdd(){
-    router.push(`/category/banquet-halls/add`)
 
-  }
-  function handleUpdate(id:string){
-    router.push(`/category/banquet-halls/update/${id}`)
-
-  }
 
   return (
     <>
@@ -78,10 +71,11 @@ export const CellAction: React.FC<CellActionProps> = ({
           >
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
-
-          <DropdownMenuItem onClick={()=>handleAdd()}><Plus className="mr-2 h-4 w-4"/>Add New </DropdownMenuItem>
-          <DropdownMenuItem onClick={()=>handleUpdate(data.id)}><Edit className="mr-2 h-4 w-4"/>Update </DropdownMenuItem>
-
+          <DropdownMenuItem
+            onClick={() => router.push(`/seller/post/banquet/${data.id}`)}
+          >
+            <Edit className="mr-2 h-4 w-4" /> Edit
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setOpen(true)}
           >

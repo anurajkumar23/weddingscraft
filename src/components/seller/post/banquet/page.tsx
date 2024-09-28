@@ -30,7 +30,7 @@ const BanquetPageData = async () => {
 
     return (
       <div className="px-4 w-full max-w-screen-xl mx-auto">
-        <div className="space-y-4 pt-6 text-white">
+        <div className="space-y-4 pt-6">
           <BanquetClient data={formattedBanquets} />
         </div>
       </div>
@@ -39,7 +39,7 @@ const BanquetPageData = async () => {
     console.error("Error fetching banquet data:", error);
     return (
       <div className="px-4 w-full max-w-screen-xl mx-auto">
-        <div className="space-y-4 pt-6 text-white">
+        <div className="space-y-4 pt-6 ">
           <p>Error loading banquet data. Please try again later.</p>
         </div>
       </div>

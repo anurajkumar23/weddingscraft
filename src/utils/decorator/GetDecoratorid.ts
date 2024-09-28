@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function getBanquetId(id: string) {
+export default async function getDecoratorId(id: string) {
   try {
     const { data } = await axios.get(`http://localhost:8000/api/decor/${id}`, {
       headers: {

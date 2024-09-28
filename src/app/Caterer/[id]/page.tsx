@@ -8,7 +8,7 @@ import Link from 'next/link';
 import DecoratorBooking from '../../../components/booking';
 
 import QuickInfo from '@/components/QuickInfo';
-import getCatererId from '@/utils/caterer/GetCatererid';
+import getCatererId from '@/utils/caterer/GetCatererId';
 
 
 

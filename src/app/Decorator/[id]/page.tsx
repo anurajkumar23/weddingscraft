@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, MapPinned, PhoneCall } from 'lucide-react';
-import getDecoratorId from '@/utils/decorator/GetDecoratorid';
+import getDecoratorId from '@/utils/decorator/GetDecoratorId';
 import ImageGallery from '@/components/Gallery/ImageGallery';
 import Link from 'next/link';
 import QuickInfo from '../../../components/QuickInfo';

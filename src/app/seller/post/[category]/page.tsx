@@ -1,4 +1,5 @@
-import BanquetPageData from '@/components/seller/post/banquet-halls/page';
+
+import BanquetPageData from '@/components/seller/post/banquet/page';
 import Carterer from '@/components/seller/post/Carterer';
 import Decorator from '@/components/seller/post/Decorator';
 import Photographer from '@/components/seller/post/Photographer';
