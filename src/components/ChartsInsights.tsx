@@ -5,11 +5,8 @@ import {
 } from "@/components/ui/resizable"
 
 import { DashboardData } from "@/customTypes/dashboard-data";
-import Chart from "./ui/Charts/SalesLineChart";
-import ChartsPage from "./ui/Charts/SalesLineChart";
 import SalesLineChart from "./ui/Charts/SalesLineChart";
 import UserPieChart from "./ui/Charts/UserPieChart";
-
 
 
 export default function ChartsInsights({ data }:{ data: DashboardData }) {
@@ -23,20 +20,18 @@ export default function ChartsInsights({ data }:{ data: DashboardData }) {
       >
         <ResizablePanel defaultSize={65} minSize={35}>
           <SalesLineChart data={data.dashboardData.charts.salesOverTime} />
-
         </ResizablePanel>
         <ResizableHandle withHandle className="w-4 bg-transparent"/>
         <ResizablePanel defaultSize={35} minSize={30}>
-          <UserPieChart data={data.dashboardData.charts.userEngagement} />
-         {/* <UserPieChart /> */}
+        <UserPieChart data={data.dashboardData.charts.userEngagement} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </section>
 
     {/* Narrow View */}
     <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:hidden">
-         {/* <SalesLineChart data={data.dashboardData.charts.salesOverTime} />
-         <UserPieChart data={data.dashboardData.charts.userEngagement} /> */}
+         <SalesLineChart data={data.dashboardData.charts.salesOverTime} />
+         <UserPieChart data={data.dashboardData.charts.userEngagement} />
          {/* <UserBarChart data={data.dashboardData.charts.userEngagement} /> */}
      </section>
     </>

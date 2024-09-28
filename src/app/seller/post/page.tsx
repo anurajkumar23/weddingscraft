@@ -3,7 +3,7 @@ import { useAuth } from '@/app/authContext';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const Page = () => {
+const PostPage = () => {
   const { user } = useAuth();
   const [allowedOptions, setAllowedOptions] = useState<string[]>([]);
   const router = useRouter();
@@ -17,7 +17,7 @@ const Page = () => {
   }, [user]);
 
   if (user?.sellerRequest !== 'accepted') {
-    return <div className="w-full h-full">You are not allowed to post.</div>;
+    return <div className="w-full h-full text-center flex">You are not allowed to post.</div>;
   }
 
   // Function to handle card click
@@ -48,4 +48,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default PostPage;

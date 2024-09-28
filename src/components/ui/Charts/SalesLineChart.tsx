@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import {
   CartesianGrid,
   LabelList,
@@ -20,22 +19,19 @@ import { formatDate } from "@/lib/formaters";
 import { ChartData } from "@/customTypes/dashboard-data";
 import CardLayout from "@/components/CardLayout";
 
-interface SalesLineChartProps {
-  data: ChartData;
-}
 
-export default function SalesLineChart({ data }: SalesLineChartProps) {
+export default function SalesLineChart({ data }: { data: ChartData }) {
   const chartData = data.labels.map((label, index) => ({
     day: formatDate(label),
     sales: data.data[index],
   }));
 
-  const chartConfig: ChartConfig = {
+  const chartConfig = {
     day: {
       label: "Day",
       color: "hsl(var(--primary))",
-    },
-  };
+    }
+  } satisfies ChartConfig;
 
   return (
     <CardLayout
@@ -74,30 +70,17 @@ export default function SalesLineChart({ data }: SalesLineChartProps) {
             activeDot={{
               r: 6,
             }}
-          />
-          {/* Custom LabelList using content for custom styling */}
-          <LabelList
-            position="top"
-            offset={12}
-            dataKey="sales"
-            content={(props) => {
-              const { x, y, value } = props; // Destructure the props
-              return (
-                <text
-                  x={x}
-                  y={y}
-                  fill="black"
-                  fontSize={12}
-                  fontWeight="bold"
-                  textAnchor="middle"
-                >
-                  {value}
-                </text>
-              );
-            }}
-          />
+          >
+            <LabelList
+              position="top"
+              offset={12}
+              className="fill-foreground"
+              fontSize={12}
+            />
+          </Line>
         </LineChart>
+
       </ChartContainer>
     </CardLayout>
-  );
+  )
 }
