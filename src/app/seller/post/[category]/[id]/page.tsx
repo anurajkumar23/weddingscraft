@@ -12,7 +12,7 @@ import { BanquetForm } from "@/components/seller/post/banquet/components/Banquet
 import getBanquetId from "@/utils/banquet/GetbanquetId";
 
 export default async function EditPage({ params }: { params: { category: string; id: string } }) {
-    const { category, id } = params;
+    const { category } = params;
     let data;
     let FormComponent;
 

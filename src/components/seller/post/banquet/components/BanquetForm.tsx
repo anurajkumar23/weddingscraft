@@ -23,29 +23,27 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import ImageUpload from "@/components/ui/image-upload"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
+import { MultiSelect } from "@/components/ui/multi-select"
 
 const formSchema = z.object({
-  name: z.string().min(1),
-  rating: z.number().min(0).max(5),
+  name: z.string().min(1, "Name is required"),
   location: z.object({
-    city: z.string().min(1),
-    area: z.string().min(1),
-    pincode: z.string().min(1),
+    city: z.string().min(1, "City is required"),
+    area: z.string().min(1, "Area is required"),
+    pincode: z.string().min(1, "Pincode is required"),
   }),
-  description: z.string().min(1),
-  price: z.number().min(0),
-  capacity: z.number().min(1),
-  type: z.string().min(1),
-  yearOfEstd: z.number().min(1800).max(new Date().getFullYear()),
-  contactUs: z.string().min(1),
-  specialFeature: z.array(z.string()),
-  availability: z.array(z.string()),
-  operatingDays: z.string().min(1),
-  openHours: z.string().min(1),
-  imageUrl: z.string().min(1),
+  services: z.array(z.string()).optional(),
+  description: z.string().min(1, "Description is required"),
+  price: z.string().optional(),
+  capacity: z.string().optional(),
+  specialFeature: z.array(z.string()).optional(),
+  yearOfEstd: z.string().optional(),
+  availability: z.array(z.string()).optional(),
+  openHours: z.string().optional(),
+  operatingDays: z.string().optional(),
+  type: z.string().optional(),
+  billboard: z.string().optional(),
 });
 
 type BanquetFormValues = z.infer<typeof formSchema>
@@ -72,35 +70,57 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: '',
-      rating: 0,
       location: { city: '', area: '', pincode: '' },
+      services: [],
       description: '',
-      price: 0,
-      capacity: 0,
-      type: '',
-      yearOfEstd: new Date().getFullYear(),
-      contactUs: '',
+      price: '',
+      capacity: '',
       specialFeature: [],
+      yearOfEstd: '',
       availability: [],
-      operatingDays: '',
       openHours: '',
-      imageUrl: '',
+      operatingDays: '',
+      type: '',
+      billboard: '',
     },
   });
 
   const onSubmit = async (data: BanquetFormValues) => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("jwt_token");
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      const payload = {
+        ...data,
+        price: parseFloat(data.price),
+        capacity: parseInt(data.capacity),
+        yearOfEstd: parseInt(data.yearOfEstd),
+      };
+
       if (initialData) {
-        await axios.patch(`/api/banquets/${params.id}`, data);
+        await axios.patch(`http://localhost:8000/api/banquet/${params.id}`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
       } else {
-        await axios.post(`/api/banquets`, data);
+        await axios.post(`http://localhost:8000/api/banquet`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
       }
       router.refresh();
-      router.push(`/banquets`);
+      router.push(`/banquet`);
       toast.success(toastMessage);
     } catch (error: any) {
-      toast.error('Something went wrong.');
+      console.error("Error submitting form:", error);
+      toast.error(error.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -109,12 +129,23 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/banquets/${params.id}`);
+      const token = localStorage.getItem("jwt_token");
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      await axios.delete(`http://localhost:8000/api/banquet/${params.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       router.refresh();
-      router.push(`/banquets`);
+      router.push(`/banquet`);
       toast.success('Banquet deleted.');
     } catch (error: any) {
-      toast.error('Something went wrong.');
+      console.error("Error deleting banquet:", error);
+      toast.error(error.response?.data?.message || 'Something went wrong.');
     } finally {
       setLoading(false);
       setOpen(false);
@@ -161,19 +192,6 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
             />
             <FormField
               control={form.control}
-              name="rating"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Rating</FormLabel>
-                  <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Rating" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="location.city"
               render={({ field }) => (
                 <FormItem>
@@ -213,6 +231,29 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
             />
             <FormField
               control={form.control}
+              name="services"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Services</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                     options={[
+                      { value: 'Catering', label: 'Catering' },
+                      { value: 'Decorations', label: 'Decorations' },
+                      { value: 'DJ', label: 'DJ' },
+                      { value: 'Photography', label: 'Photography' },
+                    ]}
+                    selected={field.value}
+                    onChange={field.onChange}
+                    placeholder="Select services"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem>
@@ -231,7 +272,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Price" {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                    <Input type="number" disabled={loading} placeholder="Price" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,56 +285,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Capacity</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Capacity" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type</FormLabel>
-                  <Select disabled={loading} onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue defaultValue={field.value} placeholder="Select a type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="wedding">Wedding</SelectItem>
-                      <SelectItem value="corporate">Corporate</SelectItem>
-                      <SelectItem value="birthday">Birthday</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="yearOfEstd"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Year of Establishment</FormLabel>
-                  <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Year of Establishment" {...field} onChange={(e) => field.onChange(parseInt(e.target.value))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="contactUs"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Us</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder="Contact information" {...field} />
+                    <Input type="number" disabled={loading} placeholder="Capacity" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -306,7 +298,29 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Special Features</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Special features (comma-separated)" {...field} onChange={(e) => field.onChange(e.target.value.split(',').map(item => item.trim()))} />
+                    <MultiSelect
+                      // disabled={loading}
+                      placeholder="Select special features"
+                      options={[
+                        { value: 'Valet Parking', label: 'Valet Parking' },
+                        { value: 'Private Garden', label: 'Private Garden' },
+                      ]}
+                      selected={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="yearOfEstd"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year of Establishment</FormLabel>
+                  <FormControl>
+                    <Input type="number" disabled={loading} placeholder="Year of Establishment" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -319,20 +333,16 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Availability</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Availability (comma-separated)" {...field} onChange={(e) => field.onChange(e.target.value.split(',').map(item => item.trim()))} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="operatingDays"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Operating Days</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder="Operating days" {...field} />
+                    <MultiSelect
+                      // disabled={loading}
+                      placeholder="Select availability"
+                      options={[
+                        { value: 'Weekdays', label: 'Weekdays' },
+                        { value: 'Weekends', label: 'Weekends' },
+                      ]}
+                      selected={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -345,30 +355,59 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Open Hours</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Open hours" {...field} />
+                    <Input disabled={loading} placeholder="e.g., 10:00 AM - 11:00 PM" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="imageUrl"
+              name="operatingDays"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image</FormLabel>
+                  <FormLabel>Operating Days</FormLabel>
                   <FormControl>
-                    <ImageUpload
-                      value={field.value ? [field.value] : []}
-                      disabled={loading}
-                      onChange={(url) => field.onChange(url)}
-                      onRemove={() => field.onChange('')}
-                    />
+                    <Input disabled={loading} placeholder="e.g., Monday to Sunday" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Type</FormLabel>
+                  <Select disabled={loading} onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="AC">AC</SelectItem>
+                      <SelectItem value="Non-AC">Non-AC</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="billboard"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Billboard</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="Billboard information" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
