@@ -25,33 +25,31 @@ import { AlertModal } from "@/components/model/alert-model";
 import { DecoratorDocument } from "@/customTypes/DecoratorDocument";
 
 
-
-
-// Define DecoratorFormValues type based on zod schema
 type DecoratorFormValues = z.infer<typeof formSchema>;
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required").max(40),
   description: z.string().optional(),
-  rating: z.preprocess((val) => parseFloat(val as string), z.number().min(1, "Rating must be at least 1").max(5).default(4.5)),
   location: z.object({
     city: z.string().min(1, "City is required"),
     area: z.string().min(1, "Area is required"),
     pincode: z.string().min(1, "Pincode is required"),
   }).optional(),
   price: z.array(z.number()).nonempty("At least one price is required"),
-  contactUs: z.string().optional(), // Use string for phone numbers to accommodate different formats
-  yearOfEstd: z.number().optional(),
+  contactUs: z.coerce.number().min(0, "Fill your contact details"),
+  yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
+    message: "Year of ESTD> must be a number",
+  }),
 
 });
 
 interface DecoratorsFormProps {
-  initialData: DecoratorDocument ;
+  initialData: DecoratorDocument;
 }
 
 const DecoratorForm: React.FC<DecoratorsFormProps> = ({
-   initialData 
-  }) => {
+  initialData
+}) => {
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -69,7 +67,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       name: "",
       description: '',
       location: { city: '', area: '', pincode: '' },
-      price: [1500],
+      price: [],
       contactUs: "",
       yearOfEstd: '',
     },
@@ -87,12 +85,12 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`http://localhost:8000/api/decor/${initialData._id}`, data, config);
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor/${initialData._id}`, data, config);
       } else {
-        await axios.post(`http://localhost:8000/api/decor`, data, config);
+        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor`, data, config);
       }
       router.refresh();
-      router.push(`/category/decorators`);
+      router.push(`/seller/post/decorator`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
@@ -113,9 +111,9 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8000/api/decor/${initialData._id}`, config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor/${initialData._id}`, config);
       router.refresh();
-      router.push(`/category/decorators`);
+      router.push(`/seller/post/decorator`);
       toast.success("Decorator deleted.");
     } catch (error: any) {
       toast.error("Make sure to remove all related data first.");
@@ -129,7 +127,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
   return (
     <>
       <AlertModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onDelete} loading={loading} />
-      <div className="text-white flex items-center justify-between">
+      <div className=" flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
@@ -147,13 +145,13 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
           <div className="md:grid-cols-10 grid gap-4 container">
 
-            <div className="md:grid md:col-span-6 container flex-1 bg-slate-800 p-5 rounded-lg font-bold  h-max gap-8">
+            <div className="md:grid md:col-span-6 container flex-1 bg-slate-100 shadow-sm p-5 rounded-lg font-bold  h-max gap-8">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-500">Decorator Name</FormLabel>
+                    <FormLabel >Decorator Name</FormLabel>
                     <FormControl>
                       <Input disabled={loading} placeholder="Name" {...field} />
                     </FormControl>
@@ -166,7 +164,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-500"> Description</FormLabel>
+                    <FormLabel > Description</FormLabel>
                     <FormControl>
                       <Input disabled={loading} placeholder="Description" {...field} />
                     </FormControl>
@@ -179,7 +177,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="yearOfEstd"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-500">Year Of ESTD.</FormLabel>
+                    <FormLabel >Year Of ESTD.</FormLabel>
                     <FormControl>
                       <Input disabled={loading} placeholder="2020" {...field} />
                     </FormControl>
@@ -192,7 +190,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-500">Price (Array)</FormLabel>
+                    <FormLabel >Price (Array)</FormLabel>
                     <FormControl>
                       <div className="space-y-4">
                         {(field.value || []).map((item, index) => (
@@ -243,13 +241,13 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
             </div>
           </div>
 
-          <div className="my-4 container bg-slate-800 p-5 rounded-lg font-bold ">
+          <div className="my-4 container p-5 space-y-4 rounded-lg bg-slate-100 shadow-sm font-bold ">
             <FormField
               control={form.control}
               name="location.city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-500">City</FormLabel>
+                  <FormLabel >City</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="City" {...field} />
                   </FormControl>
@@ -262,7 +260,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
               name="location.pincode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-500">Pincode</FormLabel>
+                  <FormLabel >Pincode</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Pincode" {...field} />
                   </FormControl>
@@ -275,7 +273,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
               name="location.area"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-500">Area</FormLabel>
+                  <FormLabel >Area</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Area" {...field} />
                   </FormControl>
@@ -283,10 +281,26 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="contactUs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone number</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="1234567890" {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <Button disabled={loading} type="submit"  >
+              {action}
+            </Button>
+
           </div>
-          <Button disabled={loading} type="submit" className="bg-gray-500">
-            {action}
-          </Button>
         </form>
       </Form>
     </>

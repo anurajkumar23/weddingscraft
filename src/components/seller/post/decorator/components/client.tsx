@@ -23,7 +23,7 @@ export const DecoratorClient: React.FC<DecoratorClientProps> = ({
     <>
       <div className="flex items-center justify-between">
         <Heading title={`Decorators Data(${data.length})`} description="Manage Decorators for your store" />
-        <Button onClick={() => router.push(`/seller/post/decorators/new`)}>
+        <Button onClick={() => router.push(`/seller/post/decorator/new`)}>
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>

@@ -40,6 +40,7 @@ const formSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(2, "Name is required"),
   price: z.coerce.number().min(0, "Price must be at least 0"),
+  contactUs:z.coerce.number().min(0, "Fill your contact details"),
   basic: z.object({
     veg: menuItemSchema,
     nonveg: menuItemSchema,
@@ -75,6 +76,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     defaultValues: initialData || {
       name: "",
       price: 0,
+      contactUs:undefined,
       basic: {
         veg: {
           starter: [],
@@ -340,10 +342,24 @@ export default function CatererForm({ initialData }: CatererFormProps) {
           {renderMenuSection("veg", "Veg Items")}
           {renderMenuSection("nonveg", "Non-Veg Items")}
           {renderAddonSection()}
+          <FormField
+              control={form.control}
+              name="contactUs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone number</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="1234567890" {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
         </form>
+      
       </Form>
     </>
   )
