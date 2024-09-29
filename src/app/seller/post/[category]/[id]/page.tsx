@@ -9,9 +9,13 @@
 
 
 import { BanquetForm } from "@/components/seller/post/banquet/components/BanquetForm";
+import CatererForm from "@/components/seller/post/caterers/components/CatererForm";
 import DecoratorForm from "@/components/seller/post/decorator/components/DecoratorForm";
+import PhotographerForm from "@/components/seller/post/photographers/components/Photographer";
 import getBanquetId from "@/utils/banquet/GetbanquetId";
+import getCatererId from "@/utils/caterer/GetCatererId";
 import getDecoratorId from "@/utils/decorator/GetDecoratorId";
+import getPhotographerId from "@/utils/Photographer/GetPhotographerId";
 
 export default async function EditPage({ params }: { params: { category: string; id: string } }) {
     const { category, id } = params;
@@ -27,20 +31,24 @@ export default async function EditPage({ params }: { params: { category: string;
             }
             FormComponent = BanquetForm;
             break;
-        // case 'caterer':
-        //   data = await getCatererById(id);
-        //   FormComponent = CatererForm;
-        //   break;
+        case 'caterer':
+            if (id !== 'new') {
+                data = await getCatererId(id);
+            }
+            FormComponent = CatererForm;
+            break;
         case 'decorator':
             if (id !== 'new') {
                 data = await getDecoratorId(id);
             }
             FormComponent = DecoratorForm;
             break;
-        // case 'photographer':
-        //   data = await getPhotographerById(id);
-        //   FormComponent = PhotographerForm;
-        //   break;
+        case 'photographer':
+            if (id !== 'new') {
+                data = await getPhotographerId(id);
+            }
+            FormComponent = PhotographerForm;
+            break;
         default:
             return <div>Invalid category</div>;
     }

@@ -73,8 +73,6 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
-  const [serviceInput, setServiceInput] = useState("");
-
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -118,11 +116,11 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       }
 
       if (initialData) {
-        await axios.patch(`http://localhost:8000/api/banquet/${params.id}`, data, 
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, data, 
           config
         );
       } else {
-        await axios.post('http://localhost:8000/api/banquet', data, config );
+        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet`, data, config );
       }
 
       console.log()
@@ -139,6 +137,13 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
 
 
   const onDelete = async () => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
     try {
       setLoading(true);
       const token = localStorage.getItem("jwt_token");
@@ -146,14 +151,9 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
         throw new Error("Authentication token not found");
       }
 
-      await axios.delete(`http://localhost:8000/api/banquet/${params.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, config);
       router.refresh();
-      router.push(`/banquet`);
+      router.push(`seller/post/banquet`);
       toast.success('Banquet deleted.');
     } catch (error: any) {
       console.error("Error deleting banquet:", error);

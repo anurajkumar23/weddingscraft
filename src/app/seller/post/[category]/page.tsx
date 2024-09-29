@@ -1,9 +1,8 @@
 
 import BanquetPageData from '@/components/seller/post/banquet/page';
-import Carterer from '@/components/seller/post/Carterer';
+import CatererPage from '@/components/seller/post/caterers/page';
 import DecoratorPage from '@/components/seller/post/decorator/page';
-
-import Photographer from '@/components/seller/post/Photographer';
+import PhotographerPage from '@/components/seller/post/photographers/page';
 import React from 'react';
 
 interface Props {
@@ -22,13 +21,13 @@ const Page: React.FC<Props> = ({ params }) => {
       ContentComponent = BanquetPageData;
       break;
     case 'caterer':
-      ContentComponent = Carterer;
+      ContentComponent = CatererPage;
       break;
     case 'decorator':
       ContentComponent = DecoratorPage;
       break;
     case 'photographer':
-      ContentComponent = Photographer;
+      ContentComponent = PhotographerPage;
       break;
     default:
       // eslint-disable-next-line react/display-name

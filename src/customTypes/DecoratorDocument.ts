@@ -7,7 +7,7 @@ export interface DecoratorDocument {
       city: string;
       pincode: string;
       area: string;
-    } | null;
+    } ;
     price: number[];
     like: string[];
     contactUs: number;

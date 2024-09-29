@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Plus, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/model/alert-model";
 
-import { BanquetColumn } from "./columns";
+import { CatererColumn } from "./columns";
 
 interface CellActionProps {
-  data: BanquetColumn;
+  data: CatererColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({
@@ -39,7 +39,8 @@ export const CellAction: React.FC<CellActionProps> = ({
     };
     try {
       setLoading(true);
-      await axios.delete(`/api/banquet/${data.id}`,config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/caterer/${data.id}`,config);
+
       toast.success('User deleted.');
       router.refresh();
     } catch (error) {
@@ -54,7 +55,6 @@ export const CellAction: React.FC<CellActionProps> = ({
     navigator.clipboard.writeText(id);
     toast.success('User ID copied to clipboard.');
   }
-
 
   return (
     <>
@@ -79,7 +79,7 @@ export const CellAction: React.FC<CellActionProps> = ({
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/seller/post/banquet/${data.id}`)}
+            onClick={() => router.push(`/seller/post/caterer/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>

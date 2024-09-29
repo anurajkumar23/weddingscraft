@@ -32,7 +32,7 @@ export const CellAction: React.FC<CellActionProps> = ({
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/decor/${data.id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/decor/${data.id}`);
       toast.success('Decorator deleted.');
       router.refresh();
     } catch (error) {

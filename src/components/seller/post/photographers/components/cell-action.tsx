@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { Copy, Edit, MoreHorizontal, Plus, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -12,38 +12,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AlertModal } from "@/components/model/alert-model";
 
-import { BanquetColumn } from "./columns";
+import { PhotographerColumn } from "./columns";
 
 interface CellActionProps {
-  data: BanquetColumn;
+  data: PhotographerColumn;
 }
 
-export const CellAction: React.FC<CellActionProps> = ({
-  data,
-}) => {
+export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onConfirm = async () => {
-    const token = localStorage.getItem("jwt_token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
     try {
       setLoading(true);
-      await axios.delete(`/api/banquet/${data.id}`,config);
-      toast.success('User deleted.');
+      await axios.delete(`/api/photographer/${data.id}`);
+      toast.success("Photographer deleted.");
       router.refresh();
     } catch (error) {
-      toast.error('Make sure you removed all User first.');
+      toast.error("Error deleting photographer.");
     } finally {
       setOpen(false);
       setLoading(false);
@@ -52,9 +43,8 @@ export const CellAction: React.FC<CellActionProps> = ({
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('User ID copied to clipboard.');
-  }
-
+    toast.success("Photographer ID copied to clipboard.");
+  };
 
   return (
     <>
@@ -73,19 +63,13 @@ export const CellAction: React.FC<CellActionProps> = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => onCopy(data.id)}
-          >
+          <DropdownMenuItem onClick={() => onCopy(data.id)}>
             <Copy className="mr-2 h-4 w-4" /> Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/seller/post/banquet/${data.id}`)}
-          >
+          <DropdownMenuItem onClick={() => router.push(`/seller/post/photographer/${data.id}`)}>
             <Edit className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setOpen(true)}
-          >
+          <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
