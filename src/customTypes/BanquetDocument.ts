@@ -39,5 +39,9 @@ export interface BanquetDocument {
   availability: string[];
   operatingDays: string;
   openHours: string;
+  gallery: {
+    name: string;
+    photos: string[];
+  }[];
   createdAt: Date;
 }

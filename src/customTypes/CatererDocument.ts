@@ -18,6 +18,10 @@ export interface CatererDocument {
     basic: SectionDocument;     
     standard: SectionDocument;
     deluxe: SectionDocument;
+    gallery: {
+      name: string;
+      photos: string[];
+    }[];
   }
   
   export interface SectionDocument {

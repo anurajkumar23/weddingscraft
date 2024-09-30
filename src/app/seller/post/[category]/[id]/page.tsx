@@ -12,6 +12,7 @@ import { BanquetForm } from "@/components/seller/post/banquet/components/Banquet
 import CatererForm from "@/components/seller/post/caterers/components/CatererForm";
 import DecoratorForm from "@/components/seller/post/decorator/components/DecoratorForm";
 import PhotographerForm from "@/components/seller/post/photographers/components/Photographer";
+import PhotoForm from "@/components/ui/ImageGallery/PhotoForm";
 import getBanquetId from "@/utils/banquet/GetbanquetId";
 import getCatererId from "@/utils/caterer/GetCatererId";
 import getDecoratorId from "@/utils/decorator/GetDecoratorId";
@@ -56,6 +57,7 @@ export default async function EditPage({ params }: { params: { category: string;
     return (
         <div className="container mx-auto p-4">
             <FormComponent initialData={data} />
+            <PhotoForm  initialData={data.gallery}  categoryId={data._id}  category={category}/>
         </div>
     );
 }

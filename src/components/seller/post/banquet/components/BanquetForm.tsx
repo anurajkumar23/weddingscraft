@@ -24,6 +24,7 @@ import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import React from "react"
 
 
 const formSchema = z.object({
@@ -116,11 +117,11 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       }
 
       if (initialData) {
-        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, data, 
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, data,
           config
         );
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet`, data, config );
+        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet`, data, config);
       }
 
       console.log()

@@ -15,4 +15,8 @@ export interface DecoratorDocument {
     reviews: any[]; 
     billboard: string;
     photos: string[];
+    gallery: {
+      name: string;
+      photos: string[];
+    }[];
   }
