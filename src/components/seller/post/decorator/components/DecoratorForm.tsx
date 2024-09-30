@@ -39,7 +39,7 @@ const formSchema = z.object({
   contactUs: z.coerce.number().min(0, "Fill your contact details"),
   yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
     message: "Year of ESTD> must be a number",
-  }),
+  }).optional(),
 
 });
 

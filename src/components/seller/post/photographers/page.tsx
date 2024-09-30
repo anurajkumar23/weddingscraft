@@ -16,7 +16,6 @@ const PhotographerPage = async () => {
       : 'Location not specified',
     locationUrl: item.locationUrl || 'N/A',
     description: item.description || 'No description',
-    feature: item.feature.length ? item.feature.join(", ") : 'No features',
     price: item.price.length ? item.price.join(", ") : 'No prices listed',
     contactUs: item.contactUs || 'N/A',
     yearOfEstd: item.yearOfEstd || 'N/A',

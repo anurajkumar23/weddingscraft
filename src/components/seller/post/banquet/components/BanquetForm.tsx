@@ -48,7 +48,7 @@ const formSchema = z.object({
 
   yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
     message: "Year of ESTD> must be a number",
-  }),
+  }).optional(),
 
   availability: z.array(z.string()).min(1, "At least one availability is required"),
 

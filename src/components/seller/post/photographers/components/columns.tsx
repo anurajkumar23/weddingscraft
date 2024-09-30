@@ -10,7 +10,6 @@ export type PhotographerColumn = {
   location: string; 
   locationUrl: string;
   description: string;
-  feature: string;
   price: string; 
   contactUs: number | string;
   yearOfEstd: number | string;
@@ -43,11 +42,6 @@ export const columns: ColumnDef<PhotographerColumn>[] = [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => row.original.description || "No description",
-  },
-  {
-    accessorKey: "feature",
-    header: "Features",
-    cell: ({ row }) => row.original.feature || "No features",
   },
   {
     accessorKey: "price",

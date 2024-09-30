@@ -58,7 +58,7 @@ const formSchema = z.object({
 type CatererFormValues = z.infer<typeof formSchema>
 
 interface CatererFormProps {
-  initialData: CatererFormValues | null
+  initialData: CatererFormValues;
 }
 
 export default function CatererForm({ initialData }: CatererFormProps) {

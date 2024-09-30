@@ -17,6 +17,7 @@ import {
 import { AlertModal } from "@/components/model/alert-model";
 
 import { CatererColumn } from "./columns";
+import React from "react";
 
 interface CellActionProps {
   data: CatererColumn;

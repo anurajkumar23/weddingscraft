@@ -53,10 +53,6 @@ export default async function EditPage({ params }: { params: { category: string;
             return <div>Invalid category</div>;
     }
 
-    // if (!data) {
-    //     return <div>Item not found</div>;
-    // }
-
     return (
         <div className="container mx-auto p-4">
             <FormComponent initialData={data} />

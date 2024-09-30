@@ -9,6 +9,7 @@ import { columns, PhotographerColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 interface PhotographerClientProps {
   data: PhotographerColumn[];

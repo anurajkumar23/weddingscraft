@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-export default async function getPhotographerId(id: string) {
+export default async function getPhotographerId(id: string | null) {
+  if (!id) {
+    return null;
+  }
   try {
     const { data } = await axios.get(`http://localhost:8000/api/photographer/${id}`, {
       headers: {

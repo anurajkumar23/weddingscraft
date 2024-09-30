@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-export default async function getDecoratorId(id: string) {
+export default async function getDecoratorId(id: string | null) {
+  if (!id) {
+    return null;
+  }
   try {
     const { data } = await axios.get(`http://localhost:8000/api/decor/${id}`, {
       headers: {
