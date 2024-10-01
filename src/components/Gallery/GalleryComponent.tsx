@@ -37,9 +37,11 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
   const [newGalleryName, setNewGalleryName] = useState('')
   const [selectedGallery, setSelectedGallery] = useState<Gallery | null>(null)
   const [newPhotos, setNewPhotos] = useState<File[]>([])
+  // const [deleteImages,setDeleteImages]=useState<string[]>([])
   const [newPhotosPreviews, setNewPhotosPreviews] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
 
   useEffect(() => {
     return () => {
@@ -84,12 +86,13 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     }
 
 
+
     try {
       setLoading(true)
       const formData = new FormData()
       formData.append('name', newGalleryName)
       formData.append('category', newCategory)
-      newPhotos.forEach(file => formData.append("photos", file))
+      newPhotos.forEach(file => formData.append("photos[]", file))
   
       const response = await axios.patch(
         `http://localhost:8000/api/${category}/${categoryId}/newfolder`,
@@ -156,28 +159,6 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     }
   }
 
-  const handleDeletePhotos = async (gallery: Gallery, deletedPhotos: string[]) => {
-    if (deletedPhotos.length === 0) return
-
-    try {
-      setLoading(true)
-      await axios.patch(
-        `http://localhost:8000/api/${category}/photos/${categoryId}/folder/${gallery._id}/delete`,
-        { photos: deletedPhotos },
-        getConfig()
-      )
-      setGalleries(galleries.map(g =>
-        g._id === gallery._id
-          ? { ...g, photos: g.photos.filter(photo => !deletedPhotos.includes(photo)) }
-          : g
-      ))
-      toast({ title: "Success", description: "Photos deleted successfully." })
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to delete photos.", variant: "destructive" })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const resetPhotoUploadForm = () => {
     setNewPhotos([])
@@ -290,7 +271,10 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
               initialData={[gallery]}
               categoryId={categoryId}
               category={category}
-              onDeleteImages={(deletedImages) => handleDeletePhotos(gallery, deletedImages)}
+              folderId={gallery._id}
+           
+              // setDeleteImages={setDeleteImages}
+              // setNewPhotos={setNewPhotos}
             />
           </div>
         ))}

@@ -14,16 +14,21 @@ interface ImageProps {
   initialData: Gallery[]
   categoryId: string
   category: string
-  onDeleteImages: (deletedImages: string[]) => void
+  folderId:string
+  newCategory:string
+  // setDeleteImages: (x: string[]) => void
+  // setNewPhotos:(x:File[])=>void
 }
 
-const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, category, onDeleteImages }) => {
+const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId,folderId, category,newCategory }) => {
   const [showModal, setShowModal] = useState(false)
   const [previewImages, setPreviewImages] = useState<string[]>([])
   const [gallery] = initialData
+  // const [newPhotos, setNewPhotos] = useState<File[]>([])
+  // const [deleteImages,setDeleteImages]=useState<string[]>([])
 
   const handleOpenModal = () => {
-    setPreviewImages(gallery.photos) // Setting the preview images from gallery
+    setPreviewImages(gallery.photos) 
     setShowModal(true)
   }
 
@@ -45,6 +50,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, categor
             />
           </button>
           <div className="justify-between items-center">
+            
             <strong className="text-lg font-semibold">{gallery.name}</strong>
             <p className="text-gray-500 text-sm">{gallery.photos.length} Photos/Videos</p>
           </div>
@@ -53,7 +59,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, categor
 
       {/* Modal for image preview */}
       {showModal && (
-        <ImageBox onClose={handleCloseModal} photos={previewImages} category={category} />
+        <ImageBox onClose={handleCloseModal} photos={previewImages} category={category}  folderId={folderId} categoryId={categoryId} />
       )}
     </div>
   )

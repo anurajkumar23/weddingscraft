@@ -7,37 +7,44 @@ import { X } from "lucide-react"
 interface GalleryImageProps {
   photos: string[]
   category: string
-  handleDeletedPhotos: (newPhotos: string[]) => void
+  handleDeletedPhotos: (deletedPhotos: string[] ) => void
+  handleUpdate: () => void
 }
 
-const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDeletedPhotos }) => {
+const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDeletedPhotos, handleUpdate }) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null)
-  const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
-  const [deletePhotoIndex, setDeletePhotoIndex] = useState<string[]>([])
+  const [localPhotos, setLocalPhotos] = useState<string[]>(photos) // Manage the local state of photos
+  const [deletePhotoIndex, setDeletePhotoIndex] = useState<string[]>([]) // Track deleted photos
 
+  // Open the lightbox view for a specific image
   const openLightbox = useCallback((index: number) => {
     setCurrentImage(index)
   }, [])
 
+  // Close the lightbox view
   const closeLightbox = useCallback(() => {
     setCurrentImage(null)
   }, [])
 
+  // Remove image from localPhotos and add it to the deleted list
   const removeImage = (index: number, imageUrl: string) => {
     const updatedPhotos = localPhotos.filter((_, idx) => idx !== index)
     setLocalPhotos(updatedPhotos)
-    setDeletePhotoIndex((prev) => [...prev, imageUrl])
+    setDeletePhotoIndex((prev) => [...prev, imageUrl]) // Add to deleted photo list
+    handleDeletedPhotos(imageUrl) // Send deleted photos to the parent
   }
 
-  const handleUpdate = () => {
-    handleDeletedPhotos(deletePhotoIndex)
-  }
-
+  // Generate correct image URL
   const getImageUrl = (imageUrl: string) => {
     if (imageUrl.startsWith('blob:') || imageUrl.startsWith('http:') || imageUrl.startsWith('https:')) {
       return imageUrl
     }
     return `/images/${category}/media/${imageUrl}`
+  }
+
+  // Call the parent's handleUpdate and handleDeletedPhotos
+  const handleUpdateClick = () => {
+    handleUpdate() // Call the parent update handler
   }
 
   return (
@@ -89,7 +96,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDel
       <div className="mt-6 text-center">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          onClick={handleUpdate}
+          onClick={handleUpdateClick}
         >
           Update
         </button>
