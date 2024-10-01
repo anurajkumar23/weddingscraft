@@ -25,6 +25,7 @@ import {
 } from "react-scroll";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { BanquetVenue } from "./page";
+import GalleryComponent from "../Gallery/GalleryComponent";
 
 const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
   console.log(banquetData,"😊😊😊😊")
@@ -252,7 +253,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
         </AlertDialog>
       </div>
         <div id="Photos">
-
+        <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
       <div
         id="Reviews"

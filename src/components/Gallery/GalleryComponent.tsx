@@ -188,7 +188,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
   return (
     <div className="border w-full h-full rounded-sm bg-white py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-medium">Photos</h1>
+        <h1 className="text-2xl font-medium container">Photos</h1>
 
       </div>
       <div className="space-y-8">
