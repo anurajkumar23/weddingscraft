@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import React from 'react';
 
 interface ImageGalleryProps {
     images: string[];

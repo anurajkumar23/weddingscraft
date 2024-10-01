@@ -12,7 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import ImageContainer from "./ImageContainer";
+import ImageContainer from "../Gallery/ImageContainer";
 import UserReview from "./UserReview";
 import { Rate } from "antd";
 import Pricing from "./Pricing";
@@ -251,29 +251,8 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      <div className="container border w-full h-full rounded-sm bg-white py-6">
         <div id="Photos">
-          <h1 className="text-2xl font-medium mb-6">Photos</h1>
-          <div className="flex gap-x-6">
-            {banquetData.gallery.map(
-              (folder) => (
-                (
-                  <div key={folder._id}>
-                    <ImageContainer
-                      // img={folder.photos[0]} 
-                      photos={folder.photos}
-                      alt={folder.name}
-                      title={folder.name}
-                      number={folder.photos.length}
-                      //  id={card.id}
-                      //  link={card.links}
-                    />
-                  </div>
-                )
-              )
-            )}
-          </div>
-        </div>
+
       </div>
       <div
         id="Reviews"
