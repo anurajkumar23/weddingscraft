@@ -1,60 +1,110 @@
 'use client'
 
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import Image from "next/image"
-import { X } from "lucide-react"
+import { X, ChevronLeft, ChevronRight, Loader2, RefreshCw } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface GalleryImageProps {
   photos: string[]
   category: string
-  handleDeletedPhotos: (deletedPhotos: string[] ) => void
-  handleUpdate: () => void
+  handleUpdate: () => Promise<string[]>
+  onDeleteImage: (imageToDelete: string) => Promise<void>
 }
 
-const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDeletedPhotos, handleUpdate }) => {
+const GalleryImage: React.FC<GalleryImageProps> = ({ 
+  photos, 
+  category, 
+  handleUpdate,
+  onDeleteImage,
+}) => {
   const [currentImage, setCurrentImage] = useState<number | null>(null)
-  const [localPhotos, setLocalPhotos] = useState<string[]>(photos) // Manage the local state of photos
-  const [deletePhotoIndex, setDeletePhotoIndex] = useState<string[]>([]) // Track deleted photos
+  const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
-  // Open the lightbox view for a specific image
+  useEffect(() => {
+    setLocalPhotos(photos)
+  }, [photos])
+
   const openLightbox = useCallback((index: number) => {
     setCurrentImage(index)
   }, [])
 
-  // Close the lightbox view
   const closeLightbox = useCallback(() => {
     setCurrentImage(null)
   }, [])
 
-  // Remove image from localPhotos and add it to the deleted list
-  const removeImage = (index: number, imageUrl: string) => {
-    const updatedPhotos = localPhotos.filter((_, idx) => idx !== index)
-    setLocalPhotos(updatedPhotos)
-    setDeletePhotoIndex((prev) => [...prev, imageUrl]) // Add to deleted photo list
-    handleDeletedPhotos(imageUrl) // Send deleted photos to the parent
+  const removeImage = async (index: number, imageUrl: string) => {
+    setIsLoading(true)
+    try {
+      await onDeleteImage(imageUrl)
+      setLocalPhotos(prevPhotos => prevPhotos.filter((_, idx) => idx !== index))
+      toast({
+        title: "Image deleted",
+        description: "The image has been successfully removed.",
+      })
+    } catch (error) {
+      console.error("Failed to delete image:", error)
+      toast({
+        title: "Error",
+        description: "Failed to delete the image. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  // Generate correct image URL
   const getImageUrl = (imageUrl: string) => {
     if (imageUrl.startsWith('blob:') || imageUrl.startsWith('http:') || imageUrl.startsWith('https:')) {
       return imageUrl
     }
-    return `/images/${category}/media/${imageUrl}`
+    return `/${category}/${imageUrl}`
   }
 
-  // Call the parent's handleUpdate and handleDeletedPhotos
-  const handleUpdateClick = () => {
-    handleUpdate() // Call the parent update handler
+  const handleUpdateClick = async () => {
+    setIsLoading(true)
+    try {
+      const updatedPhotos = await handleUpdate()
+      setLocalPhotos(updatedPhotos)
+      toast({
+        title: "Update successful",
+        description: "The gallery has been successfully updated.",
+      })
+    } catch (error) {
+      console.error("Failed to update gallery:", error)
+      toast({
+        title: "Error",
+        description: "Failed to update the gallery. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const navigateImage = (direction: 'prev' | 'next') => {
+    if (currentImage === null) return
+    const newIndex = direction === 'prev' 
+      ? (currentImage - 1 + localPhotos.length) % localPhotos.length
+      : (currentImage + 1) % localPhotos.length
+    setCurrentImage(newIndex)
   }
 
   return (
-    <div>
-      <section id="photos">
-        <div className="columns-2 gap-4 sm:columns-3 md:columns-4">
+    <div className="space-y-6">
+      <section id="photos" className="relative">
+        {isLoading && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+            <Loader2 className="w-8 h-8 text-white animate-spin" />
+          </div>
+        )}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {localPhotos.map((imageUrl, idx) => (
-            <div key={idx} className="relative mb-4 break-inside-avoid">
+            <div key={idx} className="relative group">
               <Image
-                className="w-full rounded-lg object-cover cursor-pointer"
+                className="w-full h-48 rounded-lg object-cover cursor-pointer transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                 src={getImageUrl(imageUrl)}
                 alt={`media photo-${idx}`}
                 width={500}
@@ -63,7 +113,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDel
                 loading="lazy"
               />
               <button
-                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                className="absolute top-2 right-2 p-1 text-white bg-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                 onClick={() => removeImage(idx, imageUrl)}
                 aria-label="Remove image"
               >
@@ -73,6 +123,7 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDel
           ))}
         </div>
       </section>
+
       {currentImage !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
           <div className="relative w-full h-full max-w-4xl max-h-4xl">
@@ -90,14 +141,31 @@ const GalleryImage: React.FC<GalleryImageProps> = ({ photos, category, handleDel
             >
               <X size={24} />
             </button>
+            <button
+              className="absolute top-1/2 left-4 p-2 text-white bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              onClick={() => navigateImage('prev')}
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              className="absolute top-1/2 right-4 p-2 text-white bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              onClick={() => navigateImage('next')}
+              aria-label="Next image"
+            >
+              <ChevronRight size={24} />
+            </button>
           </div>
         </div>
       )}
-      <div className="mt-6 text-center">
+
+      <div className="flex justify-center space-x-4">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 flex items-center"
           onClick={handleUpdateClick}
+          disabled={isLoading}
         >
+          <RefreshCw size={20} className="mr-2" />
           Update
         </button>
       </div>

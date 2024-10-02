@@ -4,14 +4,15 @@ import React, { useState } from "react";
 import GalleryImage from "./Gallary";
 import { toast } from '@/hooks/use-toast'
 import axios from "axios";
+import Image from "next/image";
 
 interface JoinUsFormProps {
   onClose: () => void;
   photos: string[];
   category: string;
-  folderId:string;
-  categoryId:string;
-
+  folderId: string;
+  categoryId: string;
+  onDeleteImage: (imageToDelete: string) => Promise<void>
 }
 
 const JoinUsForm: React.FC<JoinUsFormProps> = ({
@@ -20,6 +21,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
   category,
   folderId,
   categoryId,
+  onDeleteImage
 
 }) => {
   const [newImages, setNewImages] = useState<File[]>([]); // For new image files
@@ -48,11 +50,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
     setNewImagePreviews(updatedPreviews);
   };
 
-  // Handle deletion of existing photos (add to deletedImages array)
-  const handleDeletedPhotos = (photo: string) => {
-    setDeletedImages((prev) => [...prev, photo]);
-    console.log("Deleted photo:", photo);
-  };
+
   const getConfig = () => {
     const token = localStorage.getItem("jwt_token")
     return {
@@ -75,7 +73,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
     } else if (category === 'photographer') {
       newCategory = 'Photographer';
     } else {
-      newCategory = 'Banquet'; 
+      newCategory = 'Banquet';
     }
 
 
@@ -83,17 +81,17 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
     console.log("Update Triggered");
     console.log("Deleted Images:", deletedImages);
     console.log("New Images:", newImages);
-    console.log("newCategory",newCategory)
-    console.log("category",category)
-    console.log("categotry id",categoryId)
-    console.log("folderid",folderId)
+    console.log("newCategory", newCategory)
+    console.log("category", category)
+    console.log("categotry id", categoryId)
+    console.log("folderid", folderId)
     const formData = new FormData();
 
     // Append deleted images to formData
     deletedImages.forEach(image => {
       formData.append("deleteImageArray", image);
     });
-    
+
     formData.append('category', newCategory)
 
     // Append new images to formData
@@ -107,16 +105,21 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
         getConfig()
       )
 
-      console.log(response.data,"response")
-    
-      toast({ title: "Success", description: "Update successfully." })
+      console.log(response.data, "response")
+
+      // Reset the state
+      setNewImages([])
+      setNewImagePreviews([])
+      setDeletedImages([])
+
+      // Return the updated list of photos
+      return response.data.photos || []
+
     } catch (error) {
-      toast({ title: "Error", description: "Failed to Update.", variant: "destructive" })
-    } finally {
-      // setLoading(false)
+      console.error("Failed to update:", error)
+      throw error
     }
-   
-  };
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
@@ -144,7 +147,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
 
         <h1 className="text-center pb-4 font-bold text-xl">Photos/Video</h1>
 
-        
+
 
         {/* File Input for new photos */}
         <div className="mt-4">
@@ -160,9 +163,11 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
           <div className="grid grid-cols-3 gap-2">
             {newImagePreviews.map((preview, index) => (
               <div key={index} className="relative">
-                <img
+                <Image
                   src={preview}
                   alt="New Preview"
+                  width={500}
+                  height={500}
                   className="object-cover rounded"
                 />
                 <button
@@ -188,23 +193,12 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
             ))}
           </div>
         </div>
-
-        {/* Deleted images state for tracking */}
         <div className="mt-4">
-          <strong>Deleted Images:</strong>
-          <ul>
-            {deletedImages.map((img, index) => (
-              <li key={index}>{img}</li>
-            ))}
-          </ul>
-        </div>
-      <div className="mt-4">
-          Display existing gallery photos
           <GalleryImage
             photos={photos}
             category={category}
-            handleDeletedPhotos={handleDeletedPhotos}
             handleUpdate={handleUpdate}
+            onDeleteImage={onDeleteImage}
           />
         </div>
       </div>

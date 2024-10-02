@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Plus, Image as ImageIcon, X } from 'lucide-react'
+import { Plus, Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -19,6 +19,11 @@ import ImageContainer from './ImageContainer'
 import { toast } from '@/hooks/use-toast'
 import axios from 'axios'
 import Image from 'next/image'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import 'swiper/css';
+import 'swiper/css/pagination';
+
 
 interface Gallery {
   _id: string
@@ -35,12 +40,12 @@ interface ShowGallery {
 const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, category }) => {
   const [galleries, setGalleries] = useState<Gallery[]>(initialData)
   const [newGalleryName, setNewGalleryName] = useState('')
-  const [selectedGallery, setSelectedGallery] = useState<Gallery | null>(null)
   const [newPhotos, setNewPhotos] = useState<File[]>([])
-  // const [deleteImages,setDeleteImages]=useState<string[]>([])
   const [newPhotosPreviews, setNewPhotosPreviews] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const swiperRef = useRef<any>(null)
+
 
 
   useEffect(() => {
@@ -59,6 +64,23 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     }
   }
 
+
+  let newCategory = '';
+  if (category === 'banquet') {
+    newCategory = 'Banquet';
+  } else if (category === 'caterer') {
+    newCategory = 'Caterer';
+  } else if (category === 'decor') {
+    newCategory = 'Decorator';
+  } else if (category === 'decor') {
+    newCategory = 'Decorator';
+  } else if (category === 'photographer') {
+    newCategory = 'Photographer';
+  } else {
+    newCategory = 'Banquet';
+  }
+
+
   const createNewGallery = async () => {
     if (newGalleryName.trim() === "") {
       toast({ title: "Error", description: "Gallery name cannot be empty.", variant: "destructive" })
@@ -70,20 +92,6 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
       return
     }
 
-    let newCategory = '';
-    if (category === 'banquet') {
-      newCategory = 'Banquet';
-    } else if (category === 'caterer') {
-      newCategory = 'Caterer';
-    } else if (category === 'decor') {
-      newCategory = 'Decorator';
-    } else if (category === 'decor') {
-      newCategory = 'Decorator';
-    } else if (category === 'photographer') {
-      newCategory = 'Photographer';
-    } else {
-      newCategory = 'Banquet'; 
-    }
 
 
 
@@ -93,7 +101,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
       formData.append('name', newGalleryName)
       formData.append('category', newCategory)
       newPhotos.forEach(file => formData.append("photos[]", file))
-  
+
       const response = await axios.patch(
         `http://localhost:8000/api/${category}/${categoryId}/newfolder`,
         formData,
@@ -173,111 +181,102 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
 
       </div>
       <div className="space-y-8">
-        {galleries.map((gallery) => (
-          <div key={gallery._id} className="border rounded-lg p-4">
-            {/* <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-medium">{gallery.name}</h2>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline">
-                    <ImageIcon className="mr-2 h-4 w-4" /> Add Images
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Add Images to {gallery.name}</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Select images to add to this gallery.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <Input
-                    type="file"
-                    onChange={handleFileSelect}
-                    multiple
-                    accept="image/*"
-                    className="mb-4"
-                  />
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    {newPhotosPreviews.map((preview, index) => (
-                      <div key={index} className="relative">
-                        <Image src={preview} alt="Preview" className="w-full h-24 object-cover rounded" />
-                        <button
-                          onClick={() => removeFile(index)}
-                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                        >
-                          <X size={16} />
-                        </button>
-                      </div>
-                    ))}
+
+        <div className="border rounded-lg p-4">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline">
+                <Plus className="mr-2 h-4 w-4" /> Add New Gallery
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Add New Gallery</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Enter a name for the new gallery and select photos to upload.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <Input
+                value={newGalleryName}
+                onChange={(e) => setNewGalleryName(e.target.value)}
+                placeholder="Gallery Name"
+                className="mb-4"
+              />
+              <Input
+                type="file"
+                onChange={handleFileSelect}
+                multiple
+                accept="image/*"
+                className="mb-4"
+              />
+              <div className="grid grid-cols-3 gap-2 mb-4 overflow-y-auto">
+                {newPhotosPreviews.map((preview, index) => (
+                  <div key={index} className="relative ">
+                    <Image src={preview} alt="Preview" width={500}
+                      height={500} className="object-cover rounded" />
+                    <button
+                      onClick={() => removeFile(index)}
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel onClick={resetPhotoUploadForm}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => uploadPhotosToGallery(gallery._id)} disabled={loading}>
-                      {loading ? 'Uploading...' : 'Upload Images'}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div> */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline">
-                  <Plus className="mr-2 h-4 w-4" /> Add New Gallery
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Add New Gallery</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Enter a name for the new gallery and select photos to upload.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <Input
-                  value={newGalleryName}
-                  onChange={(e) => setNewGalleryName(e.target.value)}
-                  placeholder="Gallery Name"
-                  className="mb-4"
-                />
-                <Input
-                  type="file"
-                  onChange={handleFileSelect}
-                  multiple
-                  accept="image/*"
-                  className="mb-4"
-                />
-                <div className="grid grid-cols-3 gap-2 mb-4 overflow-y-auto">
-                  {newPhotosPreviews.map((preview, index) => (
-                    <div key={index} className="relative ">
-                      <Image src={preview} alt="Preview" width={500}
-                        height={500} className="object-cover rounded" />
-                      <button
-                        onClick={() => removeFile(index)}
-                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={resetPhotoUploadForm}>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={createNewGallery} disabled={loading}>
-                    {loading ? 'Creating...' : 'Create Gallery'}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <ImageContainer
-              initialData={[gallery]}
-              categoryId={categoryId}
-              category={category}
-              folderId={gallery._id}
-           
-              // setDeleteImages={setDeleteImages}
-              // setNewPhotos={setNewPhotos}
-            />
+                ))}
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={resetPhotoUploadForm}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={createNewGallery} disabled={loading}>
+                  {loading ? 'Creating...' : 'Create Gallery'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <div className="relative w-full">
+          <Swiper
+        modules={[Navigation]}
+        spaceBetween={20}
+        slidesPerView={1}
+        breakpoints={{
+          340:{slidesPerView:2},
+          640: { slidesPerView: 3 },
+          768: { slidesPerView: 4 },
+          1024: { slidesPerView: 5 },
+        }}
+        onBeforeInit={(swiper) => {
+          swiperRef.current = swiper
+        }}
+      
+      >
+              {galleries.map((gallery) => (
+
+                <SwiperSlide key={gallery._id}>
+
+
+                  <ImageContainer
+                    initialData={[gallery]}
+                    categoryId={categoryId}
+                    category={category}
+                    folderId={gallery._id}
+                    newCategory={newCategory}
+                  />
+                </SwiperSlide>
+
+              ))}
+            </Swiper>
+            <button
+        className="absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
+        onClick={() => swiperRef.current?.slidePrev()}
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button
+        className="absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
+        onClick={() => swiperRef.current?.slideNext()}
+      >
+        <ChevronRight size={24} />
+      </button>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   )
