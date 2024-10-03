@@ -2,9 +2,14 @@
 
 import React, { useState, useCallback } from 'react'
 import Image from 'next/image'
-import ImageBox from './ImageBox'
 import { toast } from '@/hooks/use-toast'
 import axios from 'axios'
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import ImageBox from './ImageBox'
 
 interface Gallery {
   _id: string
@@ -73,34 +78,37 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
 
   return (
     <div className="w-full p-4">
-      <div className="max-w-44 ">
+      <div className="max-w-44">
         <div className="relative group">
-          <button onClick={handleOpenModal}>
-            <Image
-              src={gallery.photos[0] || '/placeholder.jpg'}
-              alt={`${category} photo`}
-              width={800}
-              height={600}
-              className="w-full h-44 object-cover rounded-2xl transition-transform duration-300 ease-in-out transform group-hover:scale-105"
-            />
-          </button>
+          <AlertDialog open={showModal} onOpenChange={setShowModal}>
+            <AlertDialogTrigger asChild>
+              <button onClick={handleOpenModal}>
+                <Image
+                  src={gallery.photos[0] || '/placeholder.jpg'}
+                  alt={`${category} photo`}
+                  width={800}
+                  height={600}
+                  className="w-full h-44 object-cover rounded-2xl transition-transform duration-300 ease-in-out transform group-hover:scale-105"
+                />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-w-6xl max-h-[90vh] w-[90vw] p-0">
+              <ImageBox 
+                onClose={handleCloseModal} 
+                photos={previewImages} 
+                category={category} 
+                folderId={folderId} 
+                categoryId={categoryId}
+                onDeleteImage={handleDeleteImage}
+              />
+            </AlertDialogContent>
+          </AlertDialog>
           <div className="justify-between items-center">
             <strong className="text-lg font-semibold">{gallery.name}</strong>
             <p className="text-gray-500 text-sm">{gallery.photos.length} Photos/Videos</p>
           </div>
         </div>
       </div>
-
-      {showModal && (
-        <ImageBox 
-          onClose={handleCloseModal} 
-          photos={previewImages} 
-          category={category} 
-          folderId={folderId} 
-          categoryId={categoryId}
-          onDeleteImage={handleDeleteImage}
-        />
-      )}
     </div>
   )
 }

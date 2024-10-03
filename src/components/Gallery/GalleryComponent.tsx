@@ -232,49 +232,44 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
             </AlertDialogContent>
           </AlertDialog>
           <div className="relative w-full">
-          <Swiper
-        modules={[Navigation]}
-        spaceBetween={20}
-        slidesPerView={1}
-        breakpoints={{
-          340:{slidesPerView:2},
-          640: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          1024: { slidesPerView: 5 },
-        }}
-        onBeforeInit={(swiper) => {
-          swiperRef.current = swiper
-        }}
-      
-      >
+            <Swiper
+              modules={[Navigation]}
+              slidesPerView="auto"
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper
+              }}
+  
+            >
               {galleries.map((gallery) => (
 
-                <SwiperSlide key={gallery._id}>
+                <SwiperSlide key={gallery._id} className="!w-auto">
 
+                  <div className="max-w-44 md:w-64">
+                    <ImageContainer
+                      initialData={[gallery]}
+                      categoryId={categoryId}
+                      category={category}
+                      folderId={gallery._id}
+                      newCategory={newCategory}
+                    />
+                  </div>
 
-                  <ImageContainer
-                    initialData={[gallery]}
-                    categoryId={categoryId}
-                    category={category}
-                    folderId={gallery._id}
-                    newCategory={newCategory}
-                  />
                 </SwiperSlide>
 
               ))}
             </Swiper>
             <button
-        className="absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
-        onClick={() => swiperRef.current?.slidePrev()}
-      >
-        <ChevronLeft size={24} />
-      </button>
-      <button
-        className="absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
-        onClick={() => swiperRef.current?.slideNext()}
-      >
-        <ChevronRight size={24} />
-      </button>
+              className="absolute top-1/2 left-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
+              onClick={() => swiperRef.current?.slidePrev()}
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              className="absolute top-1/2 right-0 z-10 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 shadow-md"
+              onClick={() => swiperRef.current?.slideNext()}
+            >
+              <ChevronRight size={24} />
+            </button>
           </div>
         </div>
       </div>

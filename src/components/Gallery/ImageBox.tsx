@@ -122,8 +122,8 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-      <div className="bg-white rounded-lg p-8 max-w-6xl w-full h-[90vh] relative overflow-auto">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+            <div className="bg-white rounded-lg p-8 max-w-6xl max-h-6xl h-full w-full relative overflow-auto">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
