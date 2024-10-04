@@ -1,17 +1,30 @@
 "use client"
-import { Heart, MapPin, Star } from "lucide-react";
-import Image from "next/image";
-import React from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { CardComponent } from "./InnerCardPage";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-const InnerPage: React.FC<CardComponent & { link: string }> = ({
+import { Heart, MapPin, Star } from "lucide-react"
+import Image from "next/image"
+import React, { useState } from "react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { CardComponent } from "./InnerCardPage"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Autoplay, Pagination } from "swiper/modules"
+import 'swiper/css'
+import 'swiper/css/pagination'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion } from "framer-motion"
+
+interface Location {
+  city: string
+  pincode: string
+  area: string
+}
+
+interface InnerPageProps extends CardComponent {
+  link: string
+  category: string
+}
+
+const InnerPage: React.FC<InnerPageProps> = ({
   billboard,
   alt,
   name,
@@ -24,23 +37,74 @@ const InnerPage: React.FC<CardComponent & { link: string }> = ({
   like,
   img,
   imgLink,
+  category,
 }) => {
+  const [isLiked, setIsLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(like.length)
+
+  const getConfig = () => {
+    const token = localStorage.getItem("jwt_token")
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  }
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const endpoint = isLiked
+      ? 'http://localhost:8000/api/user/removewishlist'
+      : 'http://localhost:8000/api/user/addwishlist'
+
+    try {
+      const config = getConfig()
+      const response = await fetch(endpoint, {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+          category,
+          itemId: _id,
+        }),
+      })
+
+      if (response.ok) {
+        setIsLiked(!isLiked)
+        setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1)
+      } else {
+        console.error('Failed to update wishlist')
+      }
+    } catch (error) {
+      console.error('Error updating wishlist:', error)
+    }
+  }
+  
   return (
-    <Link href={`/${link}/${_id}`} className="block w-full">
+   
       <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg md:w-3/4 border p-4 bg-slate-50 rounded-md mb-6">
         <CardContent className="p-0">
           <div className="flex w-full relative">
-            <div className="md:w-1/3 h-auto">
+          <Link href={`/${link}/${_id}`} className="md:w-1/3 h-auto">
               {billboard ? (
                 <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink} />
               ) : (
                 <SwiperComponent img={img} _id={_id} imgLink={imgLink} />
               )}
-
-            </div>
-            <div className="absolute top-0 right-0 flex items-center ml-0 space-x-2">
-              <Heart className="w-5 h-5 text-red-500 cursor-pointer" />
-              <span className="text-sm text-gray-600">{like.length} Likes</span>
+            </Link>
+            <div className="absolute top-2 right-2 flex items-center space-x-2">
+              <motion.div
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Heart
+                  className={`w-6 h-6 cursor-pointer ${isLiked ? 'text-red-500 fill-current' : 'text-gray-400'}`}
+                  onClick={handleLike}
+                />
+              </motion.div>
+              <span className="text-sm text-gray-600">{likeCount} Likes</span>
             </div>
             <DetailsSection
               name={name}
@@ -48,20 +112,18 @@ const InnerPage: React.FC<CardComponent & { link: string }> = ({
               description={description}
               location={location}
               locationUrl={locationUrl}
-
+              link={link}
+              _id={_id}
             />
-
           </div>
         </CardContent>
         <CardFooter className="flex justify-center gap-4 p-4 bg-gray-50">
           <ActionButtons />
         </CardFooter>
       </Card>
-    </Link>
-  );
-};
-
-export default InnerPage;
+ 
+  )
+}
 
 const ImageComponent: React.FC<{ billboard: string; alt: string; imgLink: string }> = ({
   billboard,
@@ -75,7 +137,7 @@ const ImageComponent: React.FC<{ billboard: string; alt: string; imgLink: string
       width={500}
       height={500}
       objectFit="cover"
-      className="object-cover md:w-60 md:h-48  w-56 h-40 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
+      className="object-cover md:w-60 md:h-48 w-56 h-40 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
     />
   </div>
 )
@@ -93,7 +155,7 @@ const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }
       clickable: true,
     }}
     modules={[Autoplay, Pagination]}
- className="max-w-60 max-h-80"
+    className="max-w-60 max-h-80"
   >
     {img?.map((image, index) => (
       <SwiperSlide key={`${_id}-${index}`}>
@@ -104,7 +166,7 @@ const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }
             width={500}
             height={500}
             objectFit="cover"
-          className="object-cover transition-transform duration-300 hover:scale-105 md:w-60 md:h-48  w-56 h-40 cursor-pointer rounded-2xl"
+            className="object-cover transition-transform duration-300 hover:scale-105 md:w-60 md:h-48 w-56 h-40 cursor-pointer rounded-2xl"
           />
         </div>
       </SwiperSlide>
@@ -112,20 +174,19 @@ const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }
   </Swiper>
 )
 
-const DetailsSection: React.FC<{
+interface DetailsSectionProps {
   name: string
   rating: number
   description: string
-  location: {
-    city: string;
-    pincode: string;
-    area: string;
-  };
+  location: Location
   locationUrl: string
-}> = ({ name, rating, description, location, locationUrl }) => (
-  <div className=" space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2">
-    <div className="flex justify-between items-center">
+  link:string;
+  _id:string;
+}
 
+const DetailsSection: React.FC<DetailsSectionProps> = ({ name, rating, description, location, locationUrl, link, _id }) => (
+  <Link href={`/${link}/${_id}`} className="space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2" >
+    <div className="flex justify-between items-center">
       <CardTitle className="text-base md:text-xl font-semibold">{name}</CardTitle>
     </div>
     <div className="flex items-center space-x-2">
@@ -146,7 +207,7 @@ const DetailsSection: React.FC<{
         {location ? `${location.city}, ${location.area}, ${location.pincode}` : 'Location unavailable'}
       </Link>
     </div>
-  </div>
+  </Link>
 )
 
 const ActionButtons: React.FC = () => (
@@ -160,3 +221,4 @@ const ActionButtons: React.FC = () => (
   </>
 )
 
+export default InnerPage

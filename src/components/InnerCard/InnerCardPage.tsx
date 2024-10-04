@@ -21,15 +21,17 @@ export interface CardComponent {
   like: [];
   img: string[];
   imgLink:string;
+  category:string;
 }
 
 export interface InnerCardProps {
   data: CardComponent[];
   link:string;
   imgLink:string;
+  category:string;
 }
 
-const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, imgLink }) => {
+const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, imgLink, category }) => {
 
 
   return (
@@ -50,6 +52,7 @@ const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, imgLink }) => {
               link={link}
               img={card.photos}
               imgLink={imgLink}
+              category={category}
             />
           </div>
         ))}
