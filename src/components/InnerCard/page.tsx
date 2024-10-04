@@ -1,16 +1,17 @@
 "use client"
-import { Heart, MapPin } from "lucide-react";
+import { Heart, MapPin, Star } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Card } from "./InnerCardPage";
+import { CardComponent } from "./InnerCardPage";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-const InnerPage: React.FC<Card & { link: string }> = ({
+const InnerPage: React.FC<CardComponent & { link: string }> = ({
   billboard,
   alt,
   name,
@@ -25,130 +26,137 @@ const InnerPage: React.FC<Card & { link: string }> = ({
   imgLink,
 }) => {
   return (
-    <Link href={`/${link}/${_id}`} key={_id}>
-      <div className="md:w-3/4 border p-4 bg-slate-100 rounded-md mb-6">
-        <div className="flex">
-          {billboard ? (
-            <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink}/>
-          ) : (
-            <SwiperComponent img={img} _id={_id} imgLink={imgLink}/>
-          )}
-          <DetailsSection
-            name={name}
-            rating={rating}
-            description={description}
-            location={location}
-            locationUrl={locationUrl}
-            likeCount={like.length}
-          />
-        </div>
-        <div className="pt-3 flex md:justify-center">
+    <Link href={`/${link}/${_id}`} className="block w-full">
+      <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg md:w-3/4 border p-4 bg-slate-50 rounded-md mb-6">
+        <CardContent className="p-0">
+          <div className="flex w-full relative">
+            <div className="md:w-1/3 h-auto">
+              {billboard ? (
+                <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink} />
+              ) : (
+                <SwiperComponent img={img} _id={_id} imgLink={imgLink} />
+              )}
+
+            </div>
+            <div className="absolute top-0 right-0 flex items-center ml-0 space-x-2">
+              <Heart className="w-5 h-5 text-red-500 cursor-pointer" />
+              <span className="text-sm text-gray-600">{like.length} Likes</span>
+            </div>
+            <DetailsSection
+              name={name}
+              rating={rating}
+              description={description}
+              location={location}
+              locationUrl={locationUrl}
+
+            />
+
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center gap-4 p-4 bg-gray-50">
           <ActionButtons />
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
     </Link>
   );
 };
 
 export default InnerPage;
 
-// Separated Image Component
-const ImageComponent: React.FC<{ billboard: string; alt: string, imgLink:string }> = ({
+const ImageComponent: React.FC<{ billboard: string; alt: string; imgLink: string }> = ({
   billboard,
   alt,
   imgLink,
 }) => (
-  <Image
-    src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/${billboard}`}
-    alt={alt}
-    width={400}
-    height={300}
-    loading="lazy"
-    className="object-cover md:w-60 md:h-60 sm:w-60 sm:h-64 w-48 h-56 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
-  />
-);
+  <div className="relative w-full md:h-full">
+    <Image
+      src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/${billboard}`}
+      alt={alt}
+      width={500}
+      height={500}
+      objectFit="cover"
+      className="object-cover md:w-60 md:h-48  w-56 h-40 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
+    />
+  </div>
+)
 
-// Separated Swiper Component
-const SwiperComponent: React.FC<{ img: string[]; _id: string , imgLink: string}> = ({ img, _id , imgLink}) => (
+const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }> = ({ img, _id, imgLink }) => (
   <Swiper
-  slidesPerView={1}
-  centeredSlides={true}
-  autoplay={{
-    delay: 3000,
-    disableOnInteraction: false,
-  }}
-  loop={true}
-  pagination={{
-    clickable: true,
-  }}
-  modules={[Autoplay, Pagination]}
->
-  {img.map((image, index) => (
-    <SwiperSlide key={`${_id}-${index}`}>
-      <div className="flex justify-center ">
-        <Image
-          src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/media/${image}`}
-          alt="img"
-          width={400}
-          height={300}
-          loading="lazy"
-          className="object-cover md:w-60 md:h-60 sm:w-60 sm:h-64 w-48 h-56 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </SwiperSlide>
-  ))}
-</Swiper>
+    slidesPerView={1}
+    centeredSlides={true}
+    autoplay={{
+      delay: 3000,
+      disableOnInteraction: false,
+    }}
+    loop={true}
+    pagination={{
+      clickable: true,
+    }}
+    modules={[Autoplay, Pagination]}
+ className="max-w-60 max-h-80"
+  >
+    {img?.map((image, index) => (
+      <SwiperSlide key={`${_id}-${index}`}>
+        <div className="flex">
+          <Image
+            src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/media/${image}`}
+            alt={`Image ${index + 1}`}
+            width={500}
+            height={500}
+            objectFit="cover"
+          className="object-cover transition-transform duration-300 hover:scale-105 md:w-60 md:h-48  w-56 h-40 cursor-pointer rounded-2xl"
+          />
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+)
 
-);
-
-// Separated Details Section
 const DetailsSection: React.FC<{
-  name: string;
-  rating: number;
-  description: string;
+  name: string
+  rating: number
+  description: string
   location: {
     city: string;
     pincode: string;
     area: string;
   };
-  locationUrl: string;
-  likeCount: number;
-}> = ({ name, rating, description, location, locationUrl, likeCount }) => (
-  <div className="w-full px-4 m-3 mb-2">
-    <div className="flex justify-between">
-      <h1 className="text-xl font-medium mb-2">{name}</h1>
-      <Heart className="cursor-pointer" />
-      <p>{likeCount} Likes</p>
-    </div>
-    <div className="flex gap-x-2 items-center pb-2">
-      <span className="border p-1 rounded-sm bg-green-600 text-white">{rating}</span>
-      <h1 className="text-gray-600">Ratings</h1>
-    </div>
-    <div className="flex items-center mb-2">
-      <Link href={`${locationUrl}`}>
-        <MapPin className="mr-2" />
-      </Link>
-      <span className="text-gray-600">Location: </span>
-      {location ? (
-        <span>
-          <p>{location.city}, {location.area}, {location.pincode}</p>
-        </span>
-      ) : (
-        <p>No location information available</p>
-      )}
-    </div>
-    <h1>Details: {description}</h1>
-  </div>
-);
+  locationUrl: string
+}> = ({ name, rating, description, location, locationUrl }) => (
+  <div className=" space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2">
+    <div className="flex justify-between items-center">
 
-// Separated Action Buttons Component
+      <CardTitle className="text-base md:text-xl font-semibold">{name}</CardTitle>
+    </div>
+    <div className="flex items-center space-x-2">
+      <div className="flex items-center">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+          />
+        ))}
+      </div>
+      <span className="text-sm text-gray-500">{rating.toFixed(1)}</span>
+    </div>
+    <p className="md:text-sm text-xs text-gray-500 line-clamp-2">{description}</p>
+    <div className="flex items-center space-x-2">
+      <MapPin className="w-4 h-4 text-black" />
+      <Link href={`${locationUrl}`} className="text-sm text-blue-600 hover:underline">
+        {location ? `${location.city}, ${location.area}, ${location.pincode}` : 'Location unavailable'}
+      </Link>
+    </div>
+  </div>
+)
+
 const ActionButtons: React.FC = () => (
   <>
-    <Button className="mr-2 mb-2 bg-green-600 hover:bg-green-700 text-white text-base">
+    <Button className="bg-green-600 hover:bg-green-700 text-white">
       Request Pricing
     </Button>
-    <Button className="bg-blue-600 hover:bg-blue-700 text-white text-base">
-      For more details
+    <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+      More Details
     </Button>
   </>
-);
+)
+

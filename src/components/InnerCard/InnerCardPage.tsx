@@ -4,7 +4,7 @@ import InnerPage from "./page";
 
 
 
-export interface Card {
+export interface CardComponent {
   _id: string;
   alt: string;
   name: string;
@@ -24,7 +24,7 @@ export interface Card {
 }
 
 export interface InnerCardProps {
-  data: Card[];
+  data: CardComponent[];
   link:string;
   imgLink:string;
 }

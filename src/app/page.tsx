@@ -5,7 +5,6 @@ import OurServices from "@/components/HomePage/OurServices/OurServices";
 import HomePage from "@/components/HomePage/page";
 import Services from "@/components/HomePage/Services/Services";
 
-import axios from "axios";
 
 const Home: React.FC = () => {
   return (

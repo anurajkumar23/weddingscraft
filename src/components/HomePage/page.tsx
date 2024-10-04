@@ -1,8 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
-
 import CategoryPage from "./category/CategoryPage";
 import Image from "next/image";
-import bg from "../../../public/Design_elements/ritual-with-coconut-leaves-during-traditional-hindu-wedding-ceremony 1.png"
+import bg from "../../../public/ritual-with-coconut-leaves-during-traditional-hindu-wedding-ceremony-1.webp"
 import SearchBar from "./SearchBar/SearchBar";
 import { Heart } from "lucide-react";
 
@@ -13,6 +12,7 @@ const HomePage: React.FC = () => {
         className="w-full max-sm:object-cover  min-h-full md:max-h-full absolute -z-10"
         alt="Traditional Hindu Wedding Ritual"
         src={bg}
+        loading="lazy"
         width={1200}
         height={900}
       />

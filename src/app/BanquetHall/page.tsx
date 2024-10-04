@@ -21,7 +21,7 @@ const Page = async ({
   const banquet = await getBanquet(searchParams); // Pass searchParams from URL as filters
 
   return (
-    <div className="px-6 py-4">
+    <div className="px-6 py-4 ">
       <h1 className="text-2xl font-medium mb-4">Top Banquet Halls in Patna</h1>
       <FilterData />
 
