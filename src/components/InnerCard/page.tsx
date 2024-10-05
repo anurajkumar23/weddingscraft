@@ -12,6 +12,8 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion } from "framer-motion"
+import axios from "axios"
+import { useAuth } from "@/app/authContext"
 
 interface Location {
   city: string
@@ -40,35 +42,29 @@ const InnerPage: React.FC<InnerPageProps> = ({
   category,
 }) => {
   const [isLiked, setIsLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(like.length)
+  const { user, setUser } = useAuth();
 
-   const token = localStorage.getItem("jwt_token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
+  const token = localStorage.getItem("jwt_token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
 
   useEffect(() => {
-    const fetchWishlist = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/user/wishlist', config)
-
-        if (response.ok) {
-          const wishlist = await response.json()
-          const isItemLiked = wishlist.some((item: any) => item._id === _id && item.category === category)
-          setIsLiked(isItemLiked)
-        } else {
-          console.error('Failed to fetch wishlist')
-        }
-      } catch (error) {
-        console.error('Error fetching wishlist:', error)
-      }
+    // Check if the user has any banquet items in their wishlist
+    console.log(category,"category")
+    console.log(user.wishlist[category], "user");
+    if (user.wishlist[category] && user.wishlist[category].length > 0) {
+      console.log(user,"user")
+  
+      const isItemLiked = user.wishlist[category].some((item: any) => item === _id);
+      console.log(isItemLiked,"Sfsdsd")
+      setIsLiked(isItemLiked);
     }
-
-    fetchWishlist()
-  }, [_id, category])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_id, user.wishlist[category], user, category]);
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -79,18 +75,14 @@ const InnerPage: React.FC<InnerPageProps> = ({
       : 'http://localhost:8000/api/user/addwishlist'
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-          category,
-          itemId: _id,
-        }),
-      })
-
-      if (response.ok) {
+      const response = await axios.patch(endpoint, {
+        category,
+        itemId: _id,
+      }, config)
+      if (response.status === 200) {
         setIsLiked(!isLiked)
-        setLikeCount(prevCount => isLiked ? prevCount - 1 : prevCount + 1)
+        setUser(response.data.data.user)
+ 
       } else {
         console.error('Failed to update wishlist')
       }
@@ -120,7 +112,6 @@ const InnerPage: React.FC<InnerPageProps> = ({
                 onClick={handleLike}
               />
             </motion.div>
-            <span className="text-sm text-gray-600">{likeCount} Likes</span>
           </div>
           <DetailsSection
             name={name}
