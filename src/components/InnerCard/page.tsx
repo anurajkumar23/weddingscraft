@@ -2,7 +2,7 @@
 
 import { Heart, MapPin, Star } from "lucide-react"
 import Image from "next/image"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { CardComponent } from "./InnerCardPage"
@@ -42,15 +42,33 @@ const InnerPage: React.FC<InnerPageProps> = ({
   const [isLiked, setIsLiked] = useState(false)
   const [likeCount, setLikeCount] = useState(like.length)
 
-  const getConfig = () => {
-    const token = localStorage.getItem("jwt_token")
-    return {
+   const token = localStorage.getItem("jwt_token");
+    const config = {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
+    };
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/user/wishlist', config)
+
+        if (response.ok) {
+          const wishlist = await response.json()
+          const isItemLiked = wishlist.some((item: any) => item._id === _id && item.category === category)
+          setIsLiked(isItemLiked)
+        } else {
+          console.error('Failed to fetch wishlist')
+        }
+      } catch (error) {
+        console.error('Error fetching wishlist:', error)
+      }
     }
-  }
+
+    fetchWishlist()
+  }, [_id, category])
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -61,7 +79,6 @@ const InnerPage: React.FC<InnerPageProps> = ({
       : 'http://localhost:8000/api/user/addwishlist'
 
     try {
-      const config = getConfig()
       const response = await fetch(endpoint, {
         method: 'PATCH',
         headers: config.headers,
@@ -83,45 +100,43 @@ const InnerPage: React.FC<InnerPageProps> = ({
   }
   
   return (
-   
-      <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg md:w-3/4 border p-4 bg-slate-50 rounded-md mb-6">
-        <CardContent className="p-0">
-          <div className="flex w-full relative">
+    <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg md:w-3/4 border p-4 bg-slate-50 rounded-md mb-6">
+      <CardContent className="p-0">
+        <div className="flex w-full relative">
           <Link href={`/${link}/${_id}`} className="md:w-1/3 h-auto">
-              {billboard ? (
-                <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink} />
-              ) : (
-                <SwiperComponent img={img} _id={_id} imgLink={imgLink} />
-              )}
-            </Link>
-            <div className="absolute top-2 right-2 flex items-center space-x-2">
-              <motion.div
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Heart
-                  className={`w-6 h-6 cursor-pointer ${isLiked ? 'text-red-500 fill-current' : 'text-gray-400'}`}
-                  onClick={handleLike}
-                />
-              </motion.div>
-              <span className="text-sm text-gray-600">{likeCount} Likes</span>
-            </div>
-            <DetailsSection
-              name={name}
-              rating={rating}
-              description={description}
-              location={location}
-              locationUrl={locationUrl}
-              link={link}
-              _id={_id}
-            />
+            {billboard ? (
+              <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink} />
+            ) : (
+              <SwiperComponent img={img} _id={_id} imgLink={imgLink} />
+            )}
+          </Link>
+          <div className="absolute top-2 right-2 flex items-center space-x-2">
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <Heart
+                className={`w-6 h-6 cursor-pointer ${isLiked ? 'text-red-500 fill-current' : 'text-gray-400'}`}
+                onClick={handleLike}
+              />
+            </motion.div>
+            <span className="text-sm text-gray-600">{likeCount} Likes</span>
           </div>
-        </CardContent>
-        <CardFooter className="flex justify-center gap-4 p-4 bg-gray-50">
-          <ActionButtons />
-        </CardFooter>
-      </Card>
- 
+          <DetailsSection
+            name={name}
+            rating={rating}
+            description={description}
+            location={location}
+            locationUrl={locationUrl}
+            link={link}
+            _id={_id}
+          />
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-center gap-4 p-4 bg-gray-50">
+        <ActionButtons />
+      </CardFooter>
+    </Card>
   )
 }
 
@@ -180,12 +195,12 @@ interface DetailsSectionProps {
   description: string
   location: Location
   locationUrl: string
-  link:string;
-  _id:string;
+  link: string
+  _id: string
 }
 
 const DetailsSection: React.FC<DetailsSectionProps> = ({ name, rating, description, location, locationUrl, link, _id }) => (
-  <Link href={`/${link}/${_id}`} className="space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2" >
+  <Link href={`/${link}/${_id}`} className="space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2">
     <div className="flex justify-between items-center">
       <CardTitle className="text-base md:text-xl font-semibold">{name}</CardTitle>
     </div>
