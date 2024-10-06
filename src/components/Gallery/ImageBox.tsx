@@ -1,55 +1,54 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import GalleryImage from "./Gallary";
-import { toast } from '@/hooks/use-toast'
-import axios from "axios";
-import Image from "next/image";
+import React, { useState } from "react"
+
+import { useToast } from '@/hooks/use-toast'
+import axios from "axios"
+import Image from "next/image"
+import GalleryImage from "./Gallary"
 
 interface JoinUsFormProps {
-  onClose: () => void;
-  photos: string[];
-  category: string;
-  folderId: string;
-  categoryId: string;
-  onDeleteImage: (imageToDelete: string) => Promise<void>
+  onClose: () => void
+  photos: string[]
+  category: string
+  folderId: string
+  categoryId: string
+  onDeleteImage: (imageToDelete: string[]) => Promise<void>
 }
 
 const JoinUsForm: React.FC<JoinUsFormProps> = ({
   onClose,
-  photos,
+  photos: initialPhotos,
   category,
   folderId,
   categoryId,
   onDeleteImage
-
 }) => {
-  const [newImages, setNewImages] = useState<File[]>([]); // For new image files
-  const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]); // Previews for new images
-  const [deletedImages, setDeletedImages] = useState<string[]>([]); // For deleted image names from existing photos
+  const [newImages, setNewImages] = useState<File[]>([])
+  const [newImagePreviews, setNewImagePreviews] = useState<string[]>([])
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
+  const [currentPhotos, setCurrentPhotos] = useState<string[]>(initialPhotos)
+  const { toast } = useToast()
 
-  // Handle file selection
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setNewImages((prevImages) => [...prevImages, ...files]); // Add files to newImages array
-      const previews = files.map((file) => URL.createObjectURL(file)); // Generate preview URLs
-      setNewImagePreviews((prevPreviews) => [...prevPreviews, ...previews]); // Add preview URLs
+      const files = Array.from(e.target.files)
+      setNewImages((prevImages) => [...prevImages, ...files])
+      const previews = files.map((file) => URL.createObjectURL(file))
+      setNewImagePreviews((prevPreviews) => [...prevPreviews, ...previews])
     }
-  };
+  }
 
-  // Remove new image from the preview and newImages array
   const removeNewImage = (index: number) => {
-    const updatedNewImages = [...newImages];
-    const updatedPreviews = [...newImagePreviews];
+    const updatedNewImages = [...newImages]
+    const updatedPreviews = [...newImagePreviews]
 
-    updatedNewImages.splice(index, 1);
-    updatedPreviews.splice(index, 1);
+    updatedNewImages.splice(index, 1)
+    updatedPreviews.splice(index, 1)
 
-    setNewImages(updatedNewImages);
-    setNewImagePreviews(updatedPreviews);
-  };
-
+    setNewImages(updatedNewImages)
+    setNewImagePreviews(updatedPreviews)
+  }
 
   const getConfig = () => {
     const token = localStorage.getItem("jwt_token")
@@ -60,70 +59,79 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
       },
     }
   }
-  const handleUpdate = async () => {
-    let newCategory = '';
+
+  const handleUpdate = async (deletedImages: string[]) => {
+    let newCategory = ''
     if (category === 'banquet') {
-      newCategory = 'Banquet';
+      newCategory = 'Banquet'
     } else if (category === 'caterer') {
-      newCategory = 'Caterer';
+      newCategory = 'Caterer'
     } else if (category === 'decor') {
-      newCategory = 'Decorator';
-    } else if (category === 'decor') {
-      newCategory = 'Decorator';
+      newCategory = 'Decorator'
     } else if (category === 'photographer') {
-      newCategory = 'Photographer';
+      newCategory = 'Photographer'
     } else {
-      newCategory = 'Banquet';
+      newCategory = 'Banquet'
     }
 
+    const formData = new FormData()
 
-
-    console.log("Update Triggered");
-    console.log("Deleted Images:", deletedImages);
-    console.log("New Images:", newImages);
-    console.log("newCategory", newCategory)
-    console.log("category", category)
-    console.log("categotry id", categoryId)
-    console.log("folderid", folderId)
-    const formData = new FormData();
-
-    // Append deleted images to formData
     deletedImages.forEach(image => {
-      formData.append("deleteImageArray", image);
-    });
+      formData.append("deleteImageArray", image)
+    })
 
     formData.append('category', newCategory)
 
-    // Append new images to formData
     newImages.forEach(file => formData.append("addImagesArray[]", file))
 
     try {
-      // setLoading(true)
       const response = await axios.patch(
         `http://localhost:8000/api/${category}/${categoryId}/folder/${folderId}`,
         formData,
         getConfig()
       )
+      
+   const gallery = response?.data?.data?.[category]?.gallery;
+    
+   if (gallery && Array.isArray(gallery)) {
 
-      console.log(response.data, "response")
 
-      // Reset the state
-      setNewImages([])
-      setNewImagePreviews([])
-      setDeletedImages([])
+     const specificGallery = gallery.find((item) => item._id === folderId);
 
-      // Return the updated list of photos
-      return response.data.photos || []
+     const updatedPhotos = specificGallery?.photos || [];
 
-    } catch (error) {
-      console.error("Failed to update:", error)
-      throw error
-    }
-  }
+     console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
+
+
+     setCurrentPhotos(updatedPhotos);
+     setNewImages([]);
+     setNewImagePreviews([]);
+     setDeletedImages([]);
+
+     toast({
+       title: 'Update successful',
+       description: 'The gallery has been successfully updated.',
+     });
+
+     // Return the updated list of photos
+     return updatedPhotos;
+   } else {
+     throw new Error('Gallery data not found in response');
+   }
+ } catch (error) {
+   console.error('Failed to update:', error);
+   toast({
+     title: 'Error',
+     description: 'Failed to update the gallery. Please try again.',
+     variant: 'destructive',
+   });
+   throw error;
+ }
+};
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-            <div className="bg-white rounded-lg p-8 max-w-6xl max-h-6xl h-full w-full relative overflow-auto">
+      <div className="bg-white rounded-lg p-8 max-w-6xl max-h-6xl h-full w-full relative overflow-auto">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -147,9 +155,6 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
 
         <h1 className="text-center pb-4 font-bold text-xl">Photos/Video</h1>
 
-
-
-        {/* File Input for new photos */}
         <div className="mt-4">
           <input
             type="file"
@@ -159,7 +164,6 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
             className="mb-4"
           />
 
-          {/* New Photos Previews */}
           <div className="grid grid-cols-3 gap-2">
             {newImagePreviews.map((preview, index) => (
               <div key={index} className="relative">
@@ -195,15 +199,14 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
         </div>
         <div className="mt-4">
           <GalleryImage
-            photos={photos}
+            photos={currentPhotos}
             category={category}
             handleUpdate={handleUpdate}
-            onDeleteImage={onDeleteImage}
           />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default JoinUsForm;
+export default JoinUsForm

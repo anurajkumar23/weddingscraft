@@ -49,7 +49,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
     }
   }, [])
 
-  const handleDeleteImage = useCallback(async (imageToDelete: string) => {
+  const handleDeleteImage = useCallback(async (imageToDelete: string[]) => {
     try {
       const response = await axios.patch(
         `http://localhost:8000/api/${category}/${categoryId}/folder/${folderId}`,
@@ -63,9 +63,9 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
       if (response.status === 200) {
         setGallery(prevGallery => ({
           ...prevGallery,
-          photos: prevGallery.photos.filter(photo => photo !== imageToDelete)
+          photos: prevGallery.photos.filter((photo) => !imageToDelete.includes(photo))
         }))
-        setPreviewImages(prevImages => prevImages.filter(image => image !== imageToDelete))
+        setPreviewImages(prevImages => prevImages.filter((image) => !imageToDelete.includes(image)));
         toast({ title: "Success", description: "Image deleted successfully." })
       } else {
         throw new Error("Failed to delete image")
@@ -84,7 +84,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
             <AlertDialogTrigger asChild>
               <button onClick={handleOpenModal}>
                 <Image
-                  src={gallery.photos[0] || '/placeholder.jpg'}
+                  src={gallery.photos[0]}
                   alt={`${category} photo`}
                   width={800}
                   height={600}
