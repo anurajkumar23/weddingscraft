@@ -86,7 +86,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
         const specificGallery = updatedGallery.find((item) => item._id === folderId);
         const updatedPhotos = specificGallery?.photos || [];
 
-        console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
+        // console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
 
         setGallery(prevGallery => ({
           ...prevGallery,

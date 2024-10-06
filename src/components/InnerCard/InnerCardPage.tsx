@@ -37,7 +37,7 @@ const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, imgLink, category
   return (
     <div className="pt-10 w-full">
       <div>
-        {data.map((card: any) => (
+        {data?.map((card: any) => (
           <div key={card._id}>
             <InnerPage
               billboard={card.billboard}

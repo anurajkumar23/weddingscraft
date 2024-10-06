@@ -240,7 +240,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
               }}
   
             >
-              {galleries.map((gallery) => (
+              {galleries?.map((gallery) => (
 
                 <SwiperSlide key={gallery._id} className="!w-auto">
 

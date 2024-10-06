@@ -47,7 +47,7 @@ export default async function EditPage({ params }: { params: { category: string;
     return (
         <div className="container mx-auto p-4">
             <FormComponent initialData={data} />
-            <GalleryComponent  initialData={data.gallery}  categoryId={data._id}   category={category === 'decorator' ? 'decor' : category} />
+            <GalleryComponent  initialData={data?.gallery}  categoryId={data?._id}   category={category === 'decorator' ? 'decor' : category} />
         </div>
     );
 }
