@@ -1,32 +1,30 @@
 'use client'
 
 import React, { useState } from "react"
-
 import { useToast } from '@/hooks/use-toast'
-import axios from "axios"
 import Image from "next/image"
 import GalleryImage from "./Gallary"
 
-interface JoinUsFormProps {
+
+interface ImageBoxProps {
   onClose: () => void
   photos: string[]
   category: string
   folderId: string
   categoryId: string
-  onDeleteImage: (imageToDelete: string[]) => Promise<void>
+  handleUpdate: (deletedImages: string[], newImages: File[]) => Promise<string[]>
 }
 
-const JoinUsForm: React.FC<JoinUsFormProps> = ({
+const ImageBox: React.FC<ImageBoxProps> = ({
   onClose,
   photos: initialPhotos,
   category,
   folderId,
   categoryId,
-  onDeleteImage
+  handleUpdate
 }) => {
   const [newImages, setNewImages] = useState<File[]>([])
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([])
-  const [deletedImages, setDeletedImages] = useState<string[]>([])
   const [currentPhotos, setCurrentPhotos] = useState<string[]>(initialPhotos)
   const { toast } = useToast()
 
@@ -50,84 +48,23 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
     setNewImagePreviews(updatedPreviews)
   }
 
-  const getConfig = () => {
-    const token = localStorage.getItem("jwt_token")
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
+  const handleUpdateGallery = async (deletedImages: string[]) => {
+    try {
+      const updatedPhotos = await handleUpdate(deletedImages, newImages)
+      setCurrentPhotos(updatedPhotos)
+      setNewImages([])
+      setNewImagePreviews([])
+      return updatedPhotos
+    } catch (error) {
+      console.error('Failed to update:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to update the gallery. Please try again.',
+        variant: 'destructive',
+      })
+      throw error
     }
   }
-
-  const handleUpdate = async (deletedImages: string[]) => {
-    let newCategory = ''
-    if (category === 'banquet') {
-      newCategory = 'Banquet'
-    } else if (category === 'caterer') {
-      newCategory = 'Caterer'
-    } else if (category === 'decor') {
-      newCategory = 'Decorator'
-    } else if (category === 'photographer') {
-      newCategory = 'Photographer'
-    } else {
-      newCategory = 'Banquet'
-    }
-
-    const formData = new FormData()
-
-    deletedImages.forEach(image => {
-      formData.append("deleteImageArray", image)
-    })
-
-    formData.append('category', newCategory)
-
-    newImages.forEach(file => formData.append("addImagesArray[]", file))
-
-    try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/${category}/${categoryId}/folder/${folderId}`,
-        formData,
-        getConfig()
-      )
-      
-   const gallery = response?.data?.data?.[category]?.gallery;
-    
-   if (gallery && Array.isArray(gallery)) {
-
-
-     const specificGallery = gallery.find((item) => item._id === folderId);
-
-     const updatedPhotos = specificGallery?.photos || [];
-
-     console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
-
-
-     setCurrentPhotos(updatedPhotos);
-     setNewImages([]);
-     setNewImagePreviews([]);
-     setDeletedImages([]);
-
-     toast({
-       title: 'Update successful',
-       description: 'The gallery has been successfully updated.',
-     });
-
-     // Return the updated list of photos
-     return updatedPhotos;
-   } else {
-     throw new Error('Gallery data not found in response');
-   }
- } catch (error) {
-   console.error('Failed to update:', error);
-   toast({
-     title: 'Error',
-     description: 'Failed to update the gallery. Please try again.',
-     variant: 'destructive',
-   });
-   throw error;
- }
-};
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
@@ -201,7 +138,7 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
           <GalleryImage
             photos={currentPhotos}
             category={category}
-            handleUpdate={handleUpdate}
+            handleUpdate={handleUpdateGallery}
           />
         </div>
       </div>
@@ -209,4 +146,4 @@ const JoinUsForm: React.FC<JoinUsFormProps> = ({
   )
 }
 
-export default JoinUsForm
+export default ImageBox
