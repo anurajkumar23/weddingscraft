@@ -39,8 +39,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const packageTypes = ['basic', 'standard', 'deluxe'] as const;
 
     return (
-        <div className='container mx-auto  px-3 py-3 sm:px-4 lg:px-4'>
-            <div className='rounded-lg border h-full'>
+        <div className='container mx-auto py-6 px-4'>
+            <div className='rounded-sm border h-full'>
                 <div className=''>
                     <ImageGallery images={caterer.photos} category='caterer' />
                 </div>

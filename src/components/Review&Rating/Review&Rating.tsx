@@ -28,7 +28,7 @@ const ReviewRating = ({data}:any) => {
   return (
   <div
         id="Reviews"
-        className="container border w-full h-full rounded-sm bg-white py-6"
+        className="container border rounded-sm bg-white py-6"
       >
         <div>
           <h1 className="text-2xl font-medium mb-6">Reviews & Ratings</h1>
