@@ -94,7 +94,9 @@ const QuickInfo = ({ data }: any) => {
           )}
         </div>
       </div>
-      <div
+
+      
+      {/* <div
         id="Reviews"
         className="container border w-full h-full rounded-sm bg-white py-6"
       >
@@ -114,7 +116,6 @@ const QuickInfo = ({ data }: any) => {
             <Rate className="py-4 text-4xl" />
           </div>
           <h1 className="text-2xl font-medium py-4 ">Users Review</h1>
-          {/* <hr/> */}
           {userReviews.map((user) => (
             <UserReview
               key={user.id}
@@ -126,7 +127,7 @@ const QuickInfo = ({ data }: any) => {
             />
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
