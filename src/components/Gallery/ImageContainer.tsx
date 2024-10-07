@@ -135,8 +135,6 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
                 onClose={handleCloseModal} 
                 photos={previewImages} 
                 category={category} 
-                folderId={folderId} 
-                categoryId={categoryId}
                 handleUpdate={handleUpdate}
               />
             </AlertDialogContent>

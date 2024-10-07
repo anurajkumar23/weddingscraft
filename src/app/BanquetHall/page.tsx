@@ -24,8 +24,6 @@ const Page = async ({
     <div className="px-6 py-4 ">
       <h1 className="text-2xl font-medium mb-4">Top Banquet Halls in Patna</h1>
       <FilterData />
-
-      {/* Render InnerCardPage with the fetched banquet data  */}
       <InnerCardPage data={banquet} link="BanquetHall" imgLink="banquet" category="Banquet"/>
     </div>
   );

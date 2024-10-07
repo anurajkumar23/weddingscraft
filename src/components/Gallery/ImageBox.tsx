@@ -10,8 +10,6 @@ interface ImageBoxProps {
   onClose: () => void
   photos: string[]
   category: string
-  folderId: string
-  categoryId: string
   handleUpdate: (deletedImages: string[], newImages: File[]) => Promise<string[]>
 }
 
@@ -19,8 +17,6 @@ const ImageBox: React.FC<ImageBoxProps> = ({
   onClose,
   photos: initialPhotos,
   category,
-  folderId,
-  categoryId,
   handleUpdate
 }) => {
   const [newImages, setNewImages] = useState<File[]>([])
