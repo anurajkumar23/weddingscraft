@@ -8,6 +8,9 @@ import Link from 'next/link';
 import DecoratorBooking from '../../../components/booking';
 import getPhotographerId from '@/utils/Photographer/GetPhotographerId';
 import QuickInfo from '@/components/QuickInfo';
+import GalleryComponent from '@/components/Gallery/GalleryComponent';
+import ReviewRating from '@/components/Review&Rating/Review&Rating';
+
 
 
 
@@ -43,11 +46,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             ) : (
                                 <p>No location information available</p>
                             )}
-                            <Link href={`${Photographer.locationUrl}`}>
-                                <div className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white ml-4 p-1 rounded-sm font-sans cursor-pointer'>
-                                    <span className='flex gap-x-2'>View on Map <MapPinned /></span>
-                                </div>
-                            </Link>
+                           
                         </div>
                         <div className='flex space-x-2'>
                             <h1>
@@ -62,7 +61,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="space-y-6 py-6">
                             <QuickInfo data={Photographer} />
                         </div>
+                        <div id="Photos">
+                            <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='Photographer' />
+                        </div>
 
+                        <ReviewRating data={Photographer} />
                     </div>
                     <div className=" md:w-1/3 bg-muted p-6">
                         <div className="sticky top-6">
