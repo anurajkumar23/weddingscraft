@@ -6,6 +6,7 @@ import DecoratorBooking from '@/components/booking';
 import QuickInfo from '@/components/QuickInfo';
 import getCatererId from '@/utils/caterer/GetCatererId';
 import CardPage from '@/components/Caterers/page';
+import ReviewRating from '@/components/Review&Rating/Review&Rating';
 
 
 interface PackageData {
@@ -39,15 +40,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     return (
         <div className='container mx-auto  px-3 py-3 sm:px-4 lg:px-4'>
-            <div className='rounded-lg border shadow-lg overflow-hidden'>
-                <div className='relative'>
+            <div className='rounded-lg border h-full'>
+                <div className=''>
                     <ImageGallery images={caterer.photos} category='caterer' />
                 </div>
-                <div className='lg:flex'>
-                    <div className=' lg:w-2/3 bg-white border m-2'>
-                      <div className='p-6 lg:p-8'>
 
-                       <div className='flex flex-col  sm:flex-row justify-between items-start sm:items-center mb-4'>
+                <div className='relative bottom-10 w-full lg:flex grid gap-4'>
+                    <div className=' lg:w-2/3'>
+                    <div className=' mx-4 rounded-sm p-4 shadow-xl border'>
+                        <div className='flex justify-between items-center pb-2'>
                             <h1 className='text-2xl sm:text-3xl font-bold mb-2 sm:mb-0'>{caterer.name}</h1>
                             <div className='flex items-center'>
                                 <span className='px-2 py-1 rounded-md bg-green-600 text-white font-semibold text-sm'>{caterer.rating}</span>
@@ -69,7 +70,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="mb-8">
                             <QuickInfo data={caterer} />
                         </div>
-                      </div>
+                        </div>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                             {packageTypes.map((packageType) => {
                                 const packageData = caterer[packageType];
@@ -88,15 +89,17 @@ const Page = async ({ params }: { params: { id: string } }) => {
                                 return null;
                             })}
                         </div>
-                    </div>
+                        
+                        <ReviewRating data={caterer}/>
+                        </div>
                     <div className="w-full lg:w-1/3 bg-gray-100 p-6 lg:p-8">
                         <div className="sticky top-6">
                             <DecoratorBooking />
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 };
 

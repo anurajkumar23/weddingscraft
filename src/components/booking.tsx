@@ -35,7 +35,7 @@ export default function DecoratorBooking() {
     <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
       <h2 className="text-2xl font-semibold mb-4">Book Your Appointment</h2>
       
-      <div className="space-y-2">
+      <div className="space-y-2 overflow-hidden">
         <Label htmlFor="date">Select Date Range</Label>
         <CalendarDatePicker
           id="decorator-calendar"
