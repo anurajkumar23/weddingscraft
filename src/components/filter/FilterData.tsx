@@ -83,7 +83,7 @@ export default function OptimizedFilter() {
 
 
   return (
-    <div className="w-full ">
+    <div className="w-full pb-2 sticky top-0 z-10 bg-slate-50">
       <div className="max-w-xs mb-4">
         <div className="border border-gray-500 rounded-md p-2 flex items-center cursor-pointer">
           <SlidersHorizontal className="mr-2" size={24} />
