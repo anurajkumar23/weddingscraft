@@ -54,7 +54,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className='container mx-auto py-6 px-4'>
             <div className='rounded-lg border shadow-lg overflow-hidden'>
                 <div className='relative'>
-                    <ImageGallery images={caterer.photos} category='caterer' />
+                    <ImageGallery categoryId={caterer._id} category='caterer' />
                 </div>
 
                 <div className='lg:flex'>

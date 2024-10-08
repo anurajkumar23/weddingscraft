@@ -19,7 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className='container mx-auto py-6 px-4'>
             <div className='rounded-sm border h-full'>
                 <div>
-                    <ImageGallery images={Decorator.photos} category='decorator' />
+                    <ImageGallery categoryId={Decorator._id} category='decor' />
                 </div>
                 <div className='relative bottom-10 w-full md:flex grid gap-4'>
                     <div className='mx-4 w-full md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>

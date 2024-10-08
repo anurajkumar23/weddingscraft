@@ -23,10 +23,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className='container mx-auto py-6 px-4'>
             <div className='rounded-sm border h-full'>
                 <div>
-                    <ImageGallery images={Photographer.photos} category='photographer' />
+                    <ImageGallery categoryId={Photographer._id} category='photographer' />
                 </div>
-                <div className='relative bottom-10 w-full md:flex grid gap-4'>
-                    <div className='mx-4 w-full md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
+                <div className='relative bottom-10  md:flex grid gap-4'>
+                    <div className='mx-4  md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
                         <div className='flex justify-between items-center pb-2'>
                             <strong className='font-medium md:text-lg text-base'>{Photographer.name} </strong>
                             <div className='flex gap-x-2 items-center'>
@@ -62,7 +62,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             <QuickInfo data={Photographer} />
                         </div>
                         <div id="Photos">
-                            <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='Photographer' />
+                            <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='photographer' />
                         </div>
 
                         <ReviewRating data={Photographer} />

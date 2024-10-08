@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import { FaWhatsapp } from 'react-icons/fa';
 import QuickInfo from './QuickInfo';
 import Link from 'next/link';
+import ReviewRating from '../Review&Rating/Review&Rating';
 export interface BanquetVenue {
     location: {
         city: string;
@@ -88,7 +89,6 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                         </div>
                         <div className="flex items-center mb-2">
                             <MapPin className='mr-2' />
-                            {/* Guard against undefined location */}
                             {location ? (
                                 <>
                                     <p>{location.city},</p>
@@ -174,6 +174,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
             </div>
             <div className='md:col-span-8'>
                 <QuickInfo banquetData={banquetData} />
+                <ReviewRating data={banquetData} />
             </div>
         </div>
     );
