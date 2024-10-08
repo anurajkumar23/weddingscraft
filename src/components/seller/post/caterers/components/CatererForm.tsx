@@ -2,7 +2,7 @@
 
 import * as z from "zod"
 import axios from "axios"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -22,7 +22,6 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Checkbox } from "@/components/ui/checkbox"
-
 
 const menuItemSchema = z.object({
   starter: z.array(z.string()).default([]),
@@ -67,6 +66,13 @@ interface CatererFormProps {
   initialData: CatererFormValues | null;
 }
 
+const defaultPackageValues = {
+  price: 0,
+  veg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
+  nonveg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
+  addon: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
+}
+
 export default function CatererForm({ initialData }: CatererFormProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -85,14 +91,29 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     defaultValues: initialData || {
       name: "",
       contactUs: undefined,
-      basic: {
-        price: 0,
-        veg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
-        nonveg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
-        addon: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
-      },
+      basic: defaultPackageValues,
     },
   })
+
+  useEffect(() => {
+    const currentValues = form.getValues()
+    const updatedValues = { ...currentValues }
+
+    activePackages.forEach(packageType => {
+      if (!currentValues[packageType]) {
+        updatedValues[packageType] = defaultPackageValues
+      }
+    })
+
+    Object.keys(currentValues).forEach((key) => {
+      if (["basic", "standard", "deluxe"].includes(key as any) && !activePackages.includes(key as "basic" | "standard" | "deluxe")) {
+        delete updatedValues[key as "basic" | "standard" | "deluxe"];
+      }
+    });
+    
+
+    form.reset(updatedValues)
+  }, [activePackages, form])
 
   const onSubmit = async (data: CatererFormValues) => {
     const token = localStorage.getItem("jwt_token")
@@ -147,7 +168,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
   }
 
   const renderMenuSection = (packageType: "basic" | "standard" | "deluxe", section: "veg" | "nonveg", title: string) => (
-    <div className="container bg-slate-100 p-5 rounded-lg font-bold ">
+    <div className="container bg-slate-100 p-5 rounded-lg font-bold">
       <Heading title={title} description={`${title} Menu Items`} />
       <Separator className="mt-2 mb-2" />
       <div className="md:grid md:grid-cols-2 gap-8">
@@ -161,7 +182,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                 <FormLabel>{item.charAt(0).toUpperCase() + item.slice(1)}</FormLabel>
                 <FormControl>
                   <div className="space-y-4">
-                    {field.value.map((value: string, index: number) => (
+                    {field.value && field.value.map((value: string, index: number) => (
                       <div key={index} className="flex gap-2">
                         <Input
                           disabled={loading}
@@ -188,7 +209,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                     <Button
                       type="button"
                       onClick={() => {
-                        const updatedValue = [...field.value, '']
+                        const updatedValue = [...(field.value || []), '']
                         field.onChange(updatedValue)
                       }}
                     >
@@ -206,7 +227,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
   )
 
   const renderAddonSection = (packageType: "basic" | "standard" | "deluxe") => (
-    <div className="container bg-slate-100 p-5 rounded-lg font-bold ">
+    <div className="container bg-slate-100 p-5 rounded-lg font-bold">
       <Heading title="Add-on Items" description="Add-on Menu Items" />
       <Separator className="mt-2 mb-2" />
       <div className="md:grid md:grid-cols-2 gap-8">
@@ -220,7 +241,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                 <FormLabel>{`${item.charAt(0).toUpperCase() + item.slice(1)} Add-ons`}</FormLabel>
                 <FormControl>
                   <div className="space-y-4">
-                    {field.value.map((addon: z.infer<typeof addonItemSchema>, index: number) => (
+                    {field.value && field.value.map((addon: z.infer<typeof addonItemSchema>, index: number) => (
                       <div key={index} className="flex gap-2">
                         <Input
                           disabled={loading}
@@ -257,7 +278,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                     <Button
                       type="button"
                       onClick={() => {
-                        const updatedValue = [...field.value, { name: '', price: '' }]
+                        const updatedValue = [...(field.value || []), { name: '', price: '' }]
                         field.onChange(updatedValue)
                       }}
                     >
@@ -304,7 +325,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
         onConfirm={onDelete} 
         loading={loading} 
       />
-      <div className=" flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
@@ -320,7 +341,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-          <div className="my-4 md:grid md:grid-cols-2 gap-8 container bg-slate-100 p-5 rounded-lg font-bold ">
+          <div className="my-4 md:grid md:grid-cols-2 gap-8 container bg-slate-100 p-5 rounded-lg font-bold">
             <FormField
               control={form.control}
               name="name"
@@ -360,6 +381,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                       if (checked) {
                         setActivePackages([...activePackages, packageType as "basic" | "standard" | "deluxe"])
                       } else {
+                        
                         setActivePackages(activePackages.filter(p => p !== packageType))
                       }
                     }}
@@ -375,9 +397,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
             </div>
           </div>
           {activePackages.map((packageType) => renderPackageSection(packageType))}
-          <Button disabled={loading} className="ml-auto" 
-
- type="submit">
+          <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
         </form>

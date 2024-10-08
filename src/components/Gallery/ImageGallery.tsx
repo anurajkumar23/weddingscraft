@@ -35,7 +35,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
     }
 
     const renderImages = () => {
-        switch (images.length) {
+        switch (images?.length) {
             case 1:
                 return (
                     <div className='container mx-auto px-4'>
@@ -55,7 +55,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
             case 2:
                 return (
                     <div className="grid grid-cols-2 gap-2 h-[400px]">
-                        {images.map((image, index) => (
+                        {images?.map((image, index) => (
                             <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                 <Image
                                     src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
@@ -86,7 +86,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                             />
                         </div>
                         <div className="grid grid-rows-2 gap-2">
-                            {images.slice(1).map((image, index) => (
+                            {images?.slice(1).map((image, index) => (
                                 <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                     <Image
                                        src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
@@ -106,9 +106,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
             default:
                 return (
                     <div className="grid grid-cols-2 gap-2 h-[400px]">
-                        <div className="relative col-span-1" onClick={() => openFullscreen(images[0])}>
+                        <div className="relative col-span-1" onClick={() => openFullscreen(images?.[0])}>
                             <Image
-                               src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[0]}`}
+                               src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images?.[0]}`}
                                 // src={images[0]}
                                 alt="Main image"
                                 layout="fill"
@@ -119,9 +119,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                             />
                         </div>
                         <div className="grid  grid-rows-2 gap-2 ">
-                            <div className="relative col-span-1" onClick={() => openFullscreen(images[1])}>
+                            <div className="relative col-span-1" onClick={() => openFullscreen(images?.[1])}>
                                 <Image
-                                   src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images[1]}`}
+                                   src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${images?.[1]}`}
                                     alt="Image 2"
                                     layout="fill"
                                     objectFit="cover"
@@ -131,7 +131,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-2">
-                                {images.slice(2, 4).map((image, index) => (
+                                {images?.slice(2, 4).map((image, index) => (
                                     <div key={index} className="relative" onClick={() => openFullscreen(image)}>
                                         <Image
                                            src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${category}/media/${image}`}
@@ -143,10 +143,10 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                                             className="rounded-lg cursor-pointer"
                                             unoptimized
                                         />
-                                        {index === 1 && images.length > 4 && (
+                                        {index === 1 && images?.length > 4 && (
                                             <div className="cursor-pointer absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
                                                 <span className="text-white font-bold">
-                                                    +{images.length - 3} more
+                                                    +{images?.length - 3} more
                                                 </span>
                                             </div>
                                         )}
@@ -174,7 +174,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
                         onClick={() => openFullscreen(images[mainImage])}
                         unoptimized
                     />
-                    {images.length > 1 && (
+                    {images?.length > 1 && (
                         <>
                             <button
                                 className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
@@ -195,7 +195,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, category }) => {
             {!sliderActive && (
                 <div className="mt-4">
                     {renderImages()}
-                    {images.length > 1 && (
+                    {images?.length > 1 && (
                         <>
                             <button
                                 className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
