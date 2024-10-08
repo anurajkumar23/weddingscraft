@@ -9,7 +9,6 @@ import CardPage from '@/components/Caterers/page';
 import ReviewRating from '@/components/Review&Rating/Review&Rating';
 import GalleryComponent from '@/components/Gallery/GalleryComponent';
 
-
 interface PackageData {
     veg: Record<string, string[]>;
     nonveg: Record<string, string[]>;

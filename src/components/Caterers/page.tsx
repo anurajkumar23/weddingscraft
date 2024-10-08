@@ -45,18 +45,17 @@ const CardPage: React.FC<Props> = ({ name, veg, nonveg, addon, price }) => {
         }
     };
 
-    const [showAllServices, setShowAllServices] = useState(false);
     const [selectedFoods, setSelectedFoods] = useState<SelectedFood[]>([]);
     const [foodType, setFoodType] = useState<'veg' | 'nonveg'>('veg');
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
-    const [totalPrice, setTotalPrice] = useState(price);
+    const [totalPrice, setTotalPrice] = useState<number>(price);
 
     useEffect(() => {
-        const addonTotal = selectedFoods.reduce((sum, food) => sum + food.price, 0);
-        setTotalPrice(price + addonTotal);
+        const addonTotal = selectedFoods.reduce((sum, food) => sum + Number(food.price), 0); // Ensure price is treated as number
+        setTotalPrice(Number(price) + addonTotal); // Ensure total price is calculated as numbers
     }, [selectedFoods, price]);
+    
 
-    const toggleShowAllServices = () => setShowAllServices(!showAllServices);
 
     const handleAddFood = (foodName: string, foodPrice: number) => {
         if (!selectedFoods.some(food => food.name === foodName)) {
