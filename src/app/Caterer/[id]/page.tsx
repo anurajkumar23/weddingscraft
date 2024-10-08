@@ -37,18 +37,30 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const caterer: CatererData = await getCatererId(params.id);
 
     const packageTypes = ['basic', 'standard', 'deluxe'] as const;
+    const availablePackages = packageTypes.filter(type => caterer[type]);
+
+    const getPackageLayoutClass = (packageCount: number) => {
+        switch (packageCount) {
+            case 1:
+                return 'md:grid-cols-1 max-w-md mx-auto';
+            case 2:
+                return 'md:grid-cols-2 max-w-3xl mx-auto';
+            default:
+                return 'md:grid-cols-2 lg:grid-cols-3';
+        }
+    };
 
     return (
         <div className='container mx-auto py-6 px-4'>
-            <div className='rounded-sm border h-full'>
-                <div className=''>
+            <div className='rounded-lg border shadow-lg overflow-hidden'>
+                <div className='relative'>
                     <ImageGallery images={caterer.photos} category='caterer' />
                 </div>
 
-                <div className='relative bottom-10 w-full lg:flex grid gap-4'>
-                    <div className=' lg:w-2/3'>
-                        <div className=' mx-4 rounded-sm p-4 shadow-xl border'>
-                            <div className='flex justify-between items-center pb-2'>
+                <div className='lg:flex'>
+                    <div className='lg:w-2/3 bg-white p-6 lg:p-8'>
+                        <div className='mb-8'>
+                            <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4'>
                                 <h1 className='text-2xl sm:text-3xl font-bold mb-2 sm:mb-0'>{caterer.name}</h1>
                                 <div className='flex items-center'>
                                     <span className='px-2 py-1 rounded-md bg-green-600 text-white font-semibold text-sm'>{caterer.rating}</span>
@@ -71,8 +83,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
                                 <QuickInfo data={caterer} />
                             </div>
                         </div>
-                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-                            {packageTypes.map((packageType) => {
+
+                        <div className={`grid gap-6 ${getPackageLayoutClass(availablePackages.length)}`}>
+                            {availablePackages.map((packageType) => {
                                 const packageData = caterer[packageType];
                                 if (packageData) {
                                     return (
@@ -90,11 +103,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             })}
                         </div>
 
-                        <div id="Photos">
+                        <div id="Photos" className="mt-12">
+                            <h2 className="text-2xl font-bold mb-6">Gallery</h2>
                             <GalleryComponent initialData={caterer.gallery} categoryId={caterer._id} category='caterer' />
                         </div>
 
-                        <ReviewRating data={caterer} />
+                        <div className="mt-12">
+                            <h2 className="text-2xl font-bold mb-6">Reviews</h2>
+                            <ReviewRating data={caterer} />
+                        </div>
                     </div>
                     <div className="w-full lg:w-1/3 bg-gray-100 p-6 lg:p-8">
                         <div className="sticky top-6">
