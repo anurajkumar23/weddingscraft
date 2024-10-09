@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 
 const menuItemSchema = z.object({
   starter: z.array(z.string()).default([]),
@@ -54,7 +55,9 @@ const packageSchema = z.object({
 const formSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(2, "Name is required"),
-  contactUs: z.coerce.number().min(0, "Fill your contact details"),
+  description: z.string().optional(),
+  contactUs: z.string().min(10, "Contact number must be at least 10 digits"),
+  yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future"),
   basic: packageSchema.optional(),
   standard: packageSchema.optional(),
   deluxe: packageSchema.optional(),
@@ -90,7 +93,9 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      contactUs: undefined,
+      description: "",
+      contactUs: "",
+      yearOfEstd: new Date().getFullYear(),
       basic: defaultPackageValues,
     },
   })
@@ -111,7 +116,6 @@ export default function CatererForm({ initialData }: CatererFormProps) {
       }
     });
     
-
     form.reset(updatedValues)
   }, [activePackages, form])
 
@@ -154,9 +158,9 @@ export default function CatererForm({ initialData }: CatererFormProps) {
         throw new Error("Authentication token not found");
       }
       if (initialData?._id) {
-        await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/caterer/${initialData._id}`, config)
+        await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/caterer/${initialData._id}/Caterer`, config)
         router.refresh()
-        router.push(`/seller/post/caterer`)
+        router.push(`/seller/post/caterer?refreshId=${new Date().getTime()}`)
         toast.success("Caterer deleted.")
       }
     } catch (error: any) {
@@ -357,12 +361,45 @@ export default function CatererForm({ initialData }: CatererFormProps) {
             />
             <FormField
               control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea disabled={loading} placeholder="Describe your catering service" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="contactUs"
               render={({ field }) => (
+                
                 <FormItem>
                   <FormLabel>Phone number</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="1234567890" {...field} type="number" />
+                    <Input disabled={loading} placeholder="1234567890" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="yearOfEstd"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year Established</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number"
+                      disabled={loading} 
+                      placeholder="2020" 
+                      {...field}
+                      onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -381,7 +418,6 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                       if (checked) {
                         setActivePackages([...activePackages, packageType as "basic" | "standard" | "deluxe"])
                       } else {
-                        
                         setActivePackages(activePackages.filter(p => p !== packageType))
                       }
                     }}

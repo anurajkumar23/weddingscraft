@@ -30,9 +30,16 @@ export const CellAction: React.FC<CellActionProps> = ({
   const [loading, setLoading] = useState(false);
 
   const onConfirm = async () => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
     try {
       setLoading(true);
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/decor/${data.id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor/${data.id}/Decorator`, config);
       toast.success('Decorator deleted.');
       router.refresh();
     } catch (error) {

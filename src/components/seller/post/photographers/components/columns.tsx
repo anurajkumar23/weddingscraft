@@ -85,7 +85,6 @@ export const columns: ColumnDef<PhotographerColumn>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },
 ];

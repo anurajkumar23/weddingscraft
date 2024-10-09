@@ -40,12 +40,12 @@ export const CellAction: React.FC<CellActionProps> = ({
     };
     try {
       setLoading(true);
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/caterer/${data.id}`,config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/caterer/${data.id}/Caterer`,config);
 
-      toast.success('User deleted.');
+      toast.success('Caterer deleted.');
       router.refresh();
     } catch (error) {
-      toast.error('Make sure you removed all User first.');
+      toast.error('Make sure you removed all Caterer first.');
     } finally {
       setOpen(false);
       setLoading(false);
@@ -54,7 +54,7 @@ export const CellAction: React.FC<CellActionProps> = ({
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success('User ID copied to clipboard.');
+    toast.success('Caterer ID copied to clipboard.');
   }
 
   return (
