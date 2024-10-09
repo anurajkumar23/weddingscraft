@@ -43,6 +43,7 @@ const formSchema = z.object({
   type: z.enum(['AC', 'Non-AC']),
   billboard: z.string().max(255).optional(),
   specialFeature: z.array(z.string()).optional(),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
 });
 
 type BanquetFormValues = z.infer<typeof formSchema>
@@ -72,8 +73,8 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       location: { city: '', area: '', pincode: '' },
       services: [],
       description: '',
-      price: 0,
-      capacity: 0,
+      price: undefined,
+      capacity: undefined,
       specialFeature: [],
       yearOfEstd: new Date().getFullYear(),
       availability: [],
@@ -81,6 +82,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       operatingDays: '',
       type: 'AC',
       billboard: '',
+      contactUs: undefined,
     },
   });
 
@@ -105,7 +107,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       }
 
       router.refresh();
-      router.push(`/seller/post/banquet`);
+      router.push(`/seller/post/banquet?refreshId=${new Date().getTime()}`);
       toast.success(toastMessage);
     } catch (error: any) {
       console.error("Error submitting form:", error);
@@ -448,9 +450,9 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
               name="operatingDays"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Operating Days</FormLabel>
+                  <FormLabel>Operating  Days</FormLabel>
                   <FormControl>
-                    <Input  disabled={loading} placeholder="e.g., Monday to Sunday" {...field} />
+                    <Input disabled={loading} placeholder="e.g., Monday to Sunday" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -485,6 +487,25 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                   <FormLabel>Billboard</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Billboard information" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactUs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Contact number"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

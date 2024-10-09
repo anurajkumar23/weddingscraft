@@ -8,7 +8,6 @@ export type PhotographerColumn = {
   name: string;
   rating: number;
   location: string; 
-  locationUrl: string;
   description: string;
   price: string; 
   contactUs: number | string;
@@ -33,10 +32,6 @@ export const columns: ColumnDef<PhotographerColumn>[] = [
     accessorKey: "location",
     header: "Location",
     cell: ({ row }) => row.original.location || "N/A",
-  },
-  {
-    accessorKey: "locationUrl",
-    header: "Location URL",
   },
   {
     accessorKey: "description",

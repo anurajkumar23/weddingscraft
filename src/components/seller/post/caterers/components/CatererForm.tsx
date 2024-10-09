@@ -56,7 +56,7 @@ const formSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(2, "Name is required"),
   description: z.string().optional(),
-  contactUs: z.string().min(10, "Contact number must be at least 10 digits"),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
   yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future"),
   basic: packageSchema.optional(),
   standard: packageSchema.optional(),
@@ -94,7 +94,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     defaultValues: initialData || {
       name: "",
       description: "",
-      contactUs: "",
+      contactUs: undefined,
       yearOfEstd: new Date().getFullYear(),
       basic: defaultPackageValues,
     },

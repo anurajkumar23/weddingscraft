@@ -34,9 +34,8 @@ const formSchema = z.object({
     pincode: z.string().min(1, "Pincode is required"),
     area: z.string().optional(),
   }),
-  locationUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
   price: z.array(z.number().positive("Price must be positive")).nonempty("At least one price is required"),
-  contactUs: z.number().positive("Contact number must be positive").optional(),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
   yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future").optional(),
   services: z.array(z.string()).min(1, "At least one service is required"),
   occasion: z.string().min(2, "Occasion is required"),
@@ -68,7 +67,6 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
         pincode: "",
         area: "",
       },
-      locationUrl: "",
       price: [],
       contactUs: undefined,
       yearOfEstd: undefined,
@@ -262,19 +260,6 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
             </div>
           </div>
 
-          <FormField
-            control={form.control}
-            name="locationUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location URL</FormLabel>
-                <FormControl>
-                  <Input disabled={loading} placeholder="https://..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}

@@ -33,7 +33,7 @@ const formSchema = z.object({
     pincode: z.string().min(1, "Pincode is required"),
   }).optional(),
   price: z.array(z.number()).nonempty("At least one price is required"),
-  contactUs: z.number().int().min(0, "Fill your contact details"),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
   yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future").optional(),
 });
 
@@ -62,7 +62,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       description: '',
       location: { city: '', area: '', pincode: '' },
       price: [],
-      contactUs: 0,
+      contactUs: undefined,
       yearOfEstd: undefined,
     },
   });
