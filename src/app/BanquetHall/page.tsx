@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import InnerCardPage from "@/components/InnerCard/InnerCardPage";
 import getBanquet from "@/utils/banquet/GetBanquet";
 import FilterData from "../../components/filter/FilterData";
@@ -21,13 +20,15 @@ const Page = async ({
   const banquet = await getBanquet(searchParams); // Pass searchParams from URL as filters
 
   return (
-    <div className="px-6 py-4 ">
-      <h1 className="text-2xl font-medium mb-4">Top Banquet Halls in Patna</h1>
-      <FilterData />
+    <>
+      <div className="px-6 py-4 ">
+        <h1 className="text-2xl font-medium mb-4">Top Banquet Halls in Patna</h1>
 
-      {/* Render InnerCardPage with the fetched banquet data  */}
-      <InnerCardPage data={banquet} link="BanquetHall" imgLink="banquet" category="Banquet"/>
-    </div>
+        <FilterData />
+
+        <InnerCardPage data={banquet} link="BanquetHall" imgLink="banquet" category="Banquet" />
+      </div>
+    </>
   );
 };
 

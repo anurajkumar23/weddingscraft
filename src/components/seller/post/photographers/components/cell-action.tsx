@@ -29,18 +29,26 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
 
   const onConfirm = async () => {
+    const token = localStorage.getItem("jwt_token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
     try {
       setLoading(true);
-      await axios.delete(`/api/photographer/${data.id}`);
-      toast.success("Photographer deleted.");
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/photographer/${data.id}/Photographer`,config);
+      toast.success('Photographer deleted.');
       router.refresh();
     } catch (error) {
-      toast.error("Error deleting photographer.");
+      toast.error('Make sure you removed all Photographer first.');
     } finally {
       setOpen(false);
       setLoading(false);
     }
   };
+
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);

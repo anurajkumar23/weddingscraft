@@ -1,10 +1,12 @@
+"use client"
 import { MapPin, MapPinned, PhoneCall } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { FaWhatsapp } from 'react-icons/fa';
 import QuickInfo from './QuickInfo';
 import Link from 'next/link';
+import ReviewRating from '../Review&Rating/Review&Rating';
 export interface BanquetVenue {
     location: {
         city: string;
@@ -59,7 +61,8 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
     if (!banquetData) {
         return <div>Loading...</div>;
     }
-
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [showMap, setShowMap] = useState(false);
 
 
 
@@ -88,7 +91,6 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                         </div>
                         <div className="flex items-center mb-2">
                             <MapPin className='mr-2' />
-                            {/* Guard against undefined location */}
                             {location ? (
                                 <>
                                     <p>{location.city},</p>
@@ -99,11 +101,26 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                                 <p>No location information available</p>
                             )}
                             <Link href={`${locationUrl}`}>
-                                <div className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white ml-4 p-1 rounded-sm font-sans cursor-pointer'>
+                                <button
+                                onClick={() => setShowMap(!showMap)}
+                                 className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white ml-4 p-1 rounded-sm font-sans cursor-pointer'>
                                     <span className='flex gap-x-2'>View on Map <MapPinned /></span>
-                                </div>
+                                </button>
                             </Link>
                         </div>
+                        {showMap && (
+                            <div className='mt-4'>
+                                <iframe
+                                    src={locationUrl}
+                                    width="600"
+                                    height="450"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
+                            </div>
+                        )}
                         <h1>Details:</h1>
                         <Button className='mr-2 mb-2 mt-2 gap-x-2 bg-green-600 hover:bg-green-700 hover:text-white text-white text-base' variant="outline">
                             <PhoneCall />
@@ -174,6 +191,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
             </div>
             <div className='md:col-span-8'>
                 <QuickInfo banquetData={banquetData} />
+                <ReviewRating data={banquetData} />
             </div>
         </div>
     );

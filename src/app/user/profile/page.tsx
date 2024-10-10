@@ -56,7 +56,7 @@ export default function Page() {
     } else {
       setLoading(false);
     }
-  }, [user, setUser, router]); // Add `router` to the dependency array
+  }, [user, setUser, router]); 
 
   const joined = user ? formatDate(user.createdAt) : "";
 
@@ -74,7 +74,7 @@ export default function Page() {
     try {
       const token = localStorage.getItem("jwt_token");
       const response = await axios.post(
-        "http://localhost:8000/api/user/uploadPhoto",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/uploadPhoto`,
         { id: user._id, content },
         {
           headers: {
@@ -104,7 +104,7 @@ export default function Page() {
         console.error("Error uploading photo:", response.statusText);
       }
       const updateUser = await axios.patch(
-        `http://localhost:8000/api/user/image/${user._id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/image/${user._id}`,
         { image: response.data.data.filename },
         {
           headers: {
@@ -124,7 +124,7 @@ export default function Page() {
   return (
     <div className="p-4 w-full h-full">
       <div className="border m-4 p-2 flex flex-col items-center relative">
-        <Link href="/profile/editProfile">
+        <Link href="/user/profile/editProfile">
           <button className="absolute top-4 right-4 bg-blue-400 text-white p-2 rounded flex items-center">
             <UserRoundPen className="mr-2" /> Edit Profile
           </button>

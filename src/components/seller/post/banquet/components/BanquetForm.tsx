@@ -24,11 +24,8 @@ import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import React from "react"
-
 
 const formSchema = z.object({
-
   name: z.string().min(1, "Name is required").max(40, "Name cannot exceed 40 characters"),
   location: z.object({
     city: z.string().min(1, "City is required"),
@@ -36,32 +33,19 @@ const formSchema = z.object({
     pincode: z.string().min(1, "Pincode is required"),
   }),
   description: z.string().min(1, "Description is required"),
-
-  price: z.string().min(1, "Price is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
-    message: "Price must be a number",
-  }),
-
-  capacity: z.string().min(1, "Capacity is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
-    message: "Capacity must be a number",
-  }),
-
+  price: z.number().min(0, "Price must be a positive number"),
+  capacity: z.number().int().min(1, "Capacity must be a positive integer"),
   services: z.array(z.string()).min(1, "At least one service is required"),
-
-  yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
-    message: "Year of ESTD> must be a number",
-  }).optional(),
-
+  yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future"),
   availability: z.array(z.string()).min(1, "At least one availability is required"),
-
   openHours: z.string().min(1, "Open hours are required"),
-  operatingDays: z.string().min(1, "Operating days are required").transform((val) => val.toUpperCase()),
-
-  type: z.enum(['AC', 'Non-AC']).optional(),
-
+  operatingDays: z.string().min(1, "Operating days are required"),
+  type: z.enum(['AC', 'Non-AC']),
   billboard: z.string().max(255).optional(),
-
   specialFeature: z.array(z.string()).optional(),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
 });
+
 type BanquetFormValues = z.infer<typeof formSchema>
 
 interface BanquetFormProps {
@@ -89,8 +73,8 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       location: { city: '', area: '', pincode: '' },
       services: [],
       description: '',
-      price: 0,
-      capacity: 0,
+      price: undefined,
+      capacity: undefined,
       specialFeature: [],
       yearOfEstd: new Date().getFullYear(),
       availability: [],
@@ -98,6 +82,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       operatingDays: '',
       type: 'AC',
       billboard: '',
+      contactUs: undefined,
     },
   });
 
@@ -111,22 +96,18 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
     };
     try {
       setLoading(true);
-      const token = localStorage.getItem("jwt_token");
       if (!token) {
         throw new Error("Authentication token not found");
       }
 
       if (initialData) {
-        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, data,
-          config
-        );
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, data, config);
       } else {
         await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet`, data, config);
       }
 
-      console.log()
       router.refresh();
-      router.push(`/seller/post/banquet`);
+      router.push(`/seller/post/banquet?refreshId=${new Date().getTime()}`);
       toast.success(toastMessage);
     } catch (error: any) {
       console.error("Error submitting form:", error);
@@ -135,7 +116,6 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       setLoading(false);
     }
   };
-
 
   const onDelete = async () => {
     const token = localStorage.getItem("jwt_token");
@@ -147,14 +127,13 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
     };
     try {
       setLoading(true);
-      const token = localStorage.getItem("jwt_token");
       if (!token) {
         throw new Error("Authentication token not found");
       }
 
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}`, config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/banquet/${params.id}/Banquet`, config);
       router.refresh();
-      router.push(`seller/post/banquet`);
+      router.push(`/seller/post/banquet?refreshId=${new Date().getTime()}`);
       toast.success('Banquet deleted.');
     } catch (error: any) {
       console.error("Error deleting banquet:", error);
@@ -164,7 +143,6 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
       setOpen(false);
     }
   }
-
 
   return (
     <>
@@ -310,7 +288,13 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Price" {...field} />
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Price"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -323,7 +307,13 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Capacity</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Capacity" {...field} />
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Capacity"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -383,7 +373,13 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                 <FormItem>
                   <FormLabel>Year of Establishment</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="Year of Establishment" {...field} />
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Year of Establishment"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -454,7 +450,7 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
               name="operatingDays"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Operating Days</FormLabel>
+                  <FormLabel>Operating  Days</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="e.g., Monday to Sunday" {...field} />
                   </FormControl>
@@ -491,6 +487,25 @@ export const BanquetForm: React.FC<BanquetFormProps> = ({
                   <FormLabel>Billboard</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Billboard information" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactUs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="Contact number"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

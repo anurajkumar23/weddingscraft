@@ -36,7 +36,6 @@ const InnerPage: React.FC<InnerPageProps> = ({
   location,
   locationUrl,
   link,
-  like,
   img,
   imgLink,
   category,
@@ -53,18 +52,11 @@ const InnerPage: React.FC<InnerPageProps> = ({
   };
 
   useEffect(() => {
-    // Check if the user has any banquet items in their wishlist
-    console.log(category,"category")
-    console.log(user.wishlist[category], "user");
-    if (user.wishlist[category] && user.wishlist[category].length > 0) {
-      console.log(user,"user")
-  
+    if (user?.wishlist[category] && user?.wishlist[category].length > 0) {  
       const isItemLiked = user.wishlist[category].some((item: any) => item === _id);
-      console.log(isItemLiked,"Sfsdsd")
       setIsLiked(isItemLiked);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_id, user.wishlist[category], user, category]);
+  }, [_id, user?.wishlist[category], user, category]);
 
   const handleLike = async (e: React.MouseEvent) => {
     e.preventDefault()

@@ -8,6 +8,9 @@ import Link from 'next/link';
 import DecoratorBooking from '../../../components/booking';
 import getPhotographerId from '@/utils/Photographer/GetPhotographerId';
 import QuickInfo from '@/components/QuickInfo';
+import GalleryComponent from '@/components/Gallery/GalleryComponent';
+import ReviewRating from '@/components/Review&Rating/Review&Rating';
+
 
 
 
@@ -20,10 +23,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className='container mx-auto py-6 px-4'>
             <div className='rounded-sm border h-full'>
                 <div>
-                    <ImageGallery images={Photographer.photos} category='photographer' />
+                    <ImageGallery categoryId={Photographer._id} category='photographer' />
                 </div>
-                <div className='relative bottom-10 w-full md:flex grid gap-4'>
-                    <div className='mx-4 w-full md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
+                <div className='relative bottom-10  md:flex grid gap-4'>
+                    <div className='mx-4  md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
                         <div className='flex justify-between items-center pb-2'>
                             <strong className='font-medium md:text-lg text-base'>{Photographer.name} </strong>
                             <div className='flex gap-x-2 items-center'>
@@ -43,11 +46,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             ) : (
                                 <p>No location information available</p>
                             )}
-                            <Link href={`${Photographer.locationUrl}`}>
-                                <div className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white ml-4 p-1 rounded-sm font-sans cursor-pointer'>
-                                    <span className='flex gap-x-2'>View on Map <MapPinned /></span>
-                                </div>
-                            </Link>
+                           
                         </div>
                         <div className='flex space-x-2'>
                             <h1>
@@ -62,7 +61,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="space-y-6 py-6">
                             <QuickInfo data={Photographer} />
                         </div>
+                        <div id="Photos">
+                            <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='photographer' />
+                        </div>
 
+                        <ReviewRating data={Photographer} />
                     </div>
                     <div className=" md:w-1/3 bg-muted p-6">
                         <div className="sticky top-6">

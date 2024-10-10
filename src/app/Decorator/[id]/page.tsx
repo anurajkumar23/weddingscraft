@@ -6,6 +6,8 @@ import ImageGallery from '@/components/Gallery/ImageGallery';
 import Link from 'next/link';
 import QuickInfo from '../../../components/QuickInfo';
 import DecoratorBooking from '../../../components/booking';
+import GalleryComponent from '@/components/Gallery/GalleryComponent';
+import ReviewRating from '@/components/Review&Rating/Review&Rating';
 
 
 
@@ -17,7 +19,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className='container mx-auto py-6 px-4'>
             <div className='rounded-sm border h-full'>
                 <div>
-                    <ImageGallery images={Decorator.photos} category='decorator' />
+                    <ImageGallery categoryId={Decorator._id} category='decor' />
                 </div>
                 <div className='relative bottom-10 w-full md:flex grid gap-4'>
                     <div className='mx-4 w-full md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
@@ -40,11 +42,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             ) : (
                                 <p>No location information available</p>
                             )}
-                            <Link href={`${Decorator.locationUrl}`}>
-                                <div className='border text-red-600 border-red-500 hover:bg-red-600 hover:text-white ml-4 p-1 rounded-sm font-sans cursor-pointer'>
-                                    <span className='flex gap-x-2'>View on Map <MapPinned /></span>
-                                </div>
-                            </Link>
                         </div>
                         <h1>Details:</h1>
                         <Button className='mr-2 mb-2 mt-2 gap-x-2 bg-green-600 hover:bg-green-700 hover:text-white text-white text-base' variant="outline">
@@ -54,6 +51,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="space-y-6 py-6">
                             <QuickInfo data={Decorator} />
                         </div>
+                        <div id="Photos">
+                            <GalleryComponent initialData={Decorator.gallery} categoryId={Decorator._id} category='decor' />
+                        </div>
+
+                        <ReviewRating data={Decorator} />
                     </div>
                     <div className=" md:w-1/3 bg-muted p-6">
                         <div className="sticky top-6">

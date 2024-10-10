@@ -24,9 +24,6 @@ import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/model/alert-model";
 import { DecoratorDocument } from "@/customTypes/DecoratorDocument";
 
-
-type DecoratorFormValues = z.infer<typeof formSchema>;
-
 const formSchema = z.object({
   name: z.string().min(2, "Name is required").max(40),
   description: z.string().optional(),
@@ -36,12 +33,11 @@ const formSchema = z.object({
     pincode: z.string().min(1, "Pincode is required"),
   }).optional(),
   price: z.array(z.number()).nonempty("At least one price is required"),
-  contactUs: z.coerce.number().min(0, "Fill your contact details"),
-  yearOfEstd: z.string().min(1, "Year of ESTD. is required").transform((val) => Number(val)).refine(val => !isNaN(val), {
-    message: "Year of ESTD> must be a number",
-  }).optional(),
-
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
+  yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future").optional(),
 });
+
+type DecoratorFormValues = z.infer<typeof formSchema>;
 
 interface DecoratorsFormProps {
   initialData: DecoratorDocument;
@@ -50,11 +46,9 @@ interface DecoratorsFormProps {
 const DecoratorForm: React.FC<DecoratorsFormProps> = ({
   initialData
 }) => {
-
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const title = initialData ? "Edit Decorator" : "Create Decorator";
   const description = initialData ? "Edit an existing decorator." : "Add a new decorator";
@@ -68,8 +62,8 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       description: '',
       location: { city: '', area: '', pincode: '' },
       price: [],
-      contactUs: "",
-      yearOfEstd: '',
+      contactUs: undefined,
+      yearOfEstd: undefined,
     },
   });
 
@@ -90,7 +84,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
         await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor`, data, config);
       }
       router.refresh();
-      router.push(`/seller/post/decorator`);
+      router.push(`/seller/post/decorator?refreshId=${new Date().getTime()}`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
@@ -98,7 +92,6 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       setLoading(false);
     }
   };
-
 
   const onDelete = async () => {
     const token = localStorage.getItem("jwt_token");
@@ -111,9 +104,9 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
 
     try {
       setLoading(true);
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor/${initialData._id}`, config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/decor/${initialData._id}/Decorator`, config);
       router.refresh();
-      router.push(`/seller/post/decorator`);
+      router.push(`/seller/post/decorator?refreshId=${new Date().getTime()}`);
       toast.success("Decorator deleted.");
     } catch (error: any) {
       toast.error("Make sure to remove all related data first.");
@@ -122,7 +115,6 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       setOpen(false);
     }
   };
-
 
   return (
     <>
@@ -144,14 +136,13 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
           <div className="md:grid-cols-10 grid gap-4 container">
-
             <div className="md:grid md:col-span-6 container flex-1 bg-slate-100 shadow-sm p-5 rounded-lg font-bold  h-max gap-8">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel >Decorator Name</FormLabel>
+                    <FormLabel>Decorator Name</FormLabel>
                     <FormControl>
                       <Input disabled={loading} placeholder="Name" {...field} />
                     </FormControl>
@@ -164,7 +155,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel > Description</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Input disabled={loading} placeholder="Description" {...field} />
                     </FormControl>
@@ -177,9 +168,15 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="yearOfEstd"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel >Year Of ESTD.</FormLabel>
+                    <FormLabel>Year Of ESTD.</FormLabel>
                     <FormControl>
-                      <Input disabled={loading} placeholder="2020" {...field} />
+                      <Input
+                        type="number"
+                        disabled={loading}
+                        placeholder="2020"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -190,23 +187,20 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel >Price (Array)</FormLabel>
+                    <FormLabel>Price (Array)</FormLabel>
                     <FormControl>
                       <div className="space-y-4">
                         {(field.value || []).map((item, index) => (
                           <div key={index} className="flex gap-2">
                             <Input
+                              type="number"
                               disabled={loading}
                               placeholder="Price"
-                              value={item.toString()}  // Convert number to string for input
+                              value={item}
                               onChange={(e) => {
                                 const updatedValue = [...(field.value || [])];
-                                const newValue = parseFloat(e.target.value);  // Convert string to number
-
-                                if (!isNaN(newValue)) {  // Check if the new value is a valid number
-                                  updatedValue[index] = newValue;
-                                  field.onChange(updatedValue);
-                                }
+                                updatedValue[index] = e.target.valueAsNumber;
+                                field.onChange(updatedValue);
                               }}
                             />
                             <Button
@@ -224,7 +218,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                         <Button
                           type="button"
                           onClick={() => {
-                            const updatedValue = [...(field.value || []), 0];  // Add a new number (e.g., 0)
+                            const updatedValue = [...(field.value || []), 0];
                             field.onChange(updatedValue);
                           }}
                         >
@@ -232,12 +226,10 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                         </Button>
                       </div>
                     </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
             </div>
           </div>
 
@@ -247,7 +239,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
               name="location.city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel >City</FormLabel>
+                  <FormLabel>City</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="City" {...field} />
                   </FormControl>
@@ -260,7 +252,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
               name="location.pincode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel >Pincode</FormLabel>
+                  <FormLabel>Pincode</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Pincode" {...field} />
                   </FormControl>
@@ -273,7 +265,7 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
               name="location.area"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel >Area</FormLabel>
+                  <FormLabel>Area</FormLabel>
                   <FormControl>
                     <Input disabled={loading} placeholder="Area" {...field} />
                   </FormControl>
@@ -288,18 +280,22 @@ const DecoratorForm: React.FC<DecoratorsFormProps> = ({
                 <FormItem>
                   <FormLabel>Phone number</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="1234567890" {...field} type="number" />
+                    <Input
+                      type="number"
+                      disabled={loading}
+                      placeholder="1234567890"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
-            <Button disabled={loading} type="submit"  >
+            <Button disabled={loading} type="submit">
               {action}
             </Button>
-
           </div>
         </form>
       </Form>

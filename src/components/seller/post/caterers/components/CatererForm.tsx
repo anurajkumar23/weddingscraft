@@ -2,7 +2,7 @@
 
 import * as z from "zod"
 import axios from "axios"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -21,6 +21,8 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/model/alert-model"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 
 const menuItemSchema = z.object({
   starter: z.array(z.string()).default([]),
@@ -36,35 +38,51 @@ const addonItemSchema = z.object({
   price: z.string(),
 })
 
+const packageSchema = z.object({
+  price: z.coerce.number().min(0, "Price must be at least 0"),
+  veg: menuItemSchema,
+  nonveg: menuItemSchema,
+  addon: z.object({
+    starter: z.array(addonItemSchema).default([]),
+    maincourse: z.array(addonItemSchema).default([]),
+    desert: z.array(addonItemSchema).default([]),
+    welcomedrink: z.array(addonItemSchema).default([]),
+    breads: z.array(addonItemSchema).default([]),
+    rice: z.array(addonItemSchema).default([]),
+  }),
+})
+
 const formSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(2, "Name is required"),
-  price: z.coerce.number().min(0, "Price must be at least 0"),
-  contactUs:z.coerce.number().min(0, "Fill your contact details"),
-  basic: z.object({
-    veg: menuItemSchema,
-    nonveg: menuItemSchema,
-    addon: z.object({
-      starter: z.array(addonItemSchema).default([]),
-      maincourse: z.array(addonItemSchema).default([]),
-      desert: z.array(addonItemSchema).default([]),
-      welcomedrink: z.array(addonItemSchema).default([]),
-      breads: z.array(addonItemSchema).default([]),
-      rice: z.array(addonItemSchema).default([]),
-    }),
-  }),
+  description: z.string().optional(),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
+  yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future"),
+  basic: packageSchema.optional(),
+  standard: packageSchema.optional(),
+  deluxe: packageSchema.optional(),
 })
 
 type CatererFormValues = z.infer<typeof formSchema>
 
 interface CatererFormProps {
-  initialData: CatererFormValues;
+  initialData: CatererFormValues | null;
+}
+
+const defaultPackageValues = {
+  price: 0,
+  veg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
+  nonveg: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
+  addon: { starter: [], maincourse: [], desert: [], welcomedrink: [], breads: [], rice: [] },
 }
 
 export default function CatererForm({ initialData }: CatererFormProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [activePackages, setActivePackages] = useState<("basic" | "standard" | "deluxe")[]>(
+    initialData ? Object.keys(initialData).filter(key => ["basic", "standard", "deluxe"].includes(key)) as ("basic" | "standard" | "deluxe")[] : ["basic"]
+  )
 
   const title = initialData ? "Edit Caterer" : "Create Caterer"
   const description = initialData ? "Edit a caterer." : "Add a new caterer"
@@ -75,36 +93,31 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
-      price: 0,
-      contactUs:undefined,
-      basic: {
-        veg: {
-          starter: [],
-          maincourse: [],
-          desert: [],
-          welcomedrink: [],
-          breads: [],
-          rice: [],
-        },
-        nonveg: {
-          starter: [],
-          maincourse: [],
-          desert: [],
-          welcomedrink: [],
-          breads: [],
-          rice: [],
-        },
-        addon: {
-          starter: [],
-          maincourse: [],
-          desert: [],
-          welcomedrink: [],
-          breads: [],
-          rice: [],
-        },
-      },
+      description: "",
+      contactUs: undefined,
+      yearOfEstd: new Date().getFullYear(),
+      basic: defaultPackageValues,
     },
   })
+
+  useEffect(() => {
+    const currentValues = form.getValues()
+    const updatedValues = { ...currentValues }
+
+    activePackages.forEach(packageType => {
+      if (!currentValues[packageType]) {
+        updatedValues[packageType] = defaultPackageValues
+      }
+    })
+
+    Object.keys(currentValues).forEach((key) => {
+      if (["basic", "standard", "deluxe"].includes(key as any) && !activePackages.includes(key as "basic" | "standard" | "deluxe")) {
+        delete updatedValues[key as "basic" | "standard" | "deluxe"];
+      }
+    });
+    
+    form.reset(updatedValues)
+  }, [activePackages, form])
 
   const onSubmit = async (data: CatererFormValues) => {
     const token = localStorage.getItem("jwt_token")
@@ -141,14 +154,13 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     };
     try {
       setLoading(true);
-      const token = localStorage.getItem("jwt_token");
       if (!token) {
         throw new Error("Authentication token not found");
       }
-      if (initialData) {
-        await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/caterer/${initialData._id}`, config)
+      if (initialData?._id) {
+        await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/caterer/${initialData._id}/Caterer`, config)
         router.refresh()
-        router.push(`/seller/post/caterer`)
+        router.push(`/seller/post/caterer?refreshId=${new Date().getTime()}`)
         toast.success("Caterer deleted.")
       }
     } catch (error: any) {
@@ -159,8 +171,8 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     }
   }
 
-  const renderMenuSection = (section: "veg" | "nonveg", title: string) => (
-    <div className="container bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1]">
+  const renderMenuSection = (packageType: "basic" | "standard" | "deluxe", section: "veg" | "nonveg", title: string) => (
+    <div className="container bg-slate-100 p-5 rounded-lg font-bold">
       <Heading title={title} description={`${title} Menu Items`} />
       <Separator className="mt-2 mb-2" />
       <div className="md:grid md:grid-cols-2 gap-8">
@@ -168,13 +180,13 @@ export default function CatererForm({ initialData }: CatererFormProps) {
           <FormField
             key={item}
             control={form.control}
-            name={`basic.${section}.${item}`}
+            name={`${packageType}.${section}.${item}`}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{item.charAt(0).toUpperCase() + item.slice(1)}</FormLabel>
                 <FormControl>
                   <div className="space-y-4">
-                    {field.value.map((value: string, index: number) => (
+                    {field.value && field.value.map((value: string, index: number) => (
                       <div key={index} className="flex gap-2">
                         <Input
                           disabled={loading}
@@ -201,7 +213,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                     <Button
                       type="button"
                       onClick={() => {
-                        const updatedValue = [...field.value, '']
+                        const updatedValue = [...(field.value || []), '']
                         field.onChange(updatedValue)
                       }}
                     >
@@ -218,8 +230,8 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     </div>
   )
 
-  const renderAddonSection = () => (
-    <div className="container bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1]">
+  const renderAddonSection = (packageType: "basic" | "standard" | "deluxe") => (
+    <div className="container bg-slate-100 p-5 rounded-lg font-bold">
       <Heading title="Add-on Items" description="Add-on Menu Items" />
       <Separator className="mt-2 mb-2" />
       <div className="md:grid md:grid-cols-2 gap-8">
@@ -227,13 +239,13 @@ export default function CatererForm({ initialData }: CatererFormProps) {
           <FormField
             key={item}
             control={form.control}
-            name={`basic.addon.${item}`}
+            name={`${packageType}.addon.${item}`}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{`${item.charAt(0).toUpperCase() + item.slice(1)} Add-ons`}</FormLabel>
                 <FormControl>
                   <div className="space-y-4">
-                    {field.value.map((addon: z.infer<typeof addonItemSchema>, index: number) => (
+                    {field.value && field.value.map((addon: z.infer<typeof addonItemSchema>, index: number) => (
                       <div key={index} className="flex gap-2">
                         <Input
                           disabled={loading}
@@ -270,7 +282,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
                     <Button
                       type="button"
                       onClick={() => {
-                        const updatedValue = [...field.value, { name: '', price: '' }]
+                        const updatedValue = [...(field.value || []), { name: '', price: '' }]
                         field.onChange(updatedValue)
                       }}
                     >
@@ -287,6 +299,28 @@ export default function CatererForm({ initialData }: CatererFormProps) {
     </div>
   )
 
+  const renderPackageSection = (packageType: "basic" | "standard" | "deluxe") => (
+    <div key={packageType} className="space-y-8">
+      <Heading title={`${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Package`} description={`${packageType.charAt(0).toUpperCase() + packageType.slice(1)} package details`} />
+      <FormField
+        control={form.control}
+        name={`${packageType}.price`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Price</FormLabel>
+            <FormControl>
+              <Input disabled={loading} placeholder="Price" {...field} type="number" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      {renderMenuSection(packageType, "veg", "Veg Items")}
+      {renderMenuSection(packageType, "nonveg", "Non-Veg Items")}
+      {renderAddonSection(packageType)}
+    </div>
+  )
+
   return (
     <>
       <AlertModal 
@@ -295,7 +329,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
         onConfirm={onDelete} 
         loading={loading} 
       />
-      <div className="text-white flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
           <Button
@@ -311,7 +345,7 @@ export default function CatererForm({ initialData }: CatererFormProps) {
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-          <div className="my-4 md:grid md:grid-cols-2 gap-8 container bg-slate-800 p-5 rounded-lg font-bold text-[#b7bac1]">
+          <div className="my-4 md:grid md:grid-cols-2 gap-8 container bg-slate-100 p-5 rounded-lg font-bold">
             <FormField
               control={form.control}
               name="name"
@@ -327,39 +361,82 @@ export default function CatererForm({ initialData }: CatererFormProps) {
             />
             <FormField
               control={form.control}
-              name="price"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Price" {...field} type="number" />
+                    <Textarea disabled={loading} placeholder="Describe your catering service" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactUs"
+              render={({ field }) => (
+                
+                <FormItem>
+                  <FormLabel>Phone number</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="1234567890" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="yearOfEstd"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year Established</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="number"
+                      disabled={loading} 
+                      placeholder="2020" 
+                      {...field}
+                      onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          {renderMenuSection("veg", "Veg Items")}
-          {renderMenuSection("nonveg", "Non-Veg Items")}
-          {renderAddonSection()}
-          <FormField
-              control={form.control}
-              name="contactUs"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone number</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder="1234567890" {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="space-y-4">
+            <Heading title="Package Types" description="Select the package types you want to offer" />
+            <div className="flex space-x-4">
+              {["basic", "standard", "deluxe"].map((packageType) => (
+                <div key={packageType} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={packageType}
+                    checked={activePackages.includes(packageType as "basic" | "standard" | "deluxe")}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setActivePackages([...activePackages, packageType as "basic" | "standard" | "deluxe"])
+                      } else {
+                        setActivePackages(activePackages.filter(p => p !== packageType))
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor={packageType}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {packageType.charAt(0).toUpperCase() + packageType.slice(1)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          {activePackages.map((packageType) => renderPackageSection(packageType))}
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
         </form>
-      
       </Form>
     </>
   )

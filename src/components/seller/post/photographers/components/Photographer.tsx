@@ -34,12 +34,9 @@ const formSchema = z.object({
     pincode: z.string().min(1, "Pincode is required"),
     area: z.string().optional(),
   }),
-  locationUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
   price: z.array(z.number().positive("Price must be positive")).nonempty("At least one price is required"),
-  contactUs: z.number().positive("Contact number must be positive").optional(),
-  yearOfEstd: z.string().refine((val) => !isNaN(Number(val)), {
-    message: "Year must be a valid number",
-  }).transform(Number).optional(),
+  contactUs: z.number().int().min(10, "Contact number must be at least 10 digits"),
+  yearOfEstd: z.number().int().min(1800, "Year must be 1800 or later").max(new Date().getFullYear(), "Year cannot be in the future").optional(),
   services: z.array(z.string()).min(1, "At least one service is required"),
   occasion: z.string().min(2, "Occasion is required"),
 });
@@ -47,7 +44,7 @@ const formSchema = z.object({
 type PhotographerFormValues = z.infer<typeof formSchema>;
 
 interface PhotographerFormProps {
-  initialData: PhotographerDocument ;
+  initialData: PhotographerDocument;
 }
 
 export default function PhotographerForm({ initialData }: PhotographerFormProps) {
@@ -70,10 +67,9 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
         pincode: "",
         area: "",
       },
-      locationUrl: "",
       price: [],
-      contactUs: '',
-      yearOfEstd: '',
+      contactUs: undefined,
+      yearOfEstd: undefined,
       services: [],
       occasion: "",
     },
@@ -89,17 +85,15 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
           "Content-Type": "application/json",
         },
       };
-      
-      // console.log("formdata:" ,data ,".😀😀😀😀😀😀😀🐷🐷🐷🎇")
 
       if (initialData) {
-        await axios.patch(`http://localhost:8000/api/photographer/${initialData._id}`, data, config);
+        await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/photographer/${initialData._id}`, data, config);
       } else {
-        await axios.post(`http://localhost:8000/api/photographer`, data, config);
+        await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/photographer`, data, config);
       }
 
       router.refresh();
-      router.push("/seller/post/photographer?refreshId=${new Date().getTime()}");
+      router.push(`/seller/post/photographer?refreshId=${new Date().getTime()}`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong.");
@@ -119,7 +113,7 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
           "Content-Type": "application/json",
         },
       };
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/photographer/${initialData?._id}`, config);
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/photographer/${initialData._id}/Photographer`,config);
       router.refresh();
       router.push(`/seller/post/photographer?refreshId=${new Date().getTime()}`);
       toast.success("Photographer deleted.");
@@ -208,10 +202,11 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
                   <FormLabel>Year Established</FormLabel>
                   <FormControl>
                     <Input 
+                      type="number"
                       disabled={loading} 
                       placeholder="e.g., 2010" 
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value)}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -265,19 +260,6 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
             </div>
           </div>
 
-          <FormField
-            control={form.control}
-            name="locationUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location URL</FormLabel>
-                <FormControl>
-                  <Input disabled={loading} placeholder="https://..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}
@@ -334,6 +316,7 @@ export default function PhotographerForm({ initialData }: PhotographerFormProps)
                 <FormLabel>Contact Number</FormLabel>
                 <FormControl>
                   <Input 
+                    type="number"
                     disabled={loading} 
                     placeholder="Contact number" 
                     {...field}

@@ -26,6 +26,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { BanquetVenue } from "./page";
 import GalleryComponent from "../Gallery/GalleryComponent";
+import ReviewRating from "../Review&Rating/Review&Rating";
 
 const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
   console.log(banquetData,"😊😊😊😊")
@@ -255,39 +256,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
         <div id="Photos">
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
-      <div
-        id="Reviews"
-        className="container border w-full h-full rounded-sm bg-white py-6"
-      >
-        <div>
-          <h1 className="text-2xl font-medium mb-6">Reviews & Ratings</h1>
-          <div className="flex gap-x-4">
-            <span className="border p-4 rounded-xl bg-green-600 text-white text-xl">
-              {banquetData.rating}
-            </span>
-            <h1 className="text-2xl font-semibold items-center flex">
-              {banquetData.reviews.length} Reviews
-            </h1>
-          </div>
-
-          <div className="py-8">
-            <h1 className="text-2xl font-medium">Post your Review</h1>
-            <Rate className="py-4 text-4xl" />
-          </div>
-          <h1 className="text-2xl font-medium py-4 ">Users Review</h1>
-          {/* <hr/> */}
-          {userReviews.map((user) => (
-            <UserReview
-              key={user.id}
-              user={user.name}
-              ratings={user.ratings}
-              post={user.date}
-              heading={user.heading}
-              description={user.description}
-            />
-          ))}
-        </div>
-      </div>
+{/* <ReviewRating data={banquetData}/> */}
     </div>
   );
 };

@@ -47,42 +47,78 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
     return {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
     }
   }, [])
 
-  // Handle image deletion
-  const handleDeleteImage = useCallback(async (imageToDelete: string) => {
+  const handleUpdate = async (deletedImages: string[], newImages: File[]) => {
+    let newCategoryName = ''
+    if (category === 'banquet') {
+      newCategoryName = 'Banquet'
+    } else if (category === 'caterer') {
+      newCategoryName = 'Caterer'
+    } else if (category === 'decor') {
+      newCategoryName = 'Decorator'
+    } else if (category === 'photographer') {
+      newCategoryName = 'Photographer'
+    } else {
+      newCategoryName = 'Banquet'
+    }
+
+    const formData = new FormData()
+
+    deletedImages.forEach(image => {
+      formData.append("deleteImageArray[]", image)
+    })
+
+    formData.append('category', newCategoryName)
+
+    newImages.forEach(file => formData.append("addImagesArray[]", file))
+
     try {
       const response = await axios.patch(
         `http://localhost:8000/api/${category}/${categoryId}/folder/${folderId}`,
-        {
-          deleteImageArray: [imageToDelete],
-          category: newCategory
-        },
+        formData,
         getConfig()
       )
+      
+      const updatedGallery = response?.data?.data?.[category]?.gallery;
+    
+      if (updatedGallery && Array.isArray(updatedGallery)) {
+        const specificGallery = updatedGallery.find((item) => item._id === folderId);
+        const updatedPhotos = specificGallery?.photos || [];
 
-      if (response.status === 200) {
-        // Update gallery photos and preview images after deletion
+        // console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
+
         setGallery(prevGallery => ({
           ...prevGallery,
-          photos: prevGallery.photos.filter(photo => photo !== imageToDelete)
+          photos: updatedPhotos
         }))
-        setPreviewImages(prevImages => prevImages.filter(image => image !== imageToDelete))
-        toast({ title: "Success", description: "Image deleted successfully." })
+        setPreviewImages(updatedPhotos)
+
+        toast({
+          title: 'Update successful',
+          description: 'The gallery has been successfully updated.',
+        })
+
+        return updatedPhotos
       } else {
-        throw new Error("Failed to delete image")
+        throw new Error('Gallery data not found in response')
       }
     } catch (error) {
-      console.error('Error deleting image:', error)
-      toast({ title: "Error", description: "Failed to delete image.", variant: "destructive" })
+      console.error('Failed to update:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to update the gallery. Please try again.',
+        variant: 'destructive',
+      })
+      throw error
     }
-  }, [category, categoryId, folderId, newCategory, getConfig])
+  }
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 overflow-hidden">
       <div className="max-w-44">
         <div className="relative group">
           {/* Alert Dialog for Image Preview */}
@@ -90,7 +126,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
             <AlertDialogTrigger asChild>
               <button onClick={handleOpenModal}>
                 <Image
-                  src={gallery?.photos?.[0] || '/placeholder.jpg'}
+                  src={gallery?.photos[0] || '/placeholder.svg'}
                   alt={`${category} photo`}
                   width={800}
                   height={600}
@@ -105,17 +141,13 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
                 onClose={handleCloseModal} 
                 photos={previewImages} 
                 category={category} 
-                folderId={folderId} 
-                categoryId={categoryId}
-                onDeleteImage={handleDeleteImage}
+                handleUpdate={handleUpdate}
               />
             </AlertDialogContent>
           </AlertDialog>
-
-          {/* Gallery Info */}
-          <div className="mt-2">
-            <strong className="text-lg font-semibold">{gallery?.name || "Untitled"}</strong>
-            <p className="text-gray-500 text-sm">{gallery?.photos?.length || 0} Photos/Videos</p>
+          <div className="justify-between items-center mt-2">
+            <strong className="text-lg font-semibold">{gallery.name}</strong>
+            <p className="text-gray-500 text-sm">{gallery.photos.length} Photos/Videos</p>
           </div>
         </div>
       </div>

@@ -175,7 +175,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
   }
 
   return (
-    <div className="border w-full h-full rounded-sm bg-white py-6">
+    <div className="border h-full rounded-sm bg-white py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-medium container">Photos</h1>
 
@@ -231,7 +231,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <div className="relative w-full">
+          <div className="relative ">
             <Swiper
               modules={[Navigation]}
               slidesPerView="auto"
@@ -242,9 +242,9 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
             >
               {galleries?.map((gallery) => (
 
-                <SwiperSlide key={gallery._id} className="!w-auto">
+                <SwiperSlide key={gallery._id} className="!w-auto ">
 
-                  <div className="max-w-44 md:w-64">
+                  <div className="w-auto overflow-hidden">
                     <ImageContainer
                       initialData={[gallery]}
                       categoryId={categoryId}
