@@ -31,7 +31,9 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
   const [gallery, setGallery] = useState<Gallery>(initialData[0])
 
   const handleOpenModal = () => {
-    setPreviewImages(gallery.photos)
+    if (gallery?.photos) {
+      setPreviewImages(gallery.photos)
+    }
     setShowModal(true)
   }
 
@@ -39,6 +41,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
     setShowModal(false)
   }
 
+  // Fetching config for axios requests
   const getConfig = useCallback(() => {
     const token = localStorage.getItem("jwt_token")
     return {
@@ -49,6 +52,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
     }
   }, [])
 
+  // Handle image deletion
   const handleDeleteImage = useCallback(async (imageToDelete: string) => {
     try {
       const response = await axios.patch(
@@ -61,6 +65,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
       )
 
       if (response.status === 200) {
+        // Update gallery photos and preview images after deletion
         setGallery(prevGallery => ({
           ...prevGallery,
           photos: prevGallery.photos.filter(photo => photo !== imageToDelete)
@@ -80,11 +85,12 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
     <div className="w-full p-4">
       <div className="max-w-44">
         <div className="relative group">
+          {/* Alert Dialog for Image Preview */}
           <AlertDialog open={showModal} onOpenChange={setShowModal}>
             <AlertDialogTrigger asChild>
               <button onClick={handleOpenModal}>
                 <Image
-                  src={gallery.photos[0] || '/placeholder.jpg'}
+                  src={gallery?.photos?.[0] || '/placeholder.jpg'}
                   alt={`${category} photo`}
                   width={800}
                   height={600}
@@ -92,6 +98,8 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
                 />
               </button>
             </AlertDialogTrigger>
+
+            {/* Modal Content */}
             <AlertDialogContent className="max-w-6xl max-h-[90vh] w-[90vw] p-0">
               <ImageBox 
                 onClose={handleCloseModal} 
@@ -103,9 +111,11 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
               />
             </AlertDialogContent>
           </AlertDialog>
-          <div className="justify-between items-center">
-            <strong className="text-lg font-semibold">{gallery.name}</strong>
-            <p className="text-gray-500 text-sm">{gallery.photos.length} Photos/Videos</p>
+
+          {/* Gallery Info */}
+          <div className="mt-2">
+            <strong className="text-lg font-semibold">{gallery?.name || "Untitled"}</strong>
+            <p className="text-gray-500 text-sm">{gallery?.photos?.length || 0} Photos/Videos</p>
           </div>
         </div>
       </div>

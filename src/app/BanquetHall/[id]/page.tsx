@@ -1,6 +1,6 @@
 import MainCardPage from '@/components/MainCard/page'
 import { incrementVisit } from '@/utils/analytics/analyticsService';
-import getBanquetId from '@/utils/banquet/GetbanquetId'
+import getBanquetId from '@/utils/banquet/Getbanquetid'
 import React from 'react'
 
 const Page = async ({ params }: { params: { id: string } }) => {
