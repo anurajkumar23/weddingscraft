@@ -15,13 +15,16 @@ export interface CardComponent {
     pincode: string;
     area: string;
   };
-  locationUrl: string;
+  locationUrl?: {
+    coordinates: number[];
+    url: string;
+  };
   link: string;
   billboard: string;
-  like: [];
+  like: { userId: string; likedAt: Date }[]; // Adjust based on your use case
   img: string[];
-  imgLink:string;
-  category:string;
+  imgLink: string;
+  category: string;
 }
 
 export interface InnerCardProps {

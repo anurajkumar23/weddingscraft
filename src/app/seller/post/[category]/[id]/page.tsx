@@ -3,9 +3,9 @@ import { BanquetForm } from "@/components/seller/post/banquet/components/Banquet
 import CatererForm from "@/components/seller/post/caterers/components/CatererForm";
 import DecoratorForm from "@/components/seller/post/decorator/components/DecoratorForm";
 import PhotographerForm from "@/components/seller/post/photographers/components/Photographer";
-import getBanquetId from "@/utils/banquet/GetbanquetId";
-import getCatererId from "@/utils/caterer/GetCatererId";
-import getDecoratorId from "@/utils/decorator/GetDecoratorId";
+import getBanquetId from "@/utils/banquet/Getbanquetid";
+import getCatererId from "@/utils/caterer/GetCatererid";
+import getDecoratorId from "@/utils/decorator/GetDecoratorid";
 import getPhotographerId from "@/utils/Photographer/GetPhotographerId";
 
 export default async function EditPage({ params }: { params: { category: string; id: string } }) {
