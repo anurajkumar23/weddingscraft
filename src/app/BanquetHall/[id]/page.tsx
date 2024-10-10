@@ -5,6 +5,7 @@ import React from 'react'
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const banquetData = await getBanquetId(params.id);
+  
 
 incrementVisit(banquetData)
   return (
