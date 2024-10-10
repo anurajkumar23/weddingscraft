@@ -205,7 +205,7 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
           />
         ))}
       </div>
-      <span className="text-sm text-gray-500">{rating.toFixed(1)}</span>
+      <span className="text-sm text-gray-500">{rating?.toFixed(1)}</span>
     </div>
     <p className="md:text-sm text-xs text-gray-500 line-clamp-2">{description}</p>
     <div className="flex items-center space-x-2">
@@ -215,7 +215,7 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
           {location ? `${location.city}, ${location.area}, ${location.pincode}` : "Location unavailable"}
         </Link>
       ) : (
-        <span className="text-sm text-gray-500">{`${location.city}, ${location.area}, ${location.pincode}`}</span>
+        <span className="text-sm text-gray-500">{`${location?.city}, ${location?.area}, ${location?.pincode}`}</span>
       )}
     </div>
   </Link>

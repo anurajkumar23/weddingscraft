@@ -8,10 +8,10 @@ export default async function getBanquet(filters = {}) {
     const queryString = new URLSearchParams(filters).toString();
 
 
-    const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api';
+    const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   
-    const response = await axios.get(`${API_URL}/banquet?${queryString}`, {
+    const response = await axios.get(`http://localhost:8000/api/banquet?${queryString}`, {
       headers: {
         Authorization: `Bearer ${token}`, 
         "Content-Type": "application/json",
