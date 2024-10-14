@@ -256,7 +256,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
         <div id="Photos">
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
-{/* <ReviewRating data={banquetData}/> */}
+      <ReviewRating data={banquetData} />
     </div>
   );
 };

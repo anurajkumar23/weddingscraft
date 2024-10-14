@@ -7,6 +7,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import QuickInfo from "./QuickInfo";
 import Link from "next/link";
 import ReviewRating from "../Review&Rating/Review&Rating";
+import ImageGallery from "../Gallery/ImageGallery";
 export interface BanquetVenue {
   location: {
     city: string;
@@ -60,11 +61,11 @@ interface BanquetProps {
 }
 
 const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
-    const [showMap, setShowMap] = useState(true);
+  const [showMap, setShowMap] = useState(true);
   if (!banquetData) {
     return <div>Loading...</div>;
   }
-  const { location, name, rating, locationUrl, price } = banquetData;
+  const { location, name, rating, locationUrl, price, description, _id } = banquetData;
   // // eslint-disable-next-line react-hooks/rules-of-hooks, react-hooks/rules-of-hooks
 
   function convertEmbedUrlToNormalUrl(url: string) {
@@ -91,16 +92,11 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
 
   return (
     <div className="h-full grid md:grid-cols-12 gap-2">
-      <div className="md:col-span-8">
+      <div className="md:col-span-8 ">
         <div>
-          <Image
-            height={500}
-            width={500}
-            src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/banquet/${banquetData.billboard}`}
-            alt="BanquetHall"
-            loading="lazy"
-            className="w-full h-96 rounded-sm object-cover"
-          />
+          <div className="relative">
+            <ImageGallery categoryId={_id} category='banquet' />
+          </div>
           <div className="relative bottom-20 mx-4 bg-white rounded-sm p-4 shadow-xl border">
             <div className="flex justify-between items-center pb-2">
               <strong className="font-medium md:text-lg text-base">
@@ -134,19 +130,34 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
                 </button>
               </Link>
             </div>
-            {showMap && (
-              <div className="mt-4">
+            <div className='mb-4'>
+              <h2 className='font-semibold mb-2'>Details:</h2>
+              <p className='text-gray-600'>{description}</p>
+            </div>
+            {normalUrl && (
+              <div className="mb-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowMap(!showMap)}
+                  className="w-full md:w-auto"
+                >
+                  {showMap ? 'Hide Map' : 'Show Map'}
+                </Button>
+              </div>
+            )}
+            {showMap && banquetData.locationUrl?.url && (
+              <div className="aspect-video w-full">
                 <iframe
-                  src={locationUrl?.url}
-                  width="600"
-                  height="450"
-                  
+                  src={banquetData.locationUrl.url}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
                   loading="lazy"
-                 
+                  referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
             )}
-            <h1>Details:</h1>
             <Button
               className="mr-2 mb-2 mt-2 gap-x-2 bg-green-600 hover:bg-green-700 hover:text-white text-white text-base"
               variant="outline"
@@ -235,7 +246,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
       </div>
       <div className="md:col-span-8">
         <QuickInfo banquetData={banquetData} />
-        <ReviewRating data={banquetData} />
+        
       </div>
     </div>
   );
