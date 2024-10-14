@@ -23,9 +23,10 @@ interface ImageProps {
   category: string
   folderId: string
   newCategory: string
+  onGalleryUpdate: (updatedGallery: Gallery) => void;
 }
 
-const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderId, category, newCategory }) => {
+const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderId, category, onGalleryUpdate }) => {
   const [showModal, setShowModal] = useState(false)
   const [previewImages, setPreviewImages] = useState<string[]>([])
   const [gallery, setGallery] = useState<Gallery>(initialData[0])
@@ -88,6 +89,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
       if (updatedGallery && Array.isArray(updatedGallery)) {
         const specificGallery = updatedGallery.find((item) => item._id === folderId);
         const updatedPhotos = specificGallery?.photos || [];
+        onGalleryUpdate(specificGallery)
 
         // console.log(updatedPhotos, "👆👆👆 Updated Photos 😀");
 

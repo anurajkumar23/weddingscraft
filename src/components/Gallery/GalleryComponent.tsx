@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Plus, Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -24,7 +24,6 @@ import { Navigation } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-
 interface Gallery {
   _id: string
   name: string
@@ -46,8 +45,6 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
   const fileInputRef = useRef<HTMLInputElement>(null)
   const swiperRef = useRef<any>(null)
 
-
-
   useEffect(() => {
     return () => {
       newPhotosPreviews.forEach(URL.revokeObjectURL)
@@ -64,7 +61,6 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     }
   }
 
-
   let newCategory = '';
   if (category === 'banquet') {
     newCategory = 'Banquet';
@@ -72,14 +68,11 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     newCategory = 'Caterer';
   } else if (category === 'decor') {
     newCategory = 'Decorator';
-  } else if (category === 'decor') {
-    newCategory = 'Decorator';
   } else if (category === 'photographer') {
     newCategory = 'Photographer';
   } else {
     newCategory = 'Banquet';
   }
-
 
   const createNewGallery = async () => {
     if (newGalleryName.trim() === "") {
@@ -92,9 +85,6 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
       return
     }
 
-
-
-
     try {
       setLoading(true)
       const formData = new FormData()
@@ -103,16 +93,17 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
       newPhotos.forEach(file => formData.append("photos[]", file))
 
       const response = await axios.patch(
-        `http://localhost:8000/api/${category}/${categoryId}/newfolder`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/${category}/${categoryId}/newfolder`,
         formData,
         getConfig()
       )
-      const newGallery = response.data
-      setGalleries([...galleries, newGallery])
+      const newGallery = response.data.data[category].gallery[0]
+      setGalleries(prevGalleries => [...prevGalleries, newGallery])
       setNewGalleryName("")
       resetPhotoUploadForm()
       toast({ title: "Success", description: "New gallery added successfully." })
     } catch (error) {
+      console.error('Failed to create gallery:', error)
       toast({ title: "Error", description: "Failed to create gallery.", variant: "destructive" })
     } finally {
       setLoading(false)
@@ -136,52 +127,33 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
     setNewPhotosPreviews(prevPreviews => prevPreviews.filter((_, i) => i !== index))
   }
 
-  const uploadPhotosToGallery = async (galleryId: string) => {
-    if (newPhotos.length === 0) {
-      toast({ title: "Error", description: "Please select photos to upload.", variant: "destructive" })
-      return
-    }
-
-    const formData = new FormData()
-    newPhotos.forEach(file => formData.append("photos", file))
-    formData.append('category', category)
-
-    try {
-      setLoading(true)
-      const response = await axios.patch(
-        `http://localhost:8000/api/${category}/${categoryId}/folder/${galleryId}`,
-        formData,
-        getConfig()
-      )
-      setGalleries(galleries.map(g =>
-        g._id === galleryId
-          ? { ...g, photos: [...g.photos, ...response.data.newPhotos] }
-          : g
-      ))
-      resetPhotoUploadForm()
-      toast({ title: "Success", description: "Photos uploaded successfully." })
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to upload photos.", variant: "destructive" })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-
   const resetPhotoUploadForm = () => {
     setNewPhotos([])
     setNewPhotosPreviews([])
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
+  const handleGalleryUpdate = (updatedGallery: Gallery) => {
+     setGalleries(prevGalleries => 
+       prevGalleries.map(gallery => 
+         gallery._id === updatedGallery._id ? updatedGallery : gallery
+       )
+     );
+   };
+
+  useEffect(() => {
+    if (galleries.length > 0) {
+      const latestGallery = galleries[galleries.length - 1];
+      // Update the ImageContainer with the latest gallery data
+    }
+  }, [galleries]);
+
   return (
     <div className="border h-full rounded-sm bg-white py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-medium container">Photos</h1>
-
       </div>
       <div className="space-y-8">
-
         <div className="border rounded-lg p-4">
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -233,17 +205,15 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
           </AlertDialog>
           <div className="relative ">
             <Swiper
+              key={`swiper-${galleries.length}`}
               modules={[Navigation]}
               slidesPerView="auto"
               onBeforeInit={(swiper) => {
                 swiperRef.current = swiper
               }}
-  
             >
               {galleries?.map((gallery) => (
-
                 <SwiperSlide key={gallery._id} className="!w-auto ">
-
                   <div className="w-auto overflow-hidden">
                     <ImageContainer
                       initialData={[gallery]}
@@ -251,11 +221,10 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
                       category={category}
                       folderId={gallery._id}
                       newCategory={newCategory}
+                      onGalleryUpdate={handleGalleryUpdate}
                     />
                   </div>
-
                 </SwiperSlide>
-
               ))}
             </Swiper>
             <button
