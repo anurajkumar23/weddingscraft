@@ -95,7 +95,7 @@ const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
       <div className="md:col-span-8 ">
         <div>
           <div className="relative">
-            <ImageGallery categoryId={_id} category='banquet' />
+            <ImageGallery categoryId={_id} category='banquet'  />
           </div>
           <div className="relative bottom-20 mx-4 bg-white rounded-sm p-4 shadow-xl border">
             <div className="flex justify-between items-center pb-2">

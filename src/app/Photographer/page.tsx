@@ -24,7 +24,7 @@ const page = async ({ searchParams }: { searchParams: Record<string, string> }) 
     <div className='px-6 py-4'>
       <h1 className='text-2xl font-medium mb-4'>Top Photographer</h1>
       <FilterData />
-      <InnerCardPage data={Photographer} link="Photographer" imgLink="photographer" category='Photographer'/>
+      <InnerCardPage data={Photographer} link="Photographer"  category='Photographer'/>
     </div>
   );
 };

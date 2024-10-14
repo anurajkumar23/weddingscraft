@@ -1,17 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
-import axios from "axios"
+import React from "react"
 import InnerPage from "./page"
 
-
-export interface CardComponent {
-  galleryImages: never[]
+export interface FavoriteItem {
   _id: string
-  alt: string
   name: string
   rating: number
-  description: string
+  description?: string
   location: {
     city: string
     pincode: string
@@ -21,83 +17,40 @@ export interface CardComponent {
     coordinates: number[]
     url: string
   }
-  link: string
-  billboard: string
-  like: { userId: string; likedAt: Date }[]
-  img: string[]
-  imgLink: string
-  category: string
-  price: number
-  capacity: number
-  specialFeature: string[]
-  yearOfEstd: number
-  services: string[]
-  type: string
-  availability: string[]
-  openHours: string
-  operatingDays: string
-  reviews: any[]
-  gallery: { photos: string[] }[]
+  price: number | number[]
+  capacity?: number
+  services?: string[]
+  gallery: {
+    name: string
+    photos: string[]
+    _id: string
+  }[]
+  [key: string]: any
 }
 
 export interface InnerCardProps {
-  data: CardComponent[]
+  data: FavoriteItem[]
   link: string
   category: string
 }
 
 const InnerCardPage: React.FC<InnerCardProps> = ({ data, link, category }) => {
-  const [cardsWithImages, setCardsWithImages] = useState<CardComponent[]>([])
-
-  useEffect(() => {
-    const fetchGalleryImages = async () => {
-      const token = localStorage.getItem("jwt_token")
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-
-      const updatedCards = await Promise.all(
-        data.map(async (card) => {
-          try {
-            const response = await axios.get(
-              `${process.env.NEXT_PUBLIC_BACKEND_URL}/${category}/${card._id}`,
-              config
-            )
-            const galleryData = response.data.data.gallery
-            const images = galleryData.flatMap((folder: { photos: string[] }) => folder.photos)
-            return { ...card, galleryImages: images }
-          } catch (err) {
-            console.error(`Failed to fetch images for card ${card._id}:`, err)
-            return { ...card, galleryImages: [] }
-          }
-        })
-      )
-
-      setCardsWithImages(updatedCards)
-    }
-
-    fetchGalleryImages()
-  }, [data, category])
-
   return (
     <div className="pt-10 w-full">
       <div>
-        {cardsWithImages.map((card) => (
-          <div key={card._id}>
+        {data.map((item) => (
+          <div key={item._id}>
             <InnerPage
-              id={card._id}
-              name={card.name}
-              rating={card.rating}
-              description={card.description}
-              location={card.location}
-              locationUrl={card.locationUrl}
+              id={item._id}
+              name={item.name}
+              rating={item.rating}
+              description={item.description || ""}
+              location={item.location}
+              locationUrl={item.locationUrl}
               category={category}
               link={link}
-              images={card.galleryImages || []}
-              price={card.price}
+              images={item.gallery.flatMap(folder => folder.photos)}
+              price={Array.isArray(item.price) ? item.price[0] : item.price}
             />
           </div>
         ))}

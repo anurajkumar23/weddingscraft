@@ -26,7 +26,7 @@ const Page = async ({
 
       <FilterData />
 
-      <InnerCardPage data={banquet} link="Banquet" imgLink="banquet" category="Banquet" />
+      <InnerCardPage data={banquet} link="Banquet"  category="Banquet" />
     </div>
 
   );
