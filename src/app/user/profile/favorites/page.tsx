@@ -1,92 +1,78 @@
-"use client";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import axios from "axios";
-import InnerCardPage from "@/components/InnerCard/InnerCardPage";
-
-interface UserData {
-  _id: string;
-  email: string;
-  phoneNumber: string;
-  name: string;
-  role: string;
-  wishlist: {
-    Banquet: string[];
-    Caterer: string[];
-    Decorator: string[];
-    Photographer: string[];
-  };
-}
+import React, { useEffect, useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import axios from "axios"
+import InnerCardPage from "@/components/InnerCard/InnerCardPage"
 
 interface FavoriteItem {
-  _id: string;
-  name: string;
-  rating: number;
-  description: string;
-  location: {
-    city: string;
-    pincode: string;
-    area: string;
-  };
-  locationUrl?: {
-    coordinates: number[];
-    url: string;
-  };
-  billboard: string;
-  photos: string[];
-  [key: string]: any;
+  _id: string
+  name: string
+  rating: number
+  description?: string
+  location?: {
+    city: string
+    pincode: string
+    area: string
+  }
+  price: number | number[]
+  capacity?: number
+  services?: string[]
+  gallery: {
+    name: string
+    photos: string[]
+    _id: string
+  }[]
+  [key: string]: any
 }
 
 interface FavoriteData {
-  Banquet: FavoriteItem[];
-  Caterer: FavoriteItem[];
-  Decorator: FavoriteItem[];
-  Photographer: FavoriteItem[];
+  Banquet: FavoriteItem[]
+  Caterer: FavoriteItem[]
+  Decorator: FavoriteItem[]
+  Photographer: FavoriteItem[]
 }
 
 const FavoritesPage: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
   const [favoriteData, setFavoriteData] = useState<FavoriteData>({
     Banquet: [],
     Caterer: [],
     Decorator: [],
     Photographer: []
-  });
-  // const router = useRouter();
+  })
 
   useEffect(() => {
-    fetchFavoriteItems();
-  }, []);
+    fetchFavoriteItems()
+  }, [])
 
   const fetchFavoriteItems = async () => {
-    const token = localStorage.getItem("jwt_token");
+    const token = localStorage.getItem("jwt_token")
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    };
+    }
 
     try {
-      const response = await axios.get(`http://localhost:8000/api/user/wishlist`, config);
-      const wishlistData = response.data.data.wishlist;
-      setFavoriteData(wishlistData);
-      setLoading(false);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/wishlist`, config)
+      const wishlistData = response.data.data.wishlist
+      setFavoriteData(wishlistData)
+      setLoading(false)
     } catch (error) {
-      console.error("Error fetching favorite items:", error);
-      setError("Failed to fetch favorite items. Please try again later.");
-      setLoading(false);
+      console.error("Error fetching favorite items:", error)
+      setError("Failed to fetch favorite items. Please try again later.")
+      setLoading(false)
     }
-  };
+  }
 
   const handleRefresh = () => {
-    setLoading(true);
-    fetchFavoriteItems();
-  };
+    setLoading(true)
+    fetchFavoriteItems()
+  }
 
   if (loading) {
     return (
@@ -95,7 +81,7 @@ const FavoritesPage: React.FC = () => {
         <Skeleton className="h-4 w-[300px]" />
         <Skeleton className="h-[200px] w-full" />
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -109,10 +95,8 @@ const FavoritesPage: React.FC = () => {
           Refresh Favorites
         </button>
       </div>
-    );
+    )
   }
-
- 
 
   return (
     <Card className="w-full">
@@ -128,14 +112,13 @@ const FavoritesPage: React.FC = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {Object.keys(favoriteData).map((category) => (
+        {Object.entries(favoriteData).map(([category, items]) => (
           <div key={category}>
-            <h2 className="text-2xl font-semibold mb-4">{category}s</h2>
-            {favoriteData[category].length > 0 ? (
+            <h2 className="text-2xl font-semibold ">{category}s</h2>
+            {items.length > 0 ? (
               <InnerCardPage
-                data={favoriteData[category]}
-                link={category}
-                imgLink={category.toLowerCase()}
+                data={items}
+                link={category.toLowerCase()}
                 category={category}
               />
             ) : (
@@ -145,7 +128,7 @@ const FavoritesPage: React.FC = () => {
         ))}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default FavoritesPage;
+export default FavoritesPage

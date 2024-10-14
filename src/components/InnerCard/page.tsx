@@ -1,100 +1,102 @@
-"use client"
+'use client'
 
-import { Heart, MapPin, Star } from "lucide-react";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { CardComponent } from "./InnerCardPage";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import axios from "axios";
-import { useAuth } from "@/app/authContext";
+import { Heart, MapPin, Star } from "lucide-react"
+import Image from "next/image"
+import React, { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Autoplay, Pagination } from "swiper/modules"
+import "swiper/css"
+import "swiper/css/pagination"
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
+import { motion } from "framer-motion"
+import axios from "axios"
+import { useAuth } from "@/app/authContext"
 
 interface Location {
-  city: string;
-  pincode: string;
-  area: string;
+  city: string
+  pincode: string
+  area: string
 }
 
-interface InnerPageProps extends CardComponent {
-  link: string;
-  category: string;
+interface InnerPageProps {
+  id: string
+  name: string
+  rating: number
+  description: string
+  location: Location
+  locationUrl?: {
+    coordinates: number[]
+    url: string
+  }
+  category: string
+  link: string
+  images: string[]
+  price: number
 }
 
-const InnerPage: React.FC<InnerPageProps> = ({
-  billboard,
-  alt,
+export default function InnerPage({
+  id,
   name,
-  _id,
   rating,
   description,
   location,
   locationUrl,
-  link,
-  img,
-  imgLink,
   category,
-}) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const { user, setUser } = useAuth();
-
-  const token = typeof window !== "undefined" ? localStorage.getItem("jwt_token") : null;
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  link,
+  images,
+  price,
+}: InnerPageProps) {
+  const [isLiked, setIsLiked] = useState(false)
+  const { user, setUser } = useAuth()
 
   useEffect(() => {
     if (user?.wishlist[category]?.length > 0) {
-      const isItemLiked = user.wishlist[category].some((item: string) => item === _id);
-      setIsLiked(isItemLiked);
+      const isItemLiked = user.wishlist[category].some((item: string) => item === id)
+      setIsLiked(isItemLiked)
     }
-  }, [_id, user?.wishlist, category]);
+  }, [id, user?.wishlist, category])
 
   const handleLike = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
 
     const endpoint = isLiked
-      ? 'http://localhost:8000/api/user/removewishlist'
-      : 'http://localhost:8000/api/user/addwishlist';
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/removewishlist`
+      : `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/addwishlist`
 
     try {
+      const token = localStorage.getItem("jwt_token")
       const response = await axios.patch(
         endpoint,
-        { category, itemId: _id },
-        config
-      );
+        { category, itemId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       if (response.status === 200) {
-        setIsLiked(!isLiked);
-        setUser(response.data.data.user);
+        setIsLiked(!isLiked)
+        setUser(response.data.data.user)
       } else {
-        console.error("Failed to update wishlist");
+        console.error("Failed to update wishlist")
       }
     } catch (error) {
-      console.error("Error updating wishlist:", error);
+      console.error("Error updating wishlist:", error)
     }
-  };
+  }
 
   return (
     <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-lg md:w-3/4 border p-4 bg-slate-50 rounded-md mb-6">
       <CardContent className="p-0">
         <div className="flex w-full relative">
-          <Link href={`/${link}/${_id}`} className="md:w-1/3 h-auto">
-            {billboard ? (
-              <ImageComponent billboard={billboard} alt={alt} imgLink={imgLink} />
-            ) : (
-              <SwiperComponent img={img} _id={_id} imgLink={imgLink} />
-            )}
+          <Link href={`/${link}/${id}`} className="md:w-1/3 h-auto py-4">
+            <SwiperComponent images={images} />
           </Link>
-          <div className="absolute top-2 right-2 flex items-center space-x-2">
+          <div className="absolute top-0 right-0 flex items-center space-x-2">
             <motion.div
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -112,7 +114,8 @@ const InnerPage: React.FC<InnerPageProps> = ({
             location={location}
             locationUrl={locationUrl}
             link={link}
-            _id={_id}
+            id={id}
+            price={price}
           />
         </div>
       </CardContent>
@@ -120,26 +123,10 @@ const InnerPage: React.FC<InnerPageProps> = ({
         <ActionButtons />
       </CardFooter>
     </Card>
-  );
-};
+  )
+}
 
-const ImageComponent: React.FC<{ billboard: string; alt: string; imgLink: string }> = ({
-  billboard,
-  alt,
-  imgLink,
-}) => (
-  <div className="relative w-full md:h-full">
-    <Image
-      src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/${billboard}`}
-      alt={alt}
-      width={500}
-      height={500}
-      className="object-cover md:w-60 md:h-48 w-56 h-40 cursor-pointer rounded-2xl hover:scale-105 transition-transform duration-300"
-    />
-  </div>
-);
-
-const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }> = ({ img, _id, imgLink }) => (
+const SwiperComponent: React.FC<{ images: string[] }> = ({ images }) => (
   <Swiper
     slidesPerView={1}
     centeredSlides={true}
@@ -152,13 +139,13 @@ const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }
       clickable: true,
     }}
     modules={[Autoplay, Pagination]}
-    className="max-w-60 max-h-80"
+    className="max-w-40 sm:max-w-56 max-h-80"
   >
-    {img?.map((image, index) => (
-      <SwiperSlide key={`${_id}-${index}`}>
+    {images.map((image, index) => (
+      <SwiperSlide key={`${index}`}>
         <div className="flex">
           <Image
-            src={`${process.env.NEXT_PUBLIC_Backend_Url_Image}images/${imgLink}/media/${image}`}
+            src={image}
             alt={`Image ${index + 1}`}
             width={500}
             height={500}
@@ -168,19 +155,20 @@ const SwiperComponent: React.FC<{ img?: string[]; _id: string; imgLink: string }
       </SwiperSlide>
     ))}
   </Swiper>
-);
+)
 
 interface DetailsSectionProps {
-  name: string;
-  rating: number;
-  description: string;
-  location: Location;
+  name: string
+  rating: number
+  description: string
+  location: Location
   locationUrl?: {
-    coordinates: number[];
-    url: string;
-  };
-  link: string;
-  _id: string;
+    coordinates: number[]
+    url: string
+  }
+  link: string
+  id: string
+  price: number
 }
 
 const DetailsSection: React.FC<DetailsSectionProps> = ({
@@ -190,9 +178,10 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
   location,
   locationUrl,
   link,
-  _id,
+  id,
+  price,
 }) => (
-  <Link href={`/${link}/${_id}`} className="space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2">
+  <Link href={`/${link}/${id}`} className="space-y-2 w-full px-4 pt-6 md:m-3 md:mb-2">
     <div className="flex justify-between items-center">
       <CardTitle className="text-base md:text-xl font-semibold">{name}</CardTitle>
     </div>
@@ -205,21 +194,29 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
           />
         ))}
       </div>
-      <span className="text-sm text-gray-500">{rating?.toFixed(1)}</span>
+      <span className="text-sm text-gray-500">{rating.toFixed(1)}</span>
     </div>
     <p className="md:text-sm text-xs text-gray-500 line-clamp-2">{description}</p>
     <div className="flex items-center space-x-2">
       <MapPin className="w-4 h-4 text-black" />
-      {locationUrl?.url ? (
-        <Link href={locationUrl.url} className="text-sm text-blue-600 hover:underline">
-          {location ? `${location.city}, ${location.area}, ${location.pincode}` : "Location unavailable"}
-        </Link>
+      {location ? (
+        locationUrl?.url ? (
+          <Link href={locationUrl.url} className="text-sm text-blue-600 hover:underline">
+            {`${location.city}, ${location.area}, ${location.pincode}`}
+          </Link>
+        ) : (
+          <span className="text-sm text-gray-500">{`${location.city}, ${location.area}, ${location.pincode}`}</span>
+        )
       ) : (
-        <span className="text-sm text-gray-500">{`${location?.city}, ${location?.area}, ${location?.pincode}`}</span>
+        <p className="text-sm text-gray-500">No location information available</p>
       )}
     </div>
+    <div className="text-sm text-gray-500">
+      <p>Price: ₹{price}</p>
+    </div>
+
   </Link>
-);
+)
 
 const ActionButtons: React.FC = () => (
   <>
@@ -230,6 +227,4 @@ const ActionButtons: React.FC = () => (
       More Details
     </Button>
   </>
-);
-
-export default InnerPage;
+)
