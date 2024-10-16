@@ -142,7 +142,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
    };
 
   useEffect(() => {
-    if (galleries.length > 0) {
+    if (galleries?.length > 0) {
       const latestGallery = galleries[galleries.length - 1];
       // Update the ImageContainer with the latest gallery data
     }
@@ -205,7 +205,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
           </AlertDialog>
           <div className="relative ">
             <Swiper
-              key={`swiper-${galleries.length}`}
+              key={`swiper-${galleries?.length}`}
               modules={[Navigation]}
               slidesPerView="auto"
               onBeforeInit={(swiper) => {
