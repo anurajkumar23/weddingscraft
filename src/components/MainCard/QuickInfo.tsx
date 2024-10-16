@@ -253,7 +253,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-        <div id="Photos">
+        <div id="Photos" className="md:w-full w-screen overflow-hidden">
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
       <ReviewRating data={banquetData} />
