@@ -13,7 +13,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import ImageContainer from "../Gallery/ImageContainer";
-import UserReview from "./UserReview";
+import UserReview from "../Review&Rating/UserReview";
 import { Rate } from "antd";
 import Pricing from "./Pricing";
 import {
@@ -30,48 +30,6 @@ import ReviewRating from "../Review&Rating/Review&Rating";
 
 const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
   console.log(banquetData,"😊😊😊😊")
-  const userReviews = [
-    {
-      id: "1",
-      name: "Anuraj kumar",
-      date: "27 july 2024",
-      heading: "Nice",
-      ratings: 4.5,
-      description:
-        "Average Hall with more ambiance and less quality food. The hall is completely well decorated but related to food the quality is too average and up to mark as per expected. Visited there for friends functions. I liked all the surroundings and atmosphere but food taste upsets me more.",
-    },
-    {
-      id: "2",
-      name: "Gunjan kumar",
-      date: "27 july 2024",
-      heading: "Amazing Experience",
-      ratings: 3,
-      description:
-        "One the best hotels in Thane location where you can find good quality of food with good view of Thane They have huge capicity of banquet also where they give good rates to clients they also have live music in every evening where one can enjoy their dinner with family i strongly recommend to this hotel",
-    },
-  ];
-
-  // const Banquet = [
-  //   {
-  //     id: "1",
-  //     src: Banquet1,
-  //     alt: "Banquet",
-  //     title: "Photos",
-  //     links: "BanquetHall",
-  //     numbers: "45",
-  //   },
-  //   {
-  //     id: "2",
-  //     src: Banquet1,
-  //     alt: "Banquet",
-  //     title: "Videos",
-  //     links: "BanquetHall",
-  //     numbers: "4",
-  //   },
-  //   // { id: "2", src: Banquet2, alt: "Banquet", title: "Decorators" },
-  //   // { id: "3", src: Catering, alt: "Catering", title: "Caterers" },
-  //   // { id: "4", src: Photographer, alt: "Photographer", title: "Photographers" }
-  // ];
 
   const servicesData = [
     "Lock on bedroom door",
@@ -256,7 +214,9 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
         <div id="Photos" className="md:w-full w-screen mx-auto overflow-hidden">
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
+     <div id="Reviews">
       <ReviewRating data={banquetData} />
+     </div>
     </div>
   );
 };

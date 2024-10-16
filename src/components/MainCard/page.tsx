@@ -61,7 +61,7 @@ interface BanquetProps {
 }
 
 const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
-  const [showMap, setShowMap] = useState(true);
+  const [showMap, setShowMap] = useState(false);
   if (!banquetData) {
     return <div>Loading...</div>;
   }
