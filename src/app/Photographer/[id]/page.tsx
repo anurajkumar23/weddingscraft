@@ -20,7 +20,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     return (
 
-        <div className=' py-6'>
+        <div className=' py-6 '>
             <div className='rounded-sm border h-full'>
                 <div>
                     <ImageGallery categoryId={Photographer._id} category='photographer' />
@@ -61,7 +61,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="space-y-6 py-6">
                             <QuickInfo data={Photographer} />
                         </div>
-                        <div id="Photos" className="md:w-full w-screen mx-auto overflow-hidden">
+                        <div id="Photos" className='overflow-hidden'>
                             <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='photographer' />
                         </div>
 

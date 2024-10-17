@@ -1,22 +1,13 @@
 import axios from "axios";
 
-interface DecoratorFilters {
-  ids?: string; // Decorator IDs array
-  [key: string]: any; // Other filters as key-value pairs
-}
 
-export default async function getDecorator(decoratorIds: string[] = [], filters: DecoratorFilters = {}) {
+export default async function getDecorator( filters = {}) {
   try {
     let token = "";
 
     // If running on the client-side, get token from localStorage
     if (typeof window !== "undefined") {
       token = localStorage.getItem("jwt_token") || "";
-    }
-
-    // If decorator IDs are provided, convert them to a comma-separated string and add to filters
-    if (decoratorIds.length > 0) {
-      filters.ids = decoratorIds.join(",");
     }
 
     // Construct query string from filters

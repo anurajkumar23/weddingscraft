@@ -120,7 +120,7 @@ const ImageContainer: React.FC<ImageProps> = ({ initialData, categoryId, folderI
   }
 
   return (
-    <div className="w-full p-4 overflow-hidden">
+    <div className="w- p-4 ">
       <div className="max-w-44">
         <div className="relative group">
           {/* Alert Dialog for Image Preview */}

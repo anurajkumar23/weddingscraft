@@ -1,11 +1,7 @@
 import axios from "axios";
 
-interface CatererFilters {
-  ids?: string; // Caterer IDs array
-  [key: string]: any; // Other filters as key-value pairs
-}
 
-export default async function getCaterer(catererIds: string[] = [], filters: CatererFilters = {}) {
+export default async function getCaterer( filters = {}) {
   try {
     let token = "";
 
@@ -14,10 +10,6 @@ export default async function getCaterer(catererIds: string[] = [], filters: Cat
       token = localStorage.getItem("jwt_token") || "";
     }
 
-    // If caterer IDs are provided, convert them to a comma-separated string and add to filters
-    if (catererIds.length > 0) {
-      filters.ids = catererIds.join(","); 
-    }
 
     // Construct query string from filters
     const queryString = new URLSearchParams(filters as Record<string, string>).toString();

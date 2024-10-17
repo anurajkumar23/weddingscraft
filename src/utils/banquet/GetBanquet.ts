@@ -1,14 +1,15 @@
 import axios from "axios";
 
 
-export default async function getPhotographer( filters = {}) {
+export default async function getBanquet( filters = {} ) {
   try {
     let token = "";
 
-    // If running on the client-side, get token from localStorage
+    // Check if we are on the client side
     if (typeof window !== "undefined") {
       token = localStorage.getItem("jwt_token") || "";
     }
+
 
     // Construct query string from filters
     const queryString = new URLSearchParams(filters as Record<string, string>).toString();
@@ -16,8 +17,7 @@ export default async function getPhotographer( filters = {}) {
     // Use backend URL from environment variables
     const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
 
-    // Make the API request with token and content-type
-    const response = await axios.get(`${API_URL}/photographer?${queryString}`, {
+    const response = await axios.get(`${API_URL}/banquet?${queryString}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -25,12 +25,12 @@ export default async function getPhotographer( filters = {}) {
     });
 
     if (response.data.message === "success") {
-      return response.data.data; // Return the photographer data
+      return response.data.data; // Ensure this contains the expected array of banquet objects
     } else {
-      throw new Error("Failed to fetch photographer data");
+      throw new Error("Failed to fetch banquet data");
     }
   } catch (error) {
-    console.error("Error fetching photographer:", error);
+    console.error("Error fetching banquet:", error);
     throw error;
   }
 }
