@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 
 interface ReviewData {
   _id: string;
@@ -33,17 +32,16 @@ interface ReviewRatingData {
 }
 
 interface RatingReviewsProps {
-  data: ReviewRatingData;
+  initialData: ReviewRatingData;
   category: string;
 }
 
-export default function ReviewRating({ data, category }: RatingReviewsProps) {
+export default function ReviewRating({ initialData, category }: RatingReviewsProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingReview, setEditingReview] = useState<ReviewData | null>(null)
   const [newRating, setNewRating] = useState(0)
-  const [localReviews, setLocalReviews] = useState<ReviewData[]>(data.reviews)
+  const [data, setData] = useState<ReviewRatingData>(initialData)
   const { user } = useAuth()
-  const router = useRouter()
 
   const handleOpenDialog = (rating?: number) => {
     if (rating) setNewRating(rating)
@@ -73,15 +71,14 @@ export default function ReviewRating({ data, category }: RatingReviewsProps) {
         },
         config
       )
+      console.log(response.data.data.item.reviews[0], "🎉🎉🎉🎉🎉🎉🎉🎉🎉🐷posted")
       if (response.data.message === 'success') {
-        const newReviewWithId = {
-          ...newReview,
-          _id: response.data.data._id,
-          userId: user?._id || '',
-          createdAt: new Date().toISOString()
-        }
-        setLocalReviews(prevReviews => [newReviewWithId, ...prevReviews])
-        router.refresh()
+        const newReviewData = response.data.data.item.reviews[0]
+        setData(prevData => ({
+          ...prevData,
+          reviews: [newReviewData, ...prevData.reviews],
+          rating: calculateAverageRating([newReviewData, ...prevData.reviews])
+        }))
       }
     } catch (error) {
       console.error('Error submitting review:', error)
@@ -104,12 +101,24 @@ export default function ReviewRating({ data, category }: RatingReviewsProps) {
       },
     };
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/userreview/${data._id}?category=${category}`, config)
-      setLocalReviews(prevReviews => prevReviews.filter(review => review._id !== _id))
-      router.refresh()
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/userreview/${initialData._id}?category=${category}`, config)
+      setData(prevData => {
+        const updatedReviews = prevData.reviews.filter(review => review._id !== _id)
+        return {
+          ...prevData,
+          reviews: updatedReviews,
+          rating: calculateAverageRating(updatedReviews)
+        }
+      })
     } catch (error) {
       console.error('Error deleting review:', error)
     }
+  }
+
+  const calculateAverageRating = (reviews: ReviewData[]): number => {
+    if (reviews.length === 0) return 0;
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    return parseFloat((sum / reviews.length).toFixed(1));
   }
 
   return (
@@ -120,7 +129,7 @@ export default function ReviewRating({ data, category }: RatingReviewsProps) {
           <span className="text-white text-xl">{data.rating.toFixed(1)}</span>
         </div>
         <div>
-          <h2 className="text-xl font-semibold">{localReviews.length} Reviews</h2>
+          <h2 className="text-xl font-semibold">{data.reviews.length} Reviews</h2>
           <Rate disabled allowHalf defaultValue={data.rating} className="text-yellow-400" />
         </div>
       </div>
@@ -141,7 +150,7 @@ export default function ReviewRating({ data, category }: RatingReviewsProps) {
       )}
 
       <h2 className="text-2xl font-medium mb-6">User Reviews</h2>
-      {localReviews.map((review) => (
+      {data.reviews.map((review) => (
         <div key={review._id} className="border-t py-6 relative">
           <div className="flex justify-between mb-4">
             <div className="flex gap-x-4 items-center">

@@ -16,6 +16,7 @@ export default async function getBanquet(filters = {}) {
         Authorization: `Bearer ${token}`, 
         "Content-Type": "application/json",
       },
+      
     });
 
     if (response.data.message === "success") {
