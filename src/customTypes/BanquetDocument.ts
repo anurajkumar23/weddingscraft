@@ -20,6 +20,7 @@ export interface postBanquet{
 }
 
 export interface BanquetDocument {
+  services: any;
   _id: string;
   name: string;
   rating: number;
@@ -33,15 +34,37 @@ export interface BanquetDocument {
   capacity: number;
   type: string;
   yearOfEstd: number;
-  // Add other fields that you want to display
   contactUs: number;
   specialFeature: string[];
   availability: string[];
   operatingDays: string;
+  locationUrl?: {
+        coordinates: number[];
+        url: string;
+      };
   openHours: string;
+  reviews: ReviewData[];
+  like: Like[];
   gallery: {
     name: string;
     photos: string[];
+    _id: string;
   }[];
   createdAt: Date;
+}
+
+interface Like {
+  userId: string;
+  timestamp: Date;
+}
+
+interface ReviewData {
+  _id: string;
+  content: string;
+  username: string;
+  userphoto: string;
+  rating: number;
+  tag: string;
+  userId: string;
+  createdAt: string;
 }

@@ -12,9 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import ImageContainer from "../Gallery/ImageContainer";
-import UserReview from "../Review&Rating/UserReview";
-import { Rate } from "antd";
+
 import Pricing from "./Pricing";
 import {
   Link,
@@ -24,11 +22,12 @@ import {
   scrollSpy,
 } from "react-scroll";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { BanquetVenue } from "./page";
+
 import GalleryComponent from "../Gallery/GalleryComponent";
 import ReviewRating from "../Review&Rating/Review&Rating";
+import { BanquetDocument } from "@/customTypes/BanquetDocument";
 
-const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
+const QuickInfo = ({ banquetData }: { banquetData: BanquetDocument }) => {
   console.log(banquetData,"😊😊😊😊")
 
   const servicesData = [
@@ -157,7 +156,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
             <h1 className="text-2xl font-medium mb-6">Availability</h1>
 
             {banquetData.availability &&
-              banquetData.availability.map((item, index) => {
+              banquetData.availability.map((item: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined, index: React.Key | null | undefined) => {
                 return (
                   <div key={index} className="flex gap-2">
                     <GoCheckCircleFill size={25} className="text-green-600" />
@@ -174,7 +173,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
       >
         <h1 className="text-2xl font-medium mb-6">Services</h1>
         <div className="grid grid-cols-2">
-          {banquetData.services.slice(0, 5).map((service, index) => (
+          {banquetData.services.slice(0, 5).map((service: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined, index: React.Key | null | undefined) => (
             <div key={index} className="flex space-x-2 pb-3">
               <GoCheckCircleFill size={25} className="text-green-600" />
               <h1 className="font-semibold">{service}</h1>
@@ -215,7 +214,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetVenue }) => {
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
      <div id="Reviews">
-      <ReviewRating data={banquetData} />
+      <ReviewRating data={banquetData} category="Banquet"/>
      </div>
     </div>
   );

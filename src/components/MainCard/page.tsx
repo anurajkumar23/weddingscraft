@@ -8,56 +8,61 @@ import QuickInfo from "./QuickInfo";
 import Link from "next/link";
 import ReviewRating from "../Review&Rating/Review&Rating";
 import ImageGallery from "../Gallery/ImageGallery";
-export interface BanquetVenue {
-  location: {
-    city: string;
-    pincode: string;
-    area: string;
-  };
-  _id: string;
-  photo: string[]; // Assuming photo URLs are strings
-  name: string;
-  rating: number;
-  locationUrl?: {
-    coordinates: number[];
-    url: string;
-  };
-  description: string;
-  price: number;
-  like: Like[]; // Define the type for like array based on its content
-  capacity: number;
-  specialFeature: string[];
-  yearOfEstd: number;
-  services: string[];
-  type: string;
-  availability: string[];
-  billboard: string;
-  openHours: string;
-  operatingDays: string;
-  reviews: Review[]; // Define the type for reviews array based on its content
-  gallery: {
-    name: string;
-    photos: string[]; // Assuming gallery URLs are strings
-    _id: string;
-  }[];
-  __v: number;
-}
+import { BanquetDocument } from "@/customTypes/BanquetDocument";
+// export interface BanquetVenue {
+//   location: {
+//     city: string;
+//     pincode: string;
+//     area: string;
+//   };
+//   _id: string;
+//   photo: string[]; // Assuming photo URLs are strings
+//   name: string;
+//   rating: number;
+//   locationUrl?: {
+//     coordinates: number[];
+//     url: string;
+//   };
+//   description: string;
+//   price: number;
+//   like: Like[]; // Define the type for like array based on its content
+//   capacity: number;
+//   specialFeature: string[];
+//   yearOfEstd: number;
+//   services: string[];
+//   type: string;
+//   availability: string[];
+//   billboard: string;
+//   openHours: string;
+//   operatingDays: string;
+//   reviews: ReviewData[]; // Define the type for reviews array based on its content
+//   gallery: {
+//     name: string;
+//     photos: string[]; // Assuming gallery URLs are strings
+//     _id: string;
+//   }[];
+//   __v: number;
+// }
 
-// Example types for 'like' and 'review' arrays
-interface Like {
-  userId: string;
-  timestamp: Date;
-}
+// // Example types for 'like' and 'review' arrays
+// interface Like {
+//   userId: string;
+//   timestamp: Date;
+// }
 
-interface Review {
-  userId: string;
-  comment: string;
-  rating: number;
-  date: Date;
-}
+// interface ReviewData {
+//   _id: string;
+//   content: string;
+//   username: string;
+//   userphoto: string;
+//   rating: number;
+//   tag: string;
+//   userId: string;
+//   createdAt: string;
+// }
 
 interface BanquetProps {
-  banquetData: BanquetVenue;
+  banquetData: BanquetDocument;
 }
 
 const MainCardPage: React.FC<BanquetProps> = ({ banquetData }) => {
