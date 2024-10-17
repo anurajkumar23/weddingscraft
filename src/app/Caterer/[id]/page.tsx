@@ -110,7 +110,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
                         <div className="mt-12">
                             <h2 className="text-2xl font-bold mb-6">Reviews</h2>
-                            <ReviewRating data={caterer} />
+                            <ReviewRating initialData={caterer} category="Caterer"/>
                         </div>
                     </div>
                     <div className="w-full lg:w-1/3 bg-gray-100 p-6 lg:p-8">

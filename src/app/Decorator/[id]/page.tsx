@@ -55,7 +55,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             <GalleryComponent initialData={Decorator.gallery} categoryId={Decorator._id} category='decor' />
                         </div>
 
-                        <ReviewRating data={Decorator} />
+                        <ReviewRating initialData={Decorator} category="Decorator"/>
                     </div>
                     <div className=" md:w-1/3 bg-muted p-6">
                         <div className="sticky top-6">

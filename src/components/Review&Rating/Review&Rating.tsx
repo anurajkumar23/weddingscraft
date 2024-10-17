@@ -71,7 +71,7 @@ export default function ReviewRating({ initialData, category }: RatingReviewsPro
         },
         config
       )
-      console.log(response.data.data.item.reviews[0], "🎉🎉🎉🎉🎉🎉🎉🎉🎉🐷posted")
+      // console.log(response.data.data.item.reviews[0], "🎉🎉🎉🎉🎉🎉🎉🎉🎉🐷posted")
       if (response.data.message === 'success') {
         const newReviewData = response.data.data.item.reviews[0]
         setData(prevData => ({
