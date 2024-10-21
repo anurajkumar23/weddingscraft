@@ -55,13 +55,14 @@ const LeftSideBar: React.FC = () => {
 
 
   return (
-    <section className={`relative flex flex-col h-full shadow-md dark:shadow-gray-700 bg-background transition-all ${isOpen ? ' w-full min-w-60 max-w-72 py-3 p-2 ' : ' w-0 min-w-0 max-w-0 '}`}>
+    <section className={`relative flex flex-col h-full shadow-md dark:shadow-gray-700 bg-background transition-all 
+    ${isOpen ? ' w-full min-w-60 max-w-72 py-3 p-2 ' : ' w-0 min-w-0 max-w-0 '} `}>
       <div className="absolute top-0 -right-14 z-50">
         <Button variant="ghost" size="icon" onClick={toggleSidebar} >
           {isOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
         </Button>
       </div> 
-      <main className="gap-3 flex flex-col h-full w-full overflow-hidden">
+      <main className="gap-3 flex flex-col h-full w-full overflow-y-auto">
         <Link
           href="/user/profile/dashboard"
           className={`flex gap-4 p-4 text-body-medium hover:bg-red-100 hover:rounded-md ${pathname === "/user/profile/dashboard" ? "text-red-600 bg-red-100 rounded-md" : "text-grey-1"
