@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,25 +14,38 @@ import { Button } from "@/components/ui/button";
 // import { IsAdminOrSeller } from "@/utils/protect/protect";
 
 
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    if (media.matches !== matches) {
+      setMatches(media.matches)
+    }
+    const listener = () => setMatches(media.matches)
+    media.addListener(listener)
+    return () => media.removeListener(listener)
+  }, [matches, query])
+
+  return matches
+}
 
 const LeftSideBar: React.FC = () => {
   const pathname = usePathname();
-  // const [categoryOpen, setCategoryOpen] = useState(false);
   const { user, setUser } = useAuth();
-  const [loading, setLoading] = useState<boolean>(true);
+  const isLargeScreen = useMediaQuery("(min-width: 768px)")
   const router = useRouter()
-
-  // const handleCategoryClick = (e: React.MouseEvent) => {
-  //   e.preventDefault(); // Prevent the default link behavior
-  //   setCategoryOpen(!categoryOpen);
-  // };
-
+ 
   function handlelogout() {
     localStorage.clear()
     setUser(null)
     router.push("/")
 
   }
+
+  useEffect(() => {
+    setIsOpen(isLargeScreen)
+  }, [isLargeScreen])
 
   const [isOpen, setIsOpen] = useState(true)
 
@@ -42,15 +55,13 @@ const LeftSideBar: React.FC = () => {
 
 
   return (
-    <div className={`relative flex flex-col h-full shadow-md dark:shadow-gray-700 bg-background transition-all ${isOpen ? ' w-full min-w-60 max-w-72 py-3 p-2 ' : ' w-0 min-w-0 max-w-0 '}`}>
-      {/* <Image src={logo} alt="logo" width={200} height={70} priority={false} loading="lazy"/> */}
-      <div className="absolute top-2 -right-14 z-50">
+    <section className={`relative flex flex-col h-full shadow-md dark:shadow-gray-700 bg-background transition-all ${isOpen ? ' w-full min-w-60 max-w-72 py-3 p-2 ' : ' w-0 min-w-0 max-w-0 '}`}>
+      <div className="absolute top-0 -right-14 z-50">
         <Button variant="ghost" size="icon" onClick={toggleSidebar} >
           {isOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
         </Button>
-      </div>
-      <div className=" gap-3 flex flex-col h-full w-full overflow-hidden ">
-        {/* <IsAdminOrSeller> */}
+      </div> 
+      <main className="gap-3 flex flex-col h-full w-full overflow-hidden">
         <Link
           href="/user/profile/dashboard"
           className={`flex gap-4 p-4 text-body-medium hover:bg-red-100 hover:rounded-md ${pathname === "/user/profile/dashboard" ? "text-red-600 bg-red-100 rounded-md" : "text-grey-1"
@@ -77,8 +88,14 @@ const LeftSideBar: React.FC = () => {
         >
           <LogOut /><p className="cursor-pointer">Logout</p>
         </div>
-      </div>
-    </div>
+        <div className='mt-auto'>
+          <footer className='bg-background w-full border-t border-primary shadow-md font-semibold text-xs text-center '>
+            <p className="p-2">© 2024 Dream Wedders, All rights reserved.</p>
+          </footer>
+        </div>
+      </main>
+
+    </section>
   );
 };
 

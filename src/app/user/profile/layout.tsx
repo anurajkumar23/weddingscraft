@@ -1,6 +1,8 @@
 // components/UserLayout.tsx
 import React, { ReactNode } from 'react';
 import LeftSideBar from './LeftSideBar';
+import Navbar from '@/components/Navbar';
+
 
 
 interface UserLayoutProps {
@@ -9,14 +11,14 @@ interface UserLayoutProps {
 
 const UserLayout: React.FC<UserLayoutProps> = ({ children}) => {
   return (
-    <div className='flex max-lg:flex-col '>
-      <LeftSideBar />
-      <div className='w-full'>
-      <div className='p-4 sm:p-8'>
-        {children}
-      </div>
-      </div>
-    </div>
+    <main className="flex">
+    <aside className="max-h-full sticky top-0 bottom-0 z-50">
+      <LeftSideBar/>
+    </aside>
+    <main className="w-full">
+      <nav className="w-full sticky top-0 z-40">{children}</nav>
+    </main>
+  </main>
   );
 };
 

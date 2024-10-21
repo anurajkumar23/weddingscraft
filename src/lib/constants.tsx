@@ -33,21 +33,21 @@ export const navLinks: NavLink[] = [
     icon: <Heart />,
     label: "Favorites",
   },
-  {
-    url: "/user/profile/saved",
-    icon: <Bookmark />,
-    label: "Saved",
-  },
+  // {
+  //   url: "/user/profile/saved",
+  //   icon: <Bookmark />,
+  //   label: "Saved",
+  // },
   {
     url: "/user/profile/editProfile",
     icon: <UserRoundPen />,
     label: "Edit Profile",
   },
-  {
-    url: "/user/profile/transactions",
-    icon: <ClipboardCheck />,
-    label: "My Transaction",
-  },
+  // {
+  //   url: "/user/profile/transactions",
+  //   icon: <ClipboardCheck />,
+  //   label: "My Transaction",
+  // },
   // {
   //   url: "/change-language",
   //   icon: <Globe />,
@@ -64,11 +64,11 @@ export const navLinks: NavLink[] = [
     icon: <Headset />,
     label: "Customer Service",
   },
-  {
-    url: "/user/profile/investor-relations",
-    icon: <Briefcase />,
-    label: "Investor Relations",
-  },
+  // {
+  //   url: "/user/profile/investor-relations",
+  //   icon: <Briefcase />,
+  //   label: "Investor Relations",
+  // },
   {
     url: "/policy",
     icon: <FileText />,

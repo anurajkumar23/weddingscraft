@@ -10,8 +10,8 @@ const page = () => {
   return (
     <main className="flex flex-col gap-6">
       <h1 className="text-3xl sm:text-4xl font-bold">Dashboard</h1>
-      <CardsInsights data={dashboardData} />
-      <ChartsInsights data={dashboardData} />
+      {/* <CardsInsights data={dashboardData} />
+      <ChartsInsights data={dashboardData} /> */}
       <PostPage/>
     </main>
   );
