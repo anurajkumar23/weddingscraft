@@ -20,12 +20,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     return (
 
-        <div className=' py-6 '>
+        <div className='w-screen py-6 '>
             <div className='rounded-sm border h-full'>
                 <div>
                     <ImageGallery categoryId={Photographer._id} category='photographer' />
                 </div>
-                <div className='relative bottom-10  md:flex grid gap-4'>
+                <div className='relative bottom-10  md:flex gap-4'>
                     <div className=' md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
                         <div className='flex justify-between items-center pb-2'>
                             <strong className='font-medium md:text-lg text-base'>{Photographer.name} </strong>
@@ -61,7 +61,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <div className="space-y-6 py-6">
                             <QuickInfo data={Photographer} />
                         </div>
-                        <div id="Photos" className='overflow-hidden'>
+                        <div id="Photos" className=''>
                             <GalleryComponent initialData={Photographer.gallery} categoryId={Photographer._id} category='photographer' />
                         </div>
 

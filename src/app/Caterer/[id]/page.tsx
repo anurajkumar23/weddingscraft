@@ -51,15 +51,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
     };
 
     return (
-        <div className='container mx-auto py-6 px-4'>
-            <div className='rounded-lg border shadow-lg overflow-hidden'>
-                <div className='relative'>
+        <div className='w-screen py-6 '>
+        <div className='rounded-sm border h-full'>
+            <div>
                     <ImageGallery categoryId={caterer._id} category='caterer' />
                 </div>
 
                 <div className='lg:flex'>
-                    <div className='lg:w-2/3 bg-white p-6 lg:p-8'>
-                        <div className='mb-8'>
+                    <div className='lg:w-2/3 bg-white lg:p-8'>
+                        <div className='mb-8 p-4'>
                             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4'>
                                 <h1 className='text-2xl sm:text-3xl font-bold mb-2 sm:mb-0'>{caterer.name}</h1>
                                 <div className='flex items-center'>
@@ -84,7 +84,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             </div>
                         </div>
 
-                        <div className={`grid gap-6 ${getPackageLayoutClass(availablePackages.length)}`}>
+                        <div className={`grid p-4 md:p-0 gap-6 ${getPackageLayoutClass(availablePackages.length)}`}>
                             {availablePackages.map((packageType) => {
                                 const packageData = caterer[packageType];
                                 if (packageData) {
@@ -103,8 +103,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             })}
                         </div>
 
-                        <div id="Photos" className="mt-12">
-                            <h2 className="text-2xl font-bold mb-6">Gallery</h2>
+                        <div id="Photos">
                             <GalleryComponent initialData={caterer.gallery} categoryId={caterer._id} category='caterer' />
                         </div>
 

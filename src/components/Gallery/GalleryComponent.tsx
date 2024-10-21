@@ -151,10 +151,10 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
   return (
     <div className="border h-full rounded-sm bg-white py-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-medium container">Photos</h1>
+        <h1 className="text-2xl font-medium mx-6">Photos</h1>
       </div>
       <div className="space-y-8">
-        <div className="border rounded-lg p-4">
+        <div className=" p-4">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline">
@@ -181,7 +181,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
                 accept="image/*"
                 className="mb-4"
               />
-              <div className="grid grid-cols-3 gap-2 mb-4 overflow-y-auto">
+              <div className="grid grid-cols-3 gap-2 mb-4">
                 {newPhotosPreviews.map((preview, index) => (
                   <div key={index} className="relative ">
                     <Image src={preview} alt="Preview" width={500}
@@ -214,7 +214,7 @@ const GalleryComponent: React.FC<ShowGallery> = ({ initialData, categoryId, cate
             >
               {galleries?.map((gallery) => (
                 <SwiperSlide key={gallery._id} className="!w-auto ">
-                  <div className="w-auto overflow-hidden">
+                  <div className="overflow-hidden">
                     <ImageContainer
                       initialData={[gallery]}
                       categoryId={categoryId}

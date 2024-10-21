@@ -210,7 +210,7 @@ const QuickInfo = ({ banquetData }: { banquetData: BanquetDocument }) => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-        <div id="Photos" className="md:w-full w-screen mx-auto overflow-hidden">
+        <div id="Photos" className="w-screen md:w-full">
         <GalleryComponent  initialData={banquetData.gallery}  categoryId={banquetData._id}   category='banquet' />
       </div>
      <div id="Reviews">

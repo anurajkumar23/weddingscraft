@@ -16,20 +16,20 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const Decorator = await getDecoratorId(params.id);
     return (
 
-        <div className='container mx-auto py-6 px-4'>
+        <div className='w-screen py-6 '>
             <div className='rounded-sm border h-full'>
                 <div>
                     <ImageGallery categoryId={Decorator._id} category='decor' />
                 </div>
-                <div className='relative bottom-10 w-full md:flex grid gap-4'>
-                    <div className='mx-4 w-full md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
-                        <div className='flex justify-between items-center pb-2'>
-                            <strong className='font-medium md:text-lg text-base'>{Decorator.name} </strong>
-                            <div className='flex gap-x-2 items-center'>
-                                <span className='border p-1 rounded-sm bg-green-600 text-white'>{Decorator.rating}</span>
-                                <h1 className='text-gray-600'>Rating</h1>
+                <div className='relative bottom-10  md:flex gap-4'>
+                    <div className=' md:w-2/3 bg-white rounded-sm p-4 shadow-xl border'>
+                    <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4'>
+                                <h1 className='text-2xl sm:text-3xl font-bold mb-2 sm:mb-0'>{Decorator.name}</h1>
+                                <div className='flex items-center'>
+                                    <span className='px-2 py-1 rounded-md bg-green-600 text-white font-semibold text-sm'>{Decorator.rating}</span>
+                                    <span className='ml-2 text-gray-600 text-sm'>Rating</span>
+                                </div>
                             </div>
-                        </div>
                         <div className="flex items-center mb-2">
                             <MapPin className='mr-2' />
 
