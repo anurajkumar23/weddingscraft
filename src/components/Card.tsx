@@ -1,33 +1,56 @@
-import { MapPin } from 'lucide-react';
-import Image, { StaticImageData } from 'next/image';
-import React from 'react';
+import { MapPin, Star } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
 
-interface CardProps {
-  img: string | StaticImageData;
-  alt: string;
-  title: string;
+interface Location {
+  city: string
+  area: string
+  pincode: string
 }
 
-const Card: React.FC<CardProps> = ({ img, alt, title }) => {
-  return (
-    <div className='w-full'>
-      <Image
-        src={img}
-        alt={alt}
-        width={800} // Set the width of the image
-        height={600} // Set the height of the image
-        className='object-cover md:w-60 md:h-60 sm:h-64 cursor-pointer rounded-2xl'
-        loading='lazy'
-      />
-      <div className=" mt-3">
-        <div className='flex justify-between'>
-          <strong className='font-medium md:text-lg text-base'>{title}</strong>
-          <span>Rating</span>
-        </div>
-        <MapPin className='text-gray-600 max-sm:text-sm' />
-      </div>
-    </div>
-  );
-};
+interface CardProps {
+  _id: string
+  img: string[]
+  alt: string
+  title: string
+  link: string
+  rating: number
+  location: Location
+}
 
-export default Card;
+const Card: React.FC<CardProps> = ({ _id, img, alt, title, link, rating, location }) => {
+  return (
+    <Link href={`${link}/${_id}`} className="block w-full group">
+      <div className="relative w-full aspect-square overflow-hidden rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 group-hover:shadow-md">
+        <Image
+          src={img[0] || '/placeholder.svg'}
+          alt={alt}
+          layout="fill"
+          objectFit="cover"
+          className="transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+      <div className="mt-3 space-y-2">
+        <div className="flex items-start justify-between">
+          <h3 className="font-medium text-base sm:text-lg line-clamp-2 flex-grow pr-2">{title}</h3>
+          <div className="flex items-center space-x-1 flex-shrink-0">
+            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+            <span className="text-sm font-medium text-gray-700">{rating.toFixed(1)}</span>
+          </div>
+        </div>
+        {location && (
+          <div className="flex items-start space-x-1 text-sm text-gray-500">
+            <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <p className="line-clamp-2">
+              {location.area}, {location.city} {location.pincode}
+            </p>
+          </div>
+        )}
+      </div>
+    </Link>
+  )
+}
+
+export default Card

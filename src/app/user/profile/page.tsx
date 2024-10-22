@@ -122,7 +122,7 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4 w-full h-full">
+    <div className=" w-full h-full">
       <div className="border m-4 p-2 flex flex-col items-center relative">
         <Link href="/user/profile/editProfile">
           <button className="absolute top-4 right-4 bg-blue-400 text-white p-2 rounded flex items-center">
@@ -130,7 +130,7 @@ export default function Page() {
           </button>
         </Link>
         <p className="font-semibold text-xl mb-4">
-          Welcome, {user ? user.name : "Guest"}! This is a protected page.
+          Welcome, {user ? user.name : "Guest"}.
         </p>
         <div className="border overflow-hidden flex justify-center items-center rounded-full mb-4">
           <Image

@@ -35,7 +35,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
         <LeftSideBar />
       </aside>
       <main className="flex-grow">
-        <div className="p-4">{children}</div>
+        <div className="p-4 py-8">{children}</div>
       </main>
     </main>
   );
