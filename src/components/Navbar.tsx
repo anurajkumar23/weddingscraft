@@ -1,101 +1,106 @@
-"use client"
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import Image from 'next/image';
-import Link from 'next/link';
-import logo from "../../public/Dream_Wedding_Logo.png"
-import { useState } from 'react';
-// import { ShowLogin, ShowLogout } from '@/utils/protect/protect';
-import SideNavbar from './SideNavbar';
-import { useAuth } from '@/app/authContext';
-import { useRouter } from "next/navigation"; 
+'use client'
 
-
+import { useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from "next/navigation"
+import { Menu } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/app/authContext'
+import SideNavbar from './SideNavbar'
 
 const Navbar: React.FC = () => {
-
   const [menuOpen, setMenuOpen] = useState(false)
-  const {user,setUser} = useAuth()
-  // console.log(user,"navbar")
+  const { user, setUser } = useAuth()
   const router = useRouter()
-
 
   const handleNav = () => {
     setMenuOpen(!menuOpen)
   }
 
-  function handlelogout(){
+  function handleLogout() {
     localStorage.clear()
     setUser(null)
     router.push("/")
-  
   }
 
-  return (
-    <nav className="text-black z-50 w-full h-20 shadow-xl bg-slate-100 ">
-      <div className="flex justify-between gap-4 items-center h-full font-semibold w-full px-2 2xl:px-14 xl:px-10">
-        <div className='cursor-pointer flex '>
-          <Link href='/'>
-          <Image
-              src="/elements/logo.png"
-              alt="logo"
-              width={260}
-              height={70}
-              priority={false}
-              loading="lazy"
-            />
-          </Link>
-        </div>
-        <div>
-          <ul className="flex gap-6 items-center cursor-pointer ">
-            <li className='hidden md:flex'>
-              <Link href="/">Home</Link></li>
-            <li className='hidden md:flex'>
-              <Link href="/Banquet">Banquet Halls</Link>
-            </li>
-            <Link href="/Caterer">
-              <li className='hidden md:flex'>Caterer</li>
-            </Link>
-            <Link href="/Decorator">
-              <li className='hidden md:flex'>Decorators</li>
-            </Link>
-            <li className='hidden md:flex'>
-              <Link href="/Photographer">Photographers</Link>
-            </li>
-            <Link href="/seller">
-              <li className='hidden md:flex'>Seller</li>
-            </Link>
-            {/* <ShowLogout> */}
-            {!user ? ( <Link href="/auth/login">
-              <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
-                Login /SignUp
-              </li>
-            </Link>):( <><div className='' onClick={handlelogout}>
-              <li className='border p-2 rounded-sm text-blue-500 bg-blue-100'>
-                Logout
-              </li>
-              
-           
-            </div> <li>
-             
-             <Avatar onClick={handleNav}>
-               <AvatarImage src="https://github.com/shadcn.png" />
-               <AvatarFallback>CN</AvatarFallback>
-             </Avatar>
-             
-           </li></>)}
-           
-           
-            {/* </ShowLogout>
-            <ShowLogin> */}
-       
-            {/* </ShowLogin> */}
+  const navItems = [
+    { href: '/', label: 'Home' },
+    { href: '/Banquet', label: 'Banquet Halls' },
+    { href: '/Caterer', label: 'Caterer' },
+    { href: '/Decorator', label: 'Decorators' },
+    { href: '/Photographer', label: 'Photographers' },
+  ]
 
-          </ul>
+  return (
+    <nav className="sticky top-0 z-50 w-full bg-white shadow-md">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center">
+            <Link href="/" className="flex-shrink-0">
+              <Image
+                src="/elements/logo.png"
+                alt="Dream Wedding Logo"
+                width={260}
+                height={70}
+                className="w-auto h-10 sm:h-14"
+                priority
+              />
+            </Link>
+          </div>
+          <div className="hidden md:flex items-center space-x-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/seller">
+              <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+                Become a Seller
+              </Button>
+            </Link>
+            {!user ? (
+              <Link href="/auth/login">
+                <Button className='border p-2 rounded-sm text-blue-500 bg-blue-100 hover:bg-blue-200'>
+                  Login /SignUp
+                </Button>
+              </Link>
+            ) : (
+              <Avatar onClick={handleNav}>
+                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name}/>
+                <AvatarFallback>{user.name?.charAt(0) ?? 'U'}</AvatarFallback>
+              </Avatar>
+            )}
+          </div>
+          <div className="md:hidden flex items-center space-x-3">
+            {/* <Link href="/seller">
+              <Button variant="outline" size="sm" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+                Seller
+              </Button>
+            </Link> */}
+            {!user ? (
+              <Link href="/auth/login">
+                <Button size="sm" className='border rounded-sm text-blue-500 bg-blue-100 hover:bg-blue-200'>
+                  Login
+                </Button>
+              </Link>
+            ) : (
+              <Avatar onClick={handleNav}>
+                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name}/>
+                <AvatarFallback>{user.name?.charAt(0) ?? 'U'}</AvatarFallback>
+              </Avatar>
+            )}
+          </div>
         </div>
       </div>
-      <SideNavbar menuOpen={menuOpen} handleNav={handleNav}  />
+      <SideNavbar menuOpen={menuOpen} handleNav={handleNav} />
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

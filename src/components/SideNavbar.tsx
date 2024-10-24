@@ -44,16 +44,18 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                         onClick={handleNav}
                     >
                         <div className=" flex flex-col items-center text-center">
+
                             <Avatar>
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>AN</AvatarFallback>
+                                <AvatarImage src={user?.image} className='object-cover cursor-pointer' alt={user?.name}/>
+                                <AvatarFallback>{user?.name?.charAt(0) ?? 'U'}</AvatarFallback>
                             </Avatar>
+
                             <p className="mt-4 font-semibold text-lg">{user?.name}</p>
                             <p className="text-blue-500 cursor-pointer">Click to view profile</p>
                         </div>
                     </Link>
                     <hr className="w-full border-t border-gray-300" />
-                    <ul className="p-2 overflow-y-auto pb-60  h-full hide-scrollbar text-black font-medium">
+                    <ul className="p-2 overflow-scroll pb-60  h-full hide-scrollbar text-black font-medium">
                         {/* <IsAdminOrSeller> */}
                             <Link
                                 href="/user/profile/dashboard"
@@ -62,7 +64,6 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                             >
                                 <LayoutDashboard /> <p>Dashboard</p>
                             </Link>
-                        {/* </IsAdminOrSeller> */}
                         {navLinks.map((link, index) => (
                             <div key={link.label}>
                                 <Link href={link.url}

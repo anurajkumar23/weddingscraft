@@ -7,7 +7,7 @@ import Provider from "./provider";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProgressBarProvider from "./progressBarprovider";
-import { AuthProvider } from "./authContext";
+
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -61,13 +61,13 @@ export default function RootLayout({
       <body className={poppins.className}>
         <ProgressBarProvider>
           <ToastContainer />
-          <AuthProvider>
-            <Provider>
-              <Navbar />
-              {children}
-              <Footer />
-            </Provider>
-          </AuthProvider>
+
+          <Provider>
+            <Navbar />
+            {children}
+            <Footer />
+          </Provider>
+
         </ProgressBarProvider>
       </body>
     </html>
