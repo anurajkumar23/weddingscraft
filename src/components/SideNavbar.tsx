@@ -46,8 +46,12 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                         <div className=" flex flex-col items-center text-center">
 
                             <Avatar>
-                                <AvatarImage src={user?.image} className='object-cover cursor-pointer' alt={user?.name}/>
-                                <AvatarFallback>{user?.name?.charAt(0) ?? 'U'}</AvatarFallback>
+                                <AvatarImage src={user?.image} className='object-cover cursor-pointer' alt={user?.name} />
+                                <AvatarFallback>
+                                    {user?.name
+                                        ? user.name.split(' ').map((word: any[]) => word[0]).join('').toUpperCase()
+                                        : 'UN'}
+                                </AvatarFallback>
                             </Avatar>
 
                             <p className="mt-4 font-semibold text-lg">{user?.name}</p>
@@ -57,13 +61,13 @@ const SideNavbar = ({ menuOpen, handleNav }: any) => {
                     <hr className="w-full border-t border-gray-300" />
                     <ul className="p-2 overflow-scroll pb-60  h-full hide-scrollbar text-black font-medium">
                         {/* <IsAdminOrSeller> */}
-                            <Link
-                                href="/user/profile/dashboard"
-                                className="p-4 flex w-full justify-start space-x-2  hover:bg-gray-200 hover:rounded-md"
-                                onClick={handleNav}
-                            >
-                                <LayoutDashboard /> <p>Dashboard</p>
-                            </Link>
+                        <Link
+                            href="/user/profile/dashboard"
+                            className="p-4 flex w-full justify-start space-x-2  hover:bg-gray-200 hover:rounded-md"
+                            onClick={handleNav}
+                        >
+                            <LayoutDashboard /> <p>Dashboard</p>
+                        </Link>
                         {navLinks.map((link, index) => (
                             <div key={link.label}>
                                 <Link href={link.url}

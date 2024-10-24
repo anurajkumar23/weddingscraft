@@ -72,8 +72,12 @@ const Navbar: React.FC = () => {
               </Link>
             ) : (
               <Avatar onClick={handleNav}>
-                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name}/>
-                <AvatarFallback>{user.name?.charAt(0) ?? 'U'}</AvatarFallback>
+                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name} />
+                <AvatarFallback>
+                  {user.name
+                    ? user.name.split(' ').map((word: any[]) => word[0]).join('').toUpperCase()
+                    : 'UN'}
+                </AvatarFallback>
               </Avatar>
             )}
           </div>
@@ -91,8 +95,12 @@ const Navbar: React.FC = () => {
               </Link>
             ) : (
               <Avatar onClick={handleNav}>
-                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name}/>
-                <AvatarFallback>{user.name?.charAt(0) ?? 'U'}</AvatarFallback>
+                <AvatarImage src={user.image} className='object-cover cursor-pointer' alt={user.name} />
+                <AvatarFallback>
+                  {user.name
+                    ? user.name.split(' ').map((word: any[]) => word[0]).join('').toUpperCase()
+                    : 'UN'}
+                </AvatarFallback>
               </Avatar>
             )}
           </div>
